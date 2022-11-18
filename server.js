@@ -200,6 +200,7 @@ io.on("connection", (socket) => {
 
   socket.on("get_my_hand", data => {
     const roomName = data.currentRoom;
+    console.log("get my hand");
     socket.emit("my_hand", rooms[roomName].game.getPlayerHand(data.username));
   });
 
