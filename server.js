@@ -30,8 +30,6 @@ let rooms = {}
 io.on("connection", (socket) => {
   socket.emit("rooms", getRoomsInfo());
 
-  console.log("User connected");
-
   socket.on("join_room", (data) => {
     socket.join(data.currentRoom);
 
