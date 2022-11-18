@@ -12,7 +12,13 @@ const ws = require('ws');
 const PORT = process.env.PORT || 3001;
 
 const io = new Server(server, 
-  { wsEngine: ws.Server }
+  { wsEngine: ws.Server,
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+    },
+  
+  }
 );
 
 // const io = new Server(server, {
