@@ -16,7 +16,6 @@ const io = new Server(server,
       origin: "*",
       methods: ["GET", "POST"],
     },
-    wsEngine: ws.Server,
   }
 );
 
