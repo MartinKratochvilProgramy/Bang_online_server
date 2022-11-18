@@ -7,15 +7,20 @@ var uuid = require('uuid');
 const cors = require("cors");
 const Game = require('./game.js');
 const deck = require('./deck.js')
+const ws = require('ws');
 
 const PORT = process.env.PORT || 3001;
 
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-});
+const io = new Server(server, 
+  { wsEngine: ws.Server }
+);
+
+// const io = new Server(server, {
+//   cors: {
+//     origin: "*",
+//     methods: ["GET", "POST"],
+//   },
+// });
 // app.use(cors());
 // app.use(express.json());
 // app.use(function(req, res, next) {
