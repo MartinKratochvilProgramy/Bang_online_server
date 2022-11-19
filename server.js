@@ -172,11 +172,13 @@ io.on("connection", (socket) => {
 
   socket.on("send_message", data => {
     const roomName = data.currentRoom;
-    rooms[roomName].messages.push({
-      username: data.username,
-      message: data.message,
-      id: uuid.v4()
-    })
+    if (rooms[roomName].messages != undefined) {
+      rooms[roomName].messages.push({
+        username: data.username,
+        message: data.message,
+        id: uuid.v4()
+      })
+    }
     io.to(roomName).emit("get_messages", rooms[roomName].messages);
   })
 
@@ -206,7 +208,9 @@ io.on("connection", (socket) => {
 
   socket.on("get_my_role", data => {
     const roomName = data.currentRoom;
-    socket.emit("my_role", rooms[roomName].game.players[data.username].character.role);
+    if (rooms[roomName].game !== undefined) {
+      socket.emit("my_role", rooms[roomName].game.players[data.username].character.role);
+    }
   });
 
   socket.on("get_my_hand", data => {
