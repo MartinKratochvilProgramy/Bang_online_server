@@ -208,7 +208,9 @@ io.on("connection", (socket) => {
 
   socket.on("get_my_role", data => {
     const roomName = data.currentRoom;
-    socket.emit("my_role", rooms[roomName].game.players[data.username].character.role);
+    if (rooms[roomName].game != undefined) {
+      socket.emit("my_role", rooms[roomName].game.players[data.username].character.role);
+    }
   });
 
   socket.on("get_my_hand", data => {
