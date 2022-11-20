@@ -1006,12 +1006,12 @@ class Game {
                     // SHERIFF AND VICE WIN
                     if (aliveRoles.includes("Vice") || deadRoles.includes("Vice")) {
                         // Vice in game
-                        message.push(`Sheriff (${this.getNameOfPlayersByRole("Sheriff")[0]}) and Vice (${this.getNameOfPlayersByRole("Vice")[0]}) wictory!`);
+                        message.push(`Sheriff (${this.getNameOfPlayersByRole("Sheriff")[0]}) and Vice (${this.getNameOfPlayersByRole("Vice")[0]}) victory!`);
                         message.push("Game ended");
                         this.endGame();
                     } else {
                         // Vice not in game
-                        message.push(`Sheriff (${this.getNameOfPlayersByRole("Sheriff")[0]}) wictory!`);
+                        message.push(`Sheriff (${this.getNameOfPlayersByRole("Sheriff")[0]}) victory!`);
                         message.push("Game ended");
                         this.endGame();
                     }
@@ -1020,15 +1020,15 @@ class Game {
                     // BANDITS WIN
                     const bandits = this.getNameOfPlayersByRole("Bandit")
                     if (bandits.length === 1) {
-                        message.push(`Bandit (${bandits[0]}) wictory!`);
+                        message.push(`Bandit (${bandits[0]}) victory!`);
                         message.push("Game ended");
                         
                     } else if (bandits.length === 2) {
-                        message.push(`Bandits (${bandits[0]}, ${bandits[1]}) wictory!`);
+                        message.push(`Bandits (${bandits[0]}, ${bandits[1]}) victory!`);
                         message.push("Game ended");
                         
                     } else if (bandits.length === 3) {
-                        message.push(`Bandits (${bandits[0]}, ${bandits[1]}, ${bandits[2]}) wictory!`);
+                        message.push(`Bandits (${bandits[0]}, ${bandits[1]}, ${bandits[2]}) victory!`);
                         message.push("Game ended");
                     }
     
@@ -1036,7 +1036,7 @@ class Game {
                     
                 } else if (aliveRoles.includes("Renegade") && (!aliveRoles.includes("Sheriff") && !aliveRoles.includes("Vice") && !aliveRoles.includes("Bandit"))) {
                     // RENEGADE WIN
-                    message.push(`Renegade (${this.getNameOfPlayersByRole("Renegade")[0]}) wictory!`);
+                    message.push(`Renegade (${this.getNameOfPlayersByRole("Renegade")[0]}) victory!`);
                     message.push("Game ended");
                     this.endGame();
     
