@@ -4,7 +4,6 @@ const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 var uuid = require('uuid');
-const cors = require("cors");
 const Game = require('./game.js');
 const deck = require('./deck.js')
 const ws = require('ws');
@@ -859,11 +858,11 @@ function getRoomsInfo() {
       }
       res.push(roomInfo);
     }
+    return res;
   } catch (error) {
       console.log(`Error on getRoomsInfo():`);
       console.log(error);
   }
-return res;
 }
 
 function startGame(io, roomName) {
