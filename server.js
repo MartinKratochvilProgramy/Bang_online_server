@@ -732,20 +732,20 @@ io.on("connection", (socket) => {
   })
 
   socket.on("discard", (data) => {
-    const currentRoom = data.currentRoom;
+    const roomName = data.currentRoom;
     try {
-      rooms[currentRoom].game.discard(data.card.name, data.card.digit, data.card.type, data.username);
-      if (rooms[currentRoom].game.players[data.username].hand.length <= rooms[currentRoom].game.players[data.username].character.health) {
+      rooms[roomName].game.discard(data.card.name, data.card.digit, data.card.type, data.username);
+      if (rooms[roomName].game.players[data.username].hand.length <= rooms[roomName].game.players[data.username].character.health) {
         // special case for when SK is discarding
-        if (rooms[currentRoom].game.players[data.username].character.name !== "Sid Ketchum") {
+        if (rooms[roomName].game.players[data.username].character.name !== "Sid Ketchum") {
           // if less of equal cards in hand -> endTurn
           socket.emit("end_discard");
-          endTurn(io, currentRoom);
+          endTurn(io, roomName);
         } else {
-          updateGameState(io, currentRoom)
+          updateGameState(io, roomName)
         }
       } else {
-        updateGameState(io, currentRoom)
+        updateGameState(io, roomName)
       }
     } catch (error) {
         console.log(`Error in room ${roomName}:`);
@@ -753,9 +753,9 @@ io.on("connection", (socket) => {
     }
   })
 
-  socket.on("end_turn", (currentRoom) => {
+  socket.on("end_turn", (roomName) => {
     try {
-      endTurn(io, currentRoom);
+      endTurn(io, roomName);
     } catch (error) {
         console.log(`Error in room ${roomName}:`);
         console.log(error);
@@ -763,8 +763,9 @@ io.on("connection", (socket) => {
   })
 
   socket.on("request_players_in_range", (data) => {
+    const roomName = data.currentRoom;
     try {
-      socket.emit("players_in_range", rooms[data.currentRoom].game.getPlayersInRange(data.username, data.range))
+      socket.emit("players_in_range", rooms[roomName].game.getPlayersInRange(data.username, data.range))
     } catch (error) {
         console.log(`Error in room ${roomName}:`);
         console.log(error);
@@ -788,30 +789,30 @@ function updateGameState(io, roomName) {
   }
 }
 
-function endTurn(io, currentRoom) {
+function endTurn(io, roomName) {
   try {
-    io.to(currentRoom).emit("console", rooms[currentRoom].game.endTurn());
+    io.to(roomName).emit("console", rooms[roomName].game.endTurn());
   
-    const currentPlayer = rooms[currentRoom].game.getNameOfCurrentTurnPlayer(); // get current player
+    const currentPlayer = rooms[roomName].game.getNameOfCurrentTurnPlayer(); // get current player
     
-    io.to(currentRoom).emit("current_player", currentPlayer);
-    io.to(currentRoom).emit("update_players_with_action_required", rooms[currentRoom].game.getPlayersWithActionRequired());
-    updateGameState(io, currentRoom)
+    io.to(roomName).emit("current_player", currentPlayer);
+    io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game.getPlayersWithActionRequired());
+    updateGameState(io, roomName)
   
-    if (rooms[currentRoom].game.getPlayerIsInPrison(currentPlayer)) return;
-    if (rooms[currentRoom].game.getPlayerHasDynamite(currentPlayer)) return;
+    if (rooms[roomName].game.getPlayerIsInPrison(currentPlayer)) return;
+    if (rooms[roomName].game.getPlayerHasDynamite(currentPlayer)) return;
     
-    if (rooms[currentRoom].game.players[currentPlayer].character.name === "Kit Carlson") {
-      io.to(currentRoom).emit("update_draw_choices", "Kit Carlson");
+    if (rooms[roomName].game.players[currentPlayer].character.name === "Kit Carlson") {
+      io.to(roomName).emit("update_draw_choices", "Kit Carlson");
   
-    } else if (rooms[currentRoom].game.players[currentPlayer].character.name === "Lucky Duke") {
-      io.to(currentRoom).emit("update_draw_choices", "Lucky Duke");
+    } else if (rooms[roomName].game.players[currentPlayer].character.name === "Lucky Duke") {
+      io.to(roomName).emit("update_draw_choices", "Lucky Duke");
   
-    } else if (rooms[currentRoom].game.players[currentPlayer].character.name === "Pedro Ramirez" && rooms[currentRoom].game.stack.length > 0) {
-      io.to(currentRoom).emit("update_draw_choices", "Pedro Ramirez");
+    } else if (rooms[roomName].game.players[currentPlayer].character.name === "Pedro Ramirez" && rooms[roomName].game.stack.length > 0) {
+      io.to(roomName).emit("update_draw_choices", "Pedro Ramirez");
     
-    } else if (rooms[currentRoom].game.players[currentPlayer].character.name === "Jesse Jones") {
-      io.to(currentRoom).emit("update_draw_choices", "Jesse Jones");
+    } else if (rooms[roomName].game.players[currentPlayer].character.name === "Jesse Jones") {
+      io.to(roomName).emit("update_draw_choices", "Jesse Jones");
     }
   } catch (error) {
       console.log(`Error on endTurn():`);
@@ -819,26 +820,26 @@ function endTurn(io, currentRoom) {
   }
 }
 
-function nextTurn(io, currentRoom) {
+function nextTurn(io, roomName) {
   try {
-    const currentPlayer = rooms[currentRoom].game.getNameOfCurrentTurnPlayer(); // get current player
+    const currentPlayer = rooms[roomName].game.getNameOfCurrentTurnPlayer(); // get current player
     
-    if (rooms[currentRoom].game.players[currentPlayer].character.name === "Kit Carlson") {
-      io.to(currentRoom).emit("update_draw_choices", "Kit Carlson");
+    if (rooms[roomName].game.players[currentPlayer].character.name === "Kit Carlson") {
+      io.to(roomName).emit("update_draw_choices", "Kit Carlson");
   
-    } else if (rooms[currentRoom].game.players[currentPlayer].character.name === "Lucky Duke") {
-      io.to(currentRoom).emit("update_draw_choices", "Lucky Duke");
+    } else if (rooms[roomName].game.players[currentPlayer].character.name === "Lucky Duke") {
+      io.to(roomName).emit("update_draw_choices", "Lucky Duke");
   
-    } else if (rooms[currentRoom].game.players[currentPlayer].character.name === "Pedro Ramirez" && rooms[currentRoom].game.stack.length > 0) {
-      io.to(currentRoom).emit("update_draw_choices", "Pedro Ramirez");
+    } else if (rooms[roomName].game.players[currentPlayer].character.name === "Pedro Ramirez" && rooms[roomName].game.stack.length > 0) {
+      io.to(roomName).emit("update_draw_choices", "Pedro Ramirez");
   
-    } else if (rooms[currentRoom].game.players[currentPlayer].character.name === "Jesse Jones") {
-      io.to(currentRoom).emit("update_draw_choices", "Jesse Jones");
+    } else if (rooms[roomName].game.players[currentPlayer].character.name === "Jesse Jones") {
+      io.to(roomName).emit("update_draw_choices", "Jesse Jones");
     }
   
-    io.to(currentRoom).emit("current_player", currentPlayer);
-    io.to(currentRoom).emit("update_players_with_action_required", rooms[currentRoom].game.getPlayersWithActionRequired());
-    updateGameState(io, currentRoom);
+    io.to(roomName).emit("current_player", currentPlayer);
+    io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game.getPlayersWithActionRequired());
+    updateGameState(io, roomName);
   } catch (error) {
       console.log(`Error on nextTurn():`);
       console.log(error);
