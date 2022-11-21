@@ -638,6 +638,7 @@ io.on("connection", (socket) => {
         // game over      
         // emit who won
         io.to(roomName).emit("game_ended", message[message.length - 2]);
+        console.log("Game ended in room ", roomName);
         return;
       }
       if (rooms[roomName].game.players[data.username].character.health <= 0) {
