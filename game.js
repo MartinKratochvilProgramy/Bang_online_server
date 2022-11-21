@@ -348,6 +348,9 @@ class Game {
         }
         currentPlayerHand.push(randomCard);
 
+        this.setAllPlayable(playerName);
+        this.setMancatoBeerNotPlayable(playerName);
+
         return [`${playerName} used Panico on ${target}`];
     }
 
