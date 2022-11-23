@@ -459,7 +459,7 @@ class Game {
         // return if card not found
         if (getCardIndex < 0) return;
         const emporioCard = this.emporio[getCardIndex];
-        card.isPlayable = false;
+        emporioCard.isPlayable = false;
         // place card in player hand
         this.players[playerName].hand.push(emporioCard);
         // remove from emporio
