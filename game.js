@@ -299,7 +299,7 @@ class Game {
         const randomCard = this.getPlayerHand(target)[Math.floor(Math.random()*this.getPlayerHand(target).length)]
 
         this.discard(randomCard.name, randomCard.digit, randomCard.type, target);
-        message.push(`${target} used ${randomCard.name}`);
+        message.push(`${target} discarded ${randomCard.name}`);
         
         return message;
     }
