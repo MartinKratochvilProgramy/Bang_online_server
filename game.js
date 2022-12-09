@@ -1057,6 +1057,12 @@ class Game {
     }
 
     jesseJonesTarget(target, playerName = this.getNameOfCurrentTurnPlayer()) {
+
+        // continue with turn
+        this.draw(1, playerName);
+        this.setAllPlayable(playerName);
+        
+        this.awaitDrawChoice = false;
         
         // if targer is player, steal random card from his hand
         // get random card from target hand
@@ -1074,11 +1080,6 @@ class Game {
         }
         currentPlayerHand.push(randomCard);
         
-        // continue with turn
-        this.draw(1, playerName);
-        this.setAllPlayable(playerName);
-        
-        this.awaitDrawChoice = false;
         return `${playerName} stole 1 card from ${target} because he's Jesse Jones`;
     }
 
