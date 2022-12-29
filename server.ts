@@ -1,3 +1,5 @@
+import { RoomInfo, Characters } from "./types/types";
+
 const express = require("express");
 const app = express();
 const http = require("http");
@@ -10,8 +12,9 @@ const ws = require('ws');
 
 const PORT = process.env.PORT || 3001;
 
-const io = new Server(server, 
-  { cors: {
+const io = new Server(server,
+  {
+    cors: {
       origin: "*",
       methods: ["GET", "POST"],
     },
@@ -37,7 +40,7 @@ io.on("connection", (socket) => {
     const roomName = data.currentRoom;
     try {
       socket.join(data.currentRoom);
-  
+
       let username = data.username;
       // go through players, if player exists, add "_|" to username
       for (let i = 0; i < rooms[roomName].players.length; i++) {
@@ -47,20 +50,20 @@ io.on("connection", (socket) => {
           i = 0;
         }
       }
-  
+
       const newUser = {
         username: username,
         id: socket.id
       };
       rooms[roomName].players.push(newUser);
-  
+
       io.emit("rooms", getRoomsInfo());
-      
+
       io.to(data.currentRoom).emit("get_players", rooms[roomName].players);
       io.to(data.currentRoom).emit("get_messages", rooms[roomName].messages);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   });
 
@@ -73,20 +76,20 @@ io.on("connection", (socket) => {
         for (let i = 0; i < rooms[room].players.length; i++) {
           if (rooms[room].game === null) {
             // game not yet started in game -> simple splice
-            if(rooms[room].players[i].id === socket.id) {
+            if (rooms[room].players[i].id === socket.id) {
               rooms[room].players.splice(rooms[room].players.indexOf(rooms[room].players[i].username), 1);
               io.to(room).emit("get_players", rooms[room].players);
               io.emit("rooms", getRoomsInfo());
             }
-  
+
           } else {
             // game exists
             // if player === player who disconnected, splice him
-            if(rooms[room].players[i].id === socket.id) {
-      
+            if (rooms[room].players[i].id === socket.id) {
+
               io.to(room).emit("console", [`${rooms[room].players[i].username} disconnected`]);
               const message = rooms[room].game.removePlayer(rooms[room].players[i].username);
-              
+
               // if game still active, check game-end
               // player dies when disconnecting, check game-end
               if (message[message.length - 1] === "Game ended") {
@@ -96,10 +99,10 @@ io.on("connection", (socket) => {
                 io.to(room).emit("console", [message[message.length - 2], message[message.length - 1]]);
               }
               io.to(room).emit("known_roles", rooms[room].game.knownRoles);
-              
+
               rooms[room].players.splice(i, 1);
               io.emit("rooms", getRoomsInfo());
-    
+
               // tell game a player left if room exists
               if (rooms[room].game && rooms[room].players.length >= 2) {
                 // if game exists, remove player from game
@@ -108,9 +111,9 @@ io.on("connection", (socket) => {
                 nextTurn(io, room);
               }
               socket.emit("room_left");
-              
-    
-              if(rooms[room].players.length <= 0) {
+
+
+              if (rooms[room].players.length <= 0) {
                 // if room empty, delete it
                 delete rooms[room];
                 console.log("Room ", room, " deleted")
@@ -122,13 +125,13 @@ io.on("connection", (socket) => {
               }
               break;
             }
-    
+
           }
         }
       }
     } catch (error) {
-        console.log(`Error on disconnect:`);
-        console.log(error);
+      console.log(`Error on disconnect:`);
+      console.log(error);
     }
   })
 
@@ -140,14 +143,14 @@ io.on("connection", (socket) => {
       // remove player from players
       rooms[roomName].players.splice(rooms[roomName].players.indexOf(data.username), 1);
       io.to(roomName).emit("get_players", rooms[roomName].players);
-  
-      
-      if(rooms[roomName].players.length <= 0) {
+
+
+      if (rooms[roomName].players.length <= 0) {
         // if room empty, delete it
         delete rooms[roomName];
         console.log("Room ", roomName, " deleted")
         console.log("Existing rooms ", Object.keys(rooms));
-        socket.emit("rooms", getRoomsInfo()); 
+        socket.emit("rooms", getRoomsInfo());
       } else {
         if (rooms[roomName].game !== null) {
           // if game exists
@@ -162,8 +165,8 @@ io.on("connection", (socket) => {
       }
       io.emit("rooms", getRoomsInfo());
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   });
 
@@ -174,11 +177,11 @@ io.on("connection", (socket) => {
         messages: [],
         game: null
       };
-  
+
       io.emit("rooms", getRoomsInfo());
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 
@@ -194,8 +197,8 @@ io.on("connection", (socket) => {
       }
       io.to(roomName).emit("get_messages", rooms[roomName].messages);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 
@@ -206,11 +209,11 @@ io.on("connection", (socket) => {
       rooms[roomName].game = new Game(data.players, deck);
       console.log("Game started in room ", roomName);
       io.emit("rooms", getRoomsInfo());
-  
+
       io.to(roomName).emit("get_character_choices", rooms[roomName].game.genCharacterChoices());
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   });
 
@@ -218,7 +221,7 @@ io.on("connection", (socket) => {
     const roomName = data.currentRoom;
     try {
       rooms[roomName].game.setCharacter(data.username, data.character);
-      
+
       if (rooms[roomName].game.getAllPlayersChoseCharacter()) {
         // if all char choices went through, start game
         rooms[roomName].game.initRoles();
@@ -226,8 +229,8 @@ io.on("connection", (socket) => {
         startGame(io, roomName);
       }
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   });
 
@@ -236,8 +239,8 @@ io.on("connection", (socket) => {
     try {
       socket.emit("my_role", rooms[roomName].game.players[data.username].character.role);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   });
 
@@ -246,8 +249,8 @@ io.on("connection", (socket) => {
     try {
       socket.emit("my_hand", rooms[roomName].game.getPlayerHand(data.username));
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   });
 
@@ -256,8 +259,8 @@ io.on("connection", (socket) => {
     try {
       socket.emit("my_draw_choice", rooms[roomName].game.drawChoice);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   });
 
@@ -267,13 +270,13 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("console", rooms[roomName].game.useBang(data.target, data.cardDigit, data.cardType, data.username));
       io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
       updateGameState(io, roomName);
-  
+
       if (rooms[roomName].game.players[data.target].character.name === "Jourdonnais") {
         io.to(roomName).emit("jourdonnais_can_use_barel");
       }
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 
@@ -284,11 +287,11 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_bang_in_duel", (data) => {
     const roomName = data.currentRoom;
     try {
@@ -296,11 +299,11 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_bang_on_indiani", (data) => {
     const roomName = data.currentRoom;
     try {
@@ -309,11 +312,11 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("indiani_active", rooms[roomName].game.indianiActive);
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_mancato_on_indiani", (data) => {
     const roomName = data.currentRoom;
     try {
@@ -322,8 +325,8 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("indiani_active", rooms[roomName].game.indianiActive);
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 
@@ -334,11 +337,11 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_mancato_as_CJ", (data) => {
     const roomName = data.currentRoom;
     try {
@@ -346,11 +349,11 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_mancato_in_duel", (data) => {
     const roomName = data.currentRoom;
     try {
@@ -358,43 +361,43 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_beer", (data) => {
     const roomName = data.currentRoom;
     try {
       io.to(roomName).emit("console", rooms[roomName].game.useBeer(data.username, data.cardDigit, data.cardType));
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_saloon", (data) => {
     const roomName = data.currentRoom;
     try {
       io.to(roomName).emit("console", rooms[roomName].game.useSaloon(data.username, data.cardDigit, data.cardType));
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_emporio", (data) => {
     const roomName = data.currentRoom;
     try {
       io.to(roomName).emit("console", rooms[roomName].game.useEmporio(data.username, data.cardDigit, data.cardType));
       // send emporio state to clients
-      io.to(roomName).emit("emporio_state", {cards: rooms[roomName].game.emporio, nextEmporioTurn: rooms[roomName].game.nextEmporioTurn});
+      io.to(roomName).emit("emporio_state", { cards: rooms[roomName].game.emporio, nextEmporioTurn: rooms[roomName].game.nextEmporioTurn });
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 
@@ -403,11 +406,11 @@ io.on("connection", (socket) => {
     try {
       rooms[roomName].game.getEmporioCard(data.username, data.card);
       // send emporio state to clients
-      io.to(roomName).emit("emporio_state", {cards: rooms[roomName].game.emporio, nextEmporioTurn: rooms[roomName].game.nextEmporioTurn});
+      io.to(roomName).emit("emporio_state", { cards: rooms[roomName].game.emporio, nextEmporioTurn: rooms[roomName].game.nextEmporioTurn });
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 
@@ -419,8 +422,8 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("update_draw_choices", "Kit Carlson");
       io.to(roomName).emit("update_hands");
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 
@@ -431,8 +434,8 @@ io.on("connection", (socket) => {
       updateGameState(io, roomName);
       io.to(roomName).emit("update_draw_choices", "Lucky Duke");
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 
@@ -443,8 +446,8 @@ io.on("connection", (socket) => {
       // send emporio state to clients
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 
@@ -454,29 +457,29 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("console", rooms[roomName].game.useDiligenza(data.username, data.cardDigit, data.cardType));
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_wellsfargo", (data) => {
     const roomName = data.currentRoom;
     try {
       io.to(roomName).emit("console", rooms[roomName].game.useWellsFargo(data.username, data.cardDigit, data.cardType));
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_gatling", (data) => {
     const roomName = data.currentRoom;
     try {
       io.to(roomName).emit("console", rooms[roomName].game.useGatling(data.username, data.cardDigit, data.cardType));
       io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
       updateGameState(io, roomName);
-  
+
       if (rooms[roomName].game.players[data.username].character.name === "Jourdonnais") return; // if Jourdonnais played Gatling, don't activate his Barel
       // search player characters, if there is Jourdonnais, let him use Barel
       for (const player of Object.keys(rooms[roomName].game.players)) {
@@ -485,8 +488,8 @@ io.on("connection", (socket) => {
         }
       }
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 
@@ -498,11 +501,11 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_duel", (data) => {
     const roomName = data.currentRoom;
     try {
@@ -511,97 +514,97 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_prigione", (data) => {
     const roomName = data.currentRoom;
     try {
       io.to(roomName).emit("console", rooms[roomName].game.playPrigione(data.target, data.activeCard));
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_cat_ballou", (data) => {
     const roomName = data.currentRoom;
     try {
       io.to(roomName).emit("console", rooms[roomName].game.useCatBallou(data.target, data.cardDigit, data.cardType));
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_cat_ballou_on_table_card", (data) => {
     const roomName = data.currentRoom;
     try {
       io.to(roomName).emit("console", rooms[roomName].game.useCatBallouOnTableCard(data.activeCard, data.target, data.cardDigit, data.cardType));
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_panico", (data) => {
     const roomName = data.currentRoom;
     try {
       io.to(roomName).emit("console", rooms[roomName].game.usePanico(data.target, data.cardDigit, data.cardType));
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("play_panico_on_table_card", (data) => {
     const roomName = data.currentRoom;
     try {
       io.to(roomName).emit("console", rooms[roomName].game.usePanicoOnTableCard(data.activeCard, data.target, data.cardDigit, data.cardType));
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("place_blue_card_on_table", (data) => {
     const roomName = data.currentRoom;
     try {
       io.to(roomName).emit("console", rooms[roomName].game.placeBlueCardOnTable(data.card));
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("lose_health", (data) => {
     const roomName = data.currentRoom;
     try {
       const message = rooms[roomName].game.loseHealth(data.username)
       io.to(roomName).emit("console", message);
-      
+
       // player death -> show his role
       if (rooms[roomName].game.players[data.username].character.health <= 0) {
         io.to(roomName).emit("known_roles", rooms[roomName].game.knownRoles);
         updateGameState(io, roomName);
       }
-      
+
       // on indiani, emit state
       io.to(roomName).emit("indiani_active", rooms[roomName].game.indianiActive);
       io.to(roomName).emit("duel_active", rooms[roomName].game.duelActive);  // this is not optimal, however fixing it would require creating loseHealthInDuel() method...
-      
+
       io.to(roomName).emit("update_hands");
       io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
       io.to(roomName).emit("update_all_players_info", rooms[roomName].game.getAllPlayersInfo());
-      
+
       if (message[message.length - 1] === "Game ended") {
         // game over      
         // emit who won
@@ -609,11 +612,11 @@ io.on("connection", (socket) => {
         console.log("Game ended in room ", roomName);
       }
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("use_barel", (data) => {
     const roomName = data.currentRoom;
     try {
@@ -621,19 +624,19 @@ io.on("connection", (socket) => {
       updateGameState(io, roomName);
       io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("use_dynamite", (data) => {
     const roomName = data.currentRoom;
     try {
       const message = rooms[roomName].game.useDynamite(data.username, data.card);
       io.to(roomName).emit("console", message);
-  
+
       updateGameState(io, roomName);
-  
+
       if (message[message.length - 1] === "Game ended") {
         // game over      
         // emit who won
@@ -646,56 +649,56 @@ io.on("connection", (socket) => {
         return;
       }
       io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game.getPlayersWithActionRequired());
-  
+
       const currentPlayer = rooms[roomName].game.getNameOfCurrentTurnPlayer();
       if (rooms[roomName].game.players[currentPlayer].character.name === "Kit Carlson") {
         io.to(roomName).emit("update_draw_choices", "Kit Carlson");
-    
+
       } else if (rooms[roomName].game.players[currentPlayer].character.name === "Lucky Duke") {
         io.to(roomName).emit("update_draw_choices", "Lucky Duke");
-    
+
       } else if (rooms[roomName].game.players[currentPlayer].character.name === "Pedro Ramirez" && rooms[roomName].game.stack.length > 0) {
         io.to(roomName).emit("update_draw_choices", "Pedro Ramirez");
-  
+
       } else if (rooms[roomName].game.players[currentPlayer].character.name === "Jesse Jones") {
         io.to(roomName).emit("update_draw_choices", "Jesse Jones");
       }
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("use_prigione", (data) => {
     const roomName = data.currentRoom;
     try {
       io.to(roomName).emit("console", rooms[roomName].game.usePrigione(data.username, data.card));
       updateGameState(io, roomName);
       io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game.getPlayersWithActionRequired());
-      
+
       const currentPlayer = rooms[roomName].game.getNameOfCurrentTurnPlayer();
       io.to(roomName).emit("current_player", currentPlayer);
-  
+
       if (rooms[roomName].game.getPlayerIsInPrison(currentPlayer) || rooms[roomName].game.getPlayerHasDynamite(currentPlayer)) return;
-  
+
       if (rooms[roomName].game.players[currentPlayer].character.name === "Kit Carlson") {
         io.to(roomName).emit("update_draw_choices", "Kit Carlson");
-    
+
       } else if (rooms[roomName].game.players[currentPlayer].character.name === "Lucky Duke") {
         io.to(roomName).emit("update_draw_choices", "Lucky Duke");
-  
+
       } else if (rooms[roomName].game.players[currentPlayer].character.name === "Pedro Ramirez" && rooms[roomName].game.stack.length > 0) {
         io.to(roomName).emit("update_draw_choices", "Pedro Ramirez");
-    
+
       } else if (rooms[roomName].game.players[currentPlayer].character.name === "Jesse Jones") {
         io.to(roomName).emit("update_draw_choices", "Jesse Jones");
       }
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-    
+
   socket.on("jesse_jones_target", (data) => {
     const roomName = data.currentRoom;
     try {
@@ -703,11 +706,11 @@ io.on("connection", (socket) => {
       updateGameState(io, roomName);
       io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game.getPlayersWithActionRequired());
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-    
+
   socket.on("draw_from_deck", (data) => {
     const roomName = data.currentRoom;
     try {
@@ -715,11 +718,11 @@ io.on("connection", (socket) => {
       updateGameState(io, roomName);
       io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game.getPlayersWithActionRequired());
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
-  
+
   socket.on("jourdonnais_barel", (data) => {
     const roomName = data.currentRoom;
     try {
@@ -727,8 +730,8 @@ io.on("connection", (socket) => {
       io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
       updateGameState(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 
@@ -749,8 +752,8 @@ io.on("connection", (socket) => {
         updateGameState(io, roomName)
       }
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 
@@ -758,8 +761,8 @@ io.on("connection", (socket) => {
     try {
       endTurn(io, roomName);
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 
@@ -768,8 +771,8 @@ io.on("connection", (socket) => {
     try {
       socket.emit("players_in_range", rooms[roomName].game.getPlayersInRange(data.username, data.range))
     } catch (error) {
-        console.log(`Error in room ${roomName}:`);
-        console.log(error);
+      console.log(`Error in room ${roomName}:`);
+      console.log(error);
     }
   })
 });
@@ -785,65 +788,65 @@ function updateGameState(io, roomName) {
     io.to(roomName).emit("update_top_stack_card", rooms[roomName].game.getTopStackCard());
     io.to(roomName).emit("update_all_players_info", rooms[roomName].game.getAllPlayersInfo());
   } catch (error) {
-      console.log(`Error on updateGameState():`);
-      console.log(error);
+    console.log(`Error on updateGameState():`);
+    console.log(error);
   }
 }
 
 function endTurn(io, roomName) {
   try {
     io.to(roomName).emit("console", rooms[roomName].game.endTurn());
-  
+
     const currentPlayer = rooms[roomName].game.getNameOfCurrentTurnPlayer(); // get current player
-    
+
     io.to(roomName).emit("current_player", currentPlayer);
     io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game.getPlayersWithActionRequired());
     updateGameState(io, roomName)
-  
+
     if (rooms[roomName].game.getPlayerIsInPrison(currentPlayer)) return;
     if (rooms[roomName].game.getPlayerHasDynamite(currentPlayer)) return;
-    
+
     if (rooms[roomName].game.players[currentPlayer].character.name === "Kit Carlson") {
       io.to(roomName).emit("update_draw_choices", "Kit Carlson");
-  
+
     } else if (rooms[roomName].game.players[currentPlayer].character.name === "Lucky Duke") {
       io.to(roomName).emit("update_draw_choices", "Lucky Duke");
-  
+
     } else if (rooms[roomName].game.players[currentPlayer].character.name === "Pedro Ramirez" && rooms[roomName].game.stack.length > 0) {
       io.to(roomName).emit("update_draw_choices", "Pedro Ramirez");
-    
+
     } else if (rooms[roomName].game.players[currentPlayer].character.name === "Jesse Jones") {
       io.to(roomName).emit("update_draw_choices", "Jesse Jones");
     }
   } catch (error) {
-      console.log(`Error on endTurn():`);
-      console.log(error);
+    console.log(`Error on endTurn():`);
+    console.log(error);
   }
 }
 
 function nextTurn(io, roomName) {
   try {
     const currentPlayer = rooms[roomName].game.getNameOfCurrentTurnPlayer(); // get current player
-    
+
     if (rooms[roomName].game.players[currentPlayer].character.name === "Kit Carlson") {
       io.to(roomName).emit("update_draw_choices", "Kit Carlson");
-  
+
     } else if (rooms[roomName].game.players[currentPlayer].character.name === "Lucky Duke") {
       io.to(roomName).emit("update_draw_choices", "Lucky Duke");
-  
+
     } else if (rooms[roomName].game.players[currentPlayer].character.name === "Pedro Ramirez" && rooms[roomName].game.stack.length > 0) {
       io.to(roomName).emit("update_draw_choices", "Pedro Ramirez");
-  
+
     } else if (rooms[roomName].game.players[currentPlayer].character.name === "Jesse Jones") {
       io.to(roomName).emit("update_draw_choices", "Jesse Jones");
     }
-  
+
     io.to(roomName).emit("current_player", currentPlayer);
     io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game.getPlayersWithActionRequired());
     updateGameState(io, roomName);
   } catch (error) {
-      console.log(`Error on nextTurn():`);
-      console.log(error);
+    console.log(`Error on nextTurn():`);
+    console.log(error);
   }
 }
 
@@ -851,7 +854,7 @@ function getRoomsInfo() {
   try {
     // return all rooms in an array
     // [{roomName, numOfPlayers, gameActive}]
-    const res = []
+    const res: RoomInfo[] = []
     for (const room of Object.keys(rooms)) {
       const roomInfo = {
         name: room,
@@ -862,39 +865,39 @@ function getRoomsInfo() {
     }
     return res;
   } catch (error) {
-      console.log(`Error on getRoomsInfo():`);
-      console.log(error);
+    console.log(`Error on getRoomsInfo():`);
+    console.log(error);
   }
 }
 
 function startGame(io, roomName) {
   try {
     io.to(roomName).emit("console", rooms[roomName].game.startGame());
-  
-    let characters = []
+
+    let characters: Characters[] = []
     for (var player of Object.keys(rooms[roomName].game.players)) {
-      characters.push({playerName: player, character: rooms[roomName].game.players[player].character.name})
+      characters.push({ playerName: player, character: rooms[roomName].game.players[player].character.name })
     }
     io.to(roomName).emit("characters", characters);
     io.to(roomName).emit("current_player", rooms[roomName].game.getNameOfCurrentTurnPlayer());
     io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game.getPlayersWithActionRequired());
-    
+
     const currentPlayer = rooms[roomName].game.getNameOfCurrentTurnPlayer(); // get current player
-  
+
     if (rooms[roomName].game.players[currentPlayer].character.name === "Kit Carlson") {
       io.to(roomName).emit("update_draw_choices", "Kit Carlson");
-  
+
     } else if (rooms[roomName].game.players[currentPlayer].character.name === "Lucky Duke") {
       io.to(roomName).emit("update_draw_choices", "Lucky Duke");
-  
+
     } else if (rooms[roomName].game.players[currentPlayer].character.name === "Jesse Jones") {
       io.to(roomName).emit("update_draw_choices", "Jesse Jones");
-  
+
     }
-  
-    io.to(roomName).emit("game_started", {allPlayersInfo: rooms[roomName].game.getAllPlayersInfo(), allCharactersInfo: rooms[roomName].game.getCharacters()});
+
+    io.to(roomName).emit("game_started", { allPlayersInfo: rooms[roomName].game.getAllPlayersInfo(), allCharactersInfo: rooms[roomName].game.getCharacters() });
   } catch (error) {
-      console.log(`Error on startGame():`);
-      console.log(error);
+    console.log(`Error on startGame():`);
+    console.log(error);
   }
 }

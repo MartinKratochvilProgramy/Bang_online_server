@@ -1,7 +1,33 @@
-class Game {
-    constructor(playerNames, deck) {
+import { Card } from "./types/types";
+
+export class Game {
+
+    playerNames: string[];
+    numOfPlayers: number;
+    namesOfCharacters: string[];
+    knownRoles: any;
+    deck: Card[];
+    gameEnded: boolean;
+    stack: Card[];
+    emporio: Card[];
+    drawChoice: Card[];
+    players: any;
+    playerRoundId: number;
+    bangCanBeUsed: boolean;
+    duelActive: boolean;
+    indianiActive: boolean;
+    gatlingActive: boolean;
+    duelPlayers: any;
+    duelTurnIndex: number;
+    luckyDukeFirstDraw: boolean;
+    sidKetchumDiscarded: boolean;
+    awaitDrawChoice: boolean;
+    nextEmporioTurn: string | null;
+
+    constructor(playerNames: string[], deck: Card[]) {
+        this.playerNames = playerNames;
         this.numOfPlayers = playerNames.length;
-        this.namesOfCharacters = ["Bart Cassidy", "Black Jack", "Calamity Janet", "El Gringo", "Jesse Jones", "Jourdonnais", "Kit Carlson", "Lucky Duke", "Paul Regret", "Pedro Ramirez", "Rose Doolan", "Slab the Killer", "Suzy Lafayette", "Vulture Sam", "Willy the Kid"] 
+        this.namesOfCharacters = ["Bart Cassidy", "Black Jack", "Calamity Janet", "El Gringo", "Jesse Jones", "Jourdonnais", "Kit Carlson", "Lucky Duke", "Paul Regret", "Pedro Ramirez", "Rose Doolan", "Slab the Killer", "Suzy Lafayette", "Vulture Sam", "Willy the Kid"]
         // this.namesOfCharacters = ["Slab the Killer", "Calamity Janet", "Jourdonnais", "El Gringo"] 
         this.knownRoles = {}
         this.deck = [...deck];  // create new copy of deck
@@ -9,7 +35,7 @@ class Game {
         this.stack = [];
         this.emporio = [];
         this.drawChoice = [];
-        this.players = {}
+        // this.players = {}
         this.playerRoundId = 0;
         this.bangCanBeUsed = true;
         this.duelActive = false;
@@ -20,6 +46,7 @@ class Game {
         this.luckyDukeFirstDraw = true;
         this.sidKetchumDiscarded = false;
         this.awaitDrawChoice = false;
+        this.nextEmporioTurn = null;
 
         // init players
         for (let i = 0; i < this.numOfPlayers; i++) {
@@ -37,10 +64,10 @@ class Game {
         }
     }
 
-    draw(numToDraw, playerName = this.getNameOfCurrentTurnPlayer()) {
+    draw(numToDraw: number, playerName = this.getNameOfCurrentTurnPlayer()) {
         // put nomToDraw cards into hand of current playerRoundId
         // remove top card from deck
-        
+
         if (this.deck.length <= 8) {
             this.putStackIntoDeck();
         }
@@ -56,16 +83,16 @@ class Game {
 
 
         if (numToDraw === 1) {
-            return [`${playerName} drew ${numToDraw} card`];
+            return `${playerName} drew ${numToDraw} card`;
         } else {
-            return [`${playerName} drew ${numToDraw} cards`];
+            return `${playerName} drew ${numToDraw} cards`;
         }
     }
 
-    drawFromDeck(numToDraw, playerName = this.getNameOfCurrentTurnPlayer()) {
+    drawFromDeck(numToDraw: number, playerName = this.getNameOfCurrentTurnPlayer()) {
         // put nomToDraw cards into hand of current playerRoundId
         // remove top card from deck
-        
+
         if (this.deck.length <= 0) {
             this.putStackIntoDeck();
         }
@@ -91,11 +118,11 @@ class Game {
         }
     }
 
-    discard(cardName, cardDigit, cardType, playerName = this.getNameOfCurrentTurnPlayer()) {
+    discard(cardName: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
         // remove card from playerName hand and place it to the end of stack
 
         // remove card from hand
-        const cardIndex = this.players[playerName].hand.findIndex(card => (card.name === cardName && card.digit === cardDigit && card.type === cardType));
+        const cardIndex = this.players[playerName].hand.findIndex((card: Card) => (card.name === cardName && card.digit === cardDigit && card.type === cardType));
         const cardToDiscard = this.players[playerName].hand.splice(cardIndex, 1)[0];
         cardToDiscard.isPlayable = false;
         // place card on deck
@@ -113,7 +140,7 @@ class Game {
     }
 
     // ******************* USE CARDS *******************
-    useBang(target, cardDigit, cardType, playerName = this.getNameOfCurrentTurnPlayer()) {
+    useBang(target: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
         this.discard("Bang!", cardDigit, cardType, playerName);
         this.setAllNotPlayable(playerName);
 
@@ -123,14 +150,14 @@ class Game {
             // need 2 Mancato! on StK
             this.players[target].mancatoPool += 1;
         }
-        
+
         this.setPlayable("Mancato!", target);
         if (this.players[target].character.name === "Calamity Janet") {
             this.setPlayable("Bang!", target);
         }
         this.setCardOnTablePlayable("Barilo", target);
-        
-        if (this.players[playerName].table.filter(item => item.name === 'Vulcanic').length > 0 || this.players[playerName].character.name === "Willy the Kid") {
+
+        if (this.players[playerName].table.filter((item: Card) => item.name === 'Vulcanic').length > 0 || this.players[playerName].character.name === "Willy the Kid") {
             // if player has Volcanic or is Willy the Kid don't block Bang!s
             this.bangCanBeUsed = true;
         } else {
@@ -139,9 +166,9 @@ class Game {
 
         return [`${playerName} used Bang! on ${target}`];
     }
-    
-    useBangAsCJ(playerName, cardDigit, cardType) {
-        let message = [];
+
+    useBangAsCJ(playerName: string, cardDigit: number, cardType: string) {
+        let message: string[] = [];
         this.players[playerName].mancatoPool -= 1;
 
         this.discard("Bang!", cardDigit, cardType, playerName);
@@ -150,7 +177,7 @@ class Game {
         if (this.players[playerName].mancatoPool === 0) {
             this.setCardOnTableNotPlayable("Barilo", playerName);
             this.setAllNotPlayable(playerName);
-            
+
             this.setIsLosingHealth(false, playerName);
 
             // if there is player loosing health, return
@@ -165,7 +192,7 @@ class Game {
         return message;
     }
 
-    useBangOnIndiani(cardDigit, cardType, playerName) {
+    useBangOnIndiani(cardDigit: number, cardType: string, playerName: string) {
         this.discard("Bang!", cardDigit, cardType, playerName);
 
         this.setIsLosingHealth(false, playerName);
@@ -182,7 +209,7 @@ class Game {
         return [`${playerName} used Bang!`];
     }
 
-    useMancatoOnIndiani(cardDigit, cardType, playerName) {
+    useMancatoOnIndiani(cardDigit: number, cardType: string, playerName: string) {
         this.discard("Mancato!", cardDigit, cardType, playerName);
 
         this.setIsLosingHealth(false, playerName);
@@ -199,7 +226,7 @@ class Game {
         return [`${playerName} used Mancato! as Bang!`];
     }
 
-    useBangInDuel(cardDigit, cardType, playerName = this.getNameOfCurrentTurnPlayer()) {
+    useBangInDuel(cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
         // special case of Bang! use, sets the next turn of the duel state
 
         this.discard("Bang!", cardDigit, cardType, playerName);
@@ -207,7 +234,7 @@ class Game {
         this.setNotPlayable("Bang!", this.duelPlayers[this.duelTurnIndex]);
         this.setIsLosingHealth(false, this.duelPlayers[this.duelTurnIndex]);
         this.setAllNotPlayable(playerName);
-        
+
         // shift to the next player in duel (duelPlayers.length should always = 2)
         this.duelTurnIndex = (this.duelTurnIndex + 1) % 2;
         // set next players Ban!g cards playable
@@ -216,16 +243,16 @@ class Game {
             this.setPlayable("Mancato!", this.duelPlayers[this.duelTurnIndex]);
         }
         this.setIsLosingHealth(true, this.duelPlayers[this.duelTurnIndex]);
-        
+
         return [`${playerName} used Bang! in duel`];
     }
 
-    useMancato(playerName, cardDigit, cardType) {
+    useMancato(playerName: string, cardDigit: number, cardType: string) {
         let message = [`${playerName} used Mancato!`];
 
         this.discard("Mancato!", cardDigit, cardType, playerName);
 
-        this.players[playerName].mancatoPool -=1;
+        this.players[playerName].mancatoPool -= 1;
 
         if (this.players[playerName].mancatoPool === 0) {
             this.setAllNotPlayable(playerName);
@@ -236,7 +263,7 @@ class Game {
                 // CJ can play Mancato! on Indiani, so disable all cards if this happens
                 this.setAllNotPlayable(playerName);
             }
-            
+
             // if there is player loosing health, return
             // if no player is found, set playable for playerPlaceholder
             for (const player of this.getPlayersLosingHealth()) {
@@ -244,13 +271,13 @@ class Game {
             }
             this.gatlingActive = false;
             this.setAllPlayable(this.getNameOfCurrentTurnPlayer());
-            
+
         }
-        
+
         return message;
     }
 
-    useMancatoInDuel(cardDigit, cardType, playerName = this.getNameOfCurrentTurnPlayer()) {
+    useMancatoInDuel(cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
         // special case of Bang! use, sets the next turn of the duel state
 
         this.discard("Mancato!", cardDigit, cardType, playerName);
@@ -259,7 +286,7 @@ class Game {
         this.setNotPlayable("Mancato!", this.duelPlayers[this.duelTurnIndex]);
         this.setIsLosingHealth(false, this.duelPlayers[this.duelTurnIndex]);
         this.setAllNotPlayable(playerName);
-        
+
         // shift to the next player in duel (duelPlayers.length should always = 2)
         this.duelTurnIndex = (this.duelTurnIndex + 1) % 2;
         // set next players Ban!g cards playable
@@ -269,7 +296,7 @@ class Game {
         return [`${playerName} used Mancato! as Bang! in duel`];
     }
 
-    useMancatoAsCJ(target, cardDigit, cardType, playerName = this.getNameOfCurrentTurnPlayer()) {
+    useMancatoAsCJ(target: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
         this.discard("Mancato!", cardDigit, cardType, playerName);
 
         this.players[target].mancatoPool = 1;
@@ -278,7 +305,7 @@ class Game {
         this.setCardOnTablePlayable("Barilo", target);
 
         this.setAllNotPlayable(playerName);
-        if (this.players[playerName].table.filter(item => item.name === 'Vulcanic').length > 0 || this.players[playerName].character.name === "Willy the Kid") {
+        if (this.players[playerName].table.filter((item: Card) => item.name === 'Vulcanic').length > 0 || this.players[playerName].character.name === "Willy the Kid") {
             // if player has Volcanic or is Willy the Kid don't block Bang!s
             this.bangCanBeUsed = true;
         } else {
@@ -290,23 +317,23 @@ class Game {
         return [`${playerName} used Mancato! as Bang! on ${target}`];
     }
 
-    useCatBallou(target, cardDigit, cardType, playerName = this.getNameOfCurrentTurnPlayer()) {
-        let message = [];
+    useCatBallou(target: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
+        let message: string[] = [];
         this.discard("Cat Balou", cardDigit, cardType, playerName);
         message.push(`${playerName} used Cat Balou on ${target}`);
 
         // get random card from target hand
-        const randomCard = this.getPlayerHand(target)[Math.floor(Math.random()*this.getPlayerHand(target).length)]
+        const randomCard = this.getPlayerHand(target)[Math.floor(Math.random() * this.getPlayerHand(target).length)]
 
         this.discard(randomCard.name, randomCard.digit, randomCard.type, target);
         message.push(`${target} discarded ${randomCard.name}`);
-        
+
         return message;
     }
 
-    useCatBallouOnTableCard(activeCard, target, cardDigit, cardType, playerName = this.getNameOfCurrentTurnPlayer()) {
+    useCatBallouOnTableCard(activeCard: Card, target: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
         this.discard("Cat Balou", activeCard.digit, activeCard.type, playerName);
-        
+
         for (let player of Object.keys(this.players)) {
             // remove from table object where name === target
             for (let j = 0; j < this.players[player].table.length; j++) {
@@ -319,12 +346,12 @@ class Game {
         return [`${playerName} used Cat Balou on ${target}`];
     }
 
-    usePanico(target, cardDigit, cardType, playerName = this.getNameOfCurrentTurnPlayer()) {
+    usePanico(target: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
         this.discard("Panico", cardDigit, cardType, playerName);
-        
+
         // if targer is player, steal random card from his hand
         // get random card from target hand
-        const randomCard = this.getPlayerHand(target)[Math.floor(Math.random()*this.getPlayerHand(target).length)]
+        const randomCard = this.getPlayerHand(target)[Math.floor(Math.random() * this.getPlayerHand(target).length)]
         if (!randomCard) return;
         if (randomCard.name === "Mancato!") {
             // if chosen card Mancato! set isNotPlayable
@@ -336,12 +363,12 @@ class Game {
             // set playable
             randomCard.isPlayable = true;
         }
-        
+
         const currentPlayerHand = this.players[playerName].hand;
         const targetPlayerHand = this.players[target].hand;
         // remove card from hand
-        for(var i = 0; i < targetPlayerHand.length; i++) {
-            if(targetPlayerHand[i].digit === randomCard.digit && targetPlayerHand[i].type === randomCard.type) {
+        for (var i = 0; i < targetPlayerHand.length; i++) {
+            if (targetPlayerHand[i].digit === randomCard.digit && targetPlayerHand[i].type === randomCard.type) {
                 targetPlayerHand.splice(i, 1);
                 break;
             }
@@ -354,9 +381,9 @@ class Game {
         return [`${playerName} used Panico on ${target}`];
     }
 
-    usePanicoOnTableCard(activeCard, target, cardDigit, cardType, playerName = this.getNameOfCurrentTurnPlayer()) {
+    usePanicoOnTableCard(activeCard: Card, target: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
         this.discard("Panico", activeCard.digit, activeCard.type, playerName);
-        
+
         for (let player of Object.keys(this.players)) {
             // remove from table object where name === target
             for (let j = 0; j < this.players[player].table.length; j++) {
@@ -371,25 +398,25 @@ class Game {
         return [`${playerName} used Panico on ${target}`];
     }
 
-    placeBlueCardOnTable(card, playerName = this.getNameOfCurrentTurnPlayer()) {
-        const cardInHandIndex = this.players[playerName].hand.findIndex(cardInHand => (cardInHand.name === card.name && cardInHand.digit === card.digit && cardInHand.type === card.type));
+    placeBlueCardOnTable(card: Card, playerName = this.getNameOfCurrentTurnPlayer()) {
+        const cardInHandIndex = this.players[playerName].hand.findIndex((cardInHand: Card) => (cardInHand.name === card.name && cardInHand.digit === card.digit && cardInHand.type === card.type));
         this.players[playerName].hand.splice(cardInHandIndex, 1)[0]; // this can't be handled by this.discard() because decision must be made weather to push card on table or stack
 
         if (card.class === "horse") {
             // two horses allowed on table, so filter by name
-            if (this.players[playerName].table.filter(cardOnTable => cardOnTable.name === card.name).length > 0) {
+            if (this.players[playerName].table.filter((cardOnTable: Card) => cardOnTable.name === card.name).length > 0) {
                 // remove card from table
-                const cardOnTableIndex = this.players[playerName].table.findIndex(cardOnTable => (cardOnTable.name === card.name));
+                const cardOnTableIndex = this.players[playerName].table.findIndex((cardOnTable: Card) => (cardOnTable.name === card.name));
                 const removedCard = this.players[playerName].table.splice(cardOnTableIndex, 1)[0];
                 this.stack.push(removedCard);
             }
         } else if (card.class === "dynamite") {
-            
+
         } else {
             // only one gun card of same class allowed so filter by class
-            if (this.players[playerName].table.filter(cardOnTable => cardOnTable.class === card.class).length > 0) {
+            if (this.players[playerName].table.filter((cardOnTable: Card) => cardOnTable.class === card.class).length > 0) {
                 // remove card from table
-                const cardOnTableIndex = this.players[playerName].table.findIndex(foundCard => (foundCard.class === card.class));
+                const cardOnTableIndex = this.players[playerName].table.findIndex((foundCard: Card) => (foundCard.class === card.class));
                 const removedCard = this.players[playerName].table.splice(cardOnTableIndex, 1)[0];
                 if (removedCard.name === "Vulcanic") this.bangCanBeUsed = false;
                 this.stack.push(removedCard);
@@ -405,27 +432,27 @@ class Game {
                 }
             }
         }
-        
+
         // put on table
         card.isPlayable = false;
         this.players[playerName].table.push(card);
         return [`${playerName} placed ${card.name} on table`];
     }
 
-    useBeer(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit, cardType) {
+    useBeer(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit: number, cardType: string) {
         this.discard("Beer", cardDigit, cardType, playerName);
-        
+
         this.players[playerName].character.health += 1;
-        
+
         if (this.players[playerName].character.health >= this.players[playerName].character.maxHealth) {
             this.setNotPlayable("Beer", playerName) // do not let player play beer if not max HP
         }
         return [`${playerName} used Beer`];
     }
 
-    useSaloon(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit, cardType) {
+    useSaloon(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit: number, cardType: string) {
         this.discard("Saloon", cardDigit, cardType, playerName);
-        
+
         for (const player of Object.keys(this.players)) {
             // put hit on all players, except playerName
             if (this.players[player].character.health > 0 && this.players[player].character.health < this.players[player].character.maxHealth) {
@@ -436,11 +463,11 @@ class Game {
         return [`${playerName} used Saloon`];
     }
 
-    useEmporio(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit, cardType) {
+    useEmporio(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit: number, cardType: string) {
         this.discard("Emporio", cardDigit, cardType, playerName);
-        
+
         this.setAllNotPlayable(playerName);
-        
+
         this.emporio = []; // this is not necessary, but to be sure
         for (let player of Object.keys(this.players)) {
             if (this.players[player].character.health > 0) {
@@ -450,11 +477,11 @@ class Game {
             }
         }
         this.nextEmporioTurn = playerName;
-        
+
         return [`${playerName} used Emporio`];
     }
 
-    getEmporioCard(playerName, card) {
+    getEmporioCard(playerName: string, card: Card) {
         const getCardIndex = this.emporio.findIndex(foundCard => (foundCard.name === card.name && foundCard.digit === card.digit && foundCard.type === card.type))
         // return if card not found
         if (getCardIndex < 0) return;
@@ -463,7 +490,7 @@ class Game {
         // place card in player hand
         this.players[playerName].hand.push(emporioCard);
         // remove from emporio
-        this.emporio.splice(getCardIndex, 1); 
+        this.emporio.splice(getCardIndex, 1);
 
         if (this.emporio.length <= 0) {
             // end when no cards to draw
@@ -474,29 +501,29 @@ class Game {
         }
         const playerNames = Object.keys(this.players);
         let currentEmporioTurnPlayerIndex = playerNames.findIndex(player => player === this.nextEmporioTurn)
-            // find next alive player
-            for (let i = 0; i < this.numOfPlayers; i++) {
-                currentEmporioTurnPlayerIndex += 1;
-                if (currentEmporioTurnPlayerIndex >= this.numOfPlayers) {
-                    currentEmporioTurnPlayerIndex = 0;
-                }
-                const nextPlayer = Object.keys(this.players).find(key => this.players[key].id === currentEmporioTurnPlayerIndex);
-                if (this.players[nextPlayer].character.health > 0) {
-                    //this.players[nextPlayer].table.push(card);
-                    break;
-                }
+        // find next alive player
+        for (let i = 0; i < this.numOfPlayers; i++) {
+            currentEmporioTurnPlayerIndex += 1;
+            if (currentEmporioTurnPlayerIndex >= this.numOfPlayers) {
+                currentEmporioTurnPlayerIndex = 0;
             }
+            const nextPlayer = Object.keys(this.players).find(key => this.players[key].id === currentEmporioTurnPlayerIndex);
+            if (nextPlayer && this.players[nextPlayer].character.health > 0) {
+                //this.players[nextPlayer].table.push(card);
+                break;
+            }
+        }
         this.nextEmporioTurn = playerNames[currentEmporioTurnPlayerIndex];
     }
 
-    getChoiceCardKC(playerName, card) {
+    getChoiceCardKC(playerName: string, card: Card) {
         const getCardIndex = this.drawChoice.findIndex(foundCard => (foundCard.name === card.name && foundCard.digit === card.digit && foundCard.type === card.type))
         // return if card not found
         if (getCardIndex < 0) return;
         // place card in player hand
         this.players[playerName].hand.push(this.drawChoice[getCardIndex]);
         // remove from drawChoice
-        this.drawChoice.splice(getCardIndex, 1); 
+        this.drawChoice.splice(getCardIndex, 1);
 
         if (this.drawChoice.length === 1) {
             this.stack.push(this.drawChoice[0]);
@@ -507,14 +534,14 @@ class Game {
         }
     }
 
-    getChoiceCardLD(playerName, card) {
+    getChoiceCardLD(playerName: string, card: Card) {
         const getCardIndex = this.drawChoice.findIndex(foundCard => (foundCard.name === card.name && foundCard.digit === card.digit && foundCard.type === card.type))
         // return if card not found
         if (getCardIndex < 0) return;
         // place card in player hand
         this.players[playerName].hand.push(this.drawChoice[getCardIndex]);
         // remove from drawChoice
-        this.drawChoice.splice(getCardIndex, 1); 
+        this.drawChoice.splice(getCardIndex, 1);
 
         if (this.luckyDukeFirstDraw) {
             this.stack.push(this.drawChoice[0])
@@ -536,67 +563,67 @@ class Game {
         }
     }
 
-    getStackCardPR(playerName) {
+    getStackCardPR(playerName: string) {
         // place card in player hand
         this.players[playerName].hand.push(this.getTopStackCard());
         // remove from stack
         this.stack.pop();
-        
+
         this.draw(1, playerName);
-        
+
         this.setAllPlayable(playerName);
-        
+
         this.awaitDrawChoice = false;
-        
+
         return ["Pedro Ramirez drew first crad from stack"];
     }
-    
-    useDiligenza(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit, cardType) {
+
+    useDiligenza(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit: number, cardType: string) {
         this.discard("Diligenza", cardDigit, cardType);
-        
+
         this.draw(2, playerName);
-        
+
         this.setAllPlayable(playerName);
-        
+
         return [`${playerName} used Diligenza`];
     }
-    
-    useWellsFargo(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit, cardType) {
+
+    useWellsFargo(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit: number, cardType: string) {
         this.discard("Wells Fargo", cardDigit, cardType);
-        
+
         this.draw(3, playerName);
 
         this.setAllPlayable(playerName);
-        
+
         return [`${playerName} used Wells Fargo`];
     }
 
-    useDuel(target, cardDigit, cardType, playerName = this.getNameOfCurrentTurnPlayer()) {
+    useDuel(target: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
         this.discard("Duel", cardDigit, cardType, playerName);
-        
+
         this.duelPlayers = [target, playerName];
         this.duelTurnIndex = 0;
-        
+
         this.setPlayable("Bang!", target);
         if (this.players[target].character.name === "Calamity Janet") {
             this.setPlayable("Mancato!", this.duelPlayers[this.duelTurnIndex]);
         }
         this.setIsLosingHealth(true, target);
-        
+
         this.setAllNotPlayable(playerName);
-        
+
         this.duelActive = true;
-        
+
         return [`${playerName} used Duel on ${target}`];
     }
 
-    useGatling(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit, cardType) {
+    useGatling(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit: number, cardType: string) {
         this.discard("Gatling", cardDigit, cardType, playerName);
-        
+
         if (this.players[playerName].character.name === "Slab the Killer") {
             this.gatlingActive = true;
         }
-        
+
         for (const target of Object.keys(this.players)) {
             // put hit on all players, except playerName and dead players
             if (target !== playerName && this.players[target].character.health > 0) {
@@ -605,20 +632,20 @@ class Game {
                     this.setPlayable("Bang!", target);
                 }
                 this.setCardOnTablePlayable("Barilo", target);
-                
+
                 this.setIsLosingHealth(true, target);
-                this.players[target].mancatoPool =1;
+                this.players[target].mancatoPool = 1;
             }
         }
-        
+
         this.setAllNotPlayable(playerName);
-        
+
         return [`${playerName} used Gatling`];
     }
 
-    useIndiani(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit, cardType) {
+    useIndiani(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit: number, cardType: string) {
         this.discard("Indiani", cardDigit, cardType, playerName);
-        
+
         for (const target of Object.keys(this.players)) {
             // put hit on all players, except playerName
             if (target !== playerName && this.players[target].character.health > 0) {
@@ -626,36 +653,36 @@ class Game {
                 if (this.players[target].character.name === "Calamity Janet") {
                     this.setPlayable("Mancato!", target);
                 }
-                
+
                 this.setIsLosingHealth(true, target);
             }
         }
-        
+
         this.indianiActive = true;
-        
+
         this.setAllNotPlayable(playerName);
-        
+
         return [`${playerName} used Indiani`];
     }
-    
-    playPrigione(target, card, playerName = this.getNameOfCurrentTurnPlayer()) {
+
+    playPrigione(target: string, card: Card, playerName = this.getNameOfCurrentTurnPlayer()) {
         // put prison in other players' table
-        const cardIndex = this.players[playerName].hand.findIndex(foundCard => (foundCard.name === card.name && foundCard.digit === card.digit && foundCard.type === card.type));
+        const cardIndex = this.players[playerName].hand.findIndex((foundCard: Card) => (foundCard.name === card.name && foundCard.digit === card.digit && foundCard.type === card.type));
         this.players[playerName].hand.splice(cardIndex, 1)[0];
-        
+
         card.isPlayable = false;
         this.players[target].table.push(card);
-        
+
         return [`${playerName} put ${target} in prison`];
     }
 
-    useBarel(playerName) {
+    useBarel(playerName: string) {
         let message;
 
         const drawnCard = this.deck[0];
         this.deck.shift();
         this.stack.push(drawnCard);
-        
+
         message = [`${playerName} drew ${drawnCard.name} ${drawnCard.digit} ${drawnCard.type} on barel`];
 
         this.setCardOnTableNotPlayable("Barilo", playerName);
@@ -674,14 +701,20 @@ class Game {
         return message;
     }
 
-    useDynamite(playerName, card) {
+    useDynamite(playerName: string, card: Card) {
         card.isPlayable = false;
         const drawnCard = this.deck[0];
-        let secondDrawnCard;
+        let secondDrawnCard: Card = {
+            name: "",
+            rimColor: "",
+            digit: 0,
+            type: "",
+            isPlayable: false,
+        };
         this.deck.shift();
         this.stack.push(drawnCard)
         let message = [`${playerName} drew ${drawnCard.name} ${drawnCard.digit} ${drawnCard.type} on dynamite`];
-        
+
         if (this.players[playerName].character.name === "Lucky Duke") {
             secondDrawnCard = this.deck[0];
             message.push(`${playerName} drew ${secondDrawnCard.name} ${secondDrawnCard.digit} ${secondDrawnCard.type} on dynamite as Lucky Duke`);
@@ -689,12 +722,12 @@ class Game {
         }
 
         // remove from playerName table card object
-        this.players[playerName].table = this.players[playerName].table.filter(function( tableCard ) {
-             return (tableCard.name !== card.name || tableCard.digit !== card.digit || tableCard.type !== card.type);
+        this.players[playerName].table = this.players[playerName].table.filter(function (tableCard: Card) {
+            return (tableCard.name !== card.name || tableCard.digit !== card.digit || tableCard.type !== card.type);
         });
 
         if (drawnCard.type === "spades" && (2 <= drawnCard.digit && drawnCard.digit <= 9)) {
-            if ((this.players[playerName].character.name === "Lucky Duke" && (secondDrawnCard.type =! "spades" && 2 >= secondDrawnCard.digit && secondDrawnCard.digit >= 9))) {
+            if ((this.players[playerName].character.name === "Lucky Duke" && (secondDrawnCard.type !== "spades" && 2 >= secondDrawnCard.digit && secondDrawnCard.digit >= 9))) {
                 // LD drew second outside
                 // find next alive player
                 let currentPlayerId = this.playerRoundId + 1;
@@ -703,7 +736,7 @@ class Game {
                 }
                 for (let i = 0; i < this.numOfPlayers; i++) {
                     const nextPlayer = Object.keys(this.players).find(key => this.players[key].id === currentPlayerId);
-                    if (this.players[nextPlayer].character.health > 0) {
+                    if (nextPlayer && this.players[nextPlayer].character.health > 0) {
                         this.players[nextPlayer].table.push(card);
                         break;
                     }
@@ -733,7 +766,7 @@ class Game {
             }
             for (let i = 0; i < this.numOfPlayers; i++) {
                 const nextPlayer = Object.keys(this.players).find(key => this.players[key].id === currentPlayerId);
-                if (this.players[nextPlayer].character.health > 0) {
+                if (nextPlayer && this.players[nextPlayer].character.health > 0) {
                     this.players[nextPlayer].table.push(card);
                     break;
                 }
@@ -744,7 +777,7 @@ class Game {
                 }
             }
         }
-        
+
         if (!this.getPlayerHasDynamite(playerName) && !this.getPlayerIsInPrison(playerName)) {
             const currentPlayerName = this.getNameOfCurrentTurnPlayer();
             if (this.players[currentPlayerName].character.name === "Lucky Duke") {
@@ -770,14 +803,14 @@ class Game {
             if (this.players[playerName].character.name !== "Pedro Ramirez" && this.stack.length > 0) {
                 this.draw(2, playerName);
                 this.setAllPlayable(playerName);
-            }  
+            }
         } else {
             this.setAllNotPlayable(playerName);
         }
         return message;
     }
 
-    usePrigione(playerName, card) {
+    usePrigione(playerName: string, card: Card) {
         card.isPlayable = false;
 
         // place prison on stack
@@ -785,11 +818,17 @@ class Game {
 
         // draw card
         const drawnCard = this.deck[0];
-        let secondDrawnCard;
+        let secondDrawnCard: Card = {
+            name: "",
+            rimColor: "",
+            digit: 0,
+            type: "",
+            isPlayable: false,
+        };
         this.deck.shift();
         this.stack.push(drawnCard)
         let message = [`${playerName} drew ${drawnCard.name} ${drawnCard.digit} ${drawnCard.type} on prison`];
-                
+
         if (this.players[playerName].character.name === "Lucky Duke") {
             // Lucky Duke second card
             secondDrawnCard = this.deck[0];
@@ -799,8 +838,8 @@ class Game {
         }
 
         // remove from playerName table card object
-        this.players[playerName].table = this.players[playerName].table.filter(function( tableCard ) {
-             return (tableCard.name !== card.name || tableCard.digit !== card.digit || tableCard.type !== card.type);
+        this.players[playerName].table = this.players[playerName].table.filter(function (tableCard: Card) {
+            return (tableCard.name !== card.name || tableCard.digit !== card.digit || tableCard.type !== card.type);
         });
 
         if (drawnCard.type === "hearts" || (this.players[playerName].character.name === "Lucky Duke" && secondDrawnCard.type === "hearts")) {
@@ -842,10 +881,10 @@ class Game {
             this.endTurn();
             return message;
         }
-        
+
     }
 
-    loseHealth(playerName) {
+    loseHealth(playerName: string) {
         let message = [`${playerName} lost health`];
 
         this.players[playerName].character.health -= 1;
@@ -858,12 +897,12 @@ class Game {
             this.setNotPlayable("Bang!", playerName);
         }
         this.setCardOnTableNotPlayable("Barilo", playerName)
-        
-        
+
+
         if (this.players[playerName].character.name === "Bart Cassidy" && !this.indianiActive) {
             // Bart Cassidy draws a card on hit
             // this works on all damage taken except Indiani -> could cause problems
-            if (this.players[playerName].table.filter(foundCard => foundCard.name === "Dynamite").lenght === 0) {
+            if (this.players[playerName].table.filter((foundCard: Card) => foundCard.name === "Dynamite").lenght === 0) {
                 message.push(this.draw(1, playerName));
             } else {
                 if (this.getNameOfCurrentTurnPlayer() !== playerName) {
@@ -871,13 +910,13 @@ class Game {
                 }
             }
         }
-        
+
         if (playerName !== this.getNameOfCurrentTurnPlayer()) {
             // if not players turn, disable his Bang!
             // this is for lose life when Indiani
             this.setNotPlayable("Bang!", playerName)
         }
-        
+
         if (this.duelActive) {
             this.duelActive = false;
             this.duelTurnIndex = 0;
@@ -892,7 +931,7 @@ class Game {
         if (this.players[playerName].character.name === "El Gringo" && (this.getTopStackCard().name === "Bang!" || this.getTopStackCard().name === "Mancato!" || this.getTopStackCard().name === "Gatling")) {
             const playerHandLenght = this.players[this.getNameOfCurrentTurnPlayer()].hand.length;
             if (playerHandLenght > 0) {
-                
+
                 const randomCardIndex = Math.floor(Math.random() * playerHandLenght);
                 const randomCard = this.players[this.getNameOfCurrentTurnPlayer()].hand.shift(randomCardIndex, 1);
                 randomCard.isPlayable = false;
@@ -916,10 +955,10 @@ class Game {
             if (!someoneLosingHealth) {
                 this.gatlingActive = false;
                 this.indianiActive = false;
-    
+
             }
         }
-        
+
         // 0 health -> lose game
         if (this.players[playerName].character.health <= 0) {
             // if player were to die, allow him to play beer
@@ -989,14 +1028,14 @@ class Game {
             }
 
             this.knownRoles[playerName] = this.players[playerName].character.role;
-            
+
             message.push(`${playerName} has died!`);
 
             if (!this.gameEnded) {
                 // if not game ended, check for winner
                 // ********* GAME END *********
-                let aliveRoles = [];
-                let deadRoles = [];
+                let aliveRoles: string[] = [];
+                let deadRoles: string[] = [];
                 for (const player of Object.keys(this.players)) {
                     if (this.players[player].character.health > 0) {
                         aliveRoles.push(this.players[player].character.role);
@@ -1004,8 +1043,8 @@ class Game {
                         deadRoles.push(this.players[player].character.role);
                     }
                 }
-    
-                if (aliveRoles.includes("Sheriff") && (!aliveRoles.includes("Bandit") && !aliveRoles.includes("Renegade"))){
+
+                if (aliveRoles.includes("Sheriff") && (!aliveRoles.includes("Bandit") && !aliveRoles.includes("Renegade"))) {
                     // SHERIFF AND VICE WIN
                     if (aliveRoles.includes("Vice") || deadRoles.includes("Vice")) {
                         // Vice in game
@@ -1018,31 +1057,31 @@ class Game {
                         message.push("Game ended");
                         this.endGame();
                     }
-                    
+
                 } else if (aliveRoles.includes("Bandit") && deadRoles.includes("Sheriff")) {
                     // BANDITS WIN
                     const bandits = this.getNameOfPlayersByRole("Bandit")
                     if (bandits.length === 1) {
                         message.push(`Bandit (${bandits[0]}) victory!`);
                         message.push("Game ended");
-                        
+
                     } else if (bandits.length === 2) {
                         message.push(`Bandits (${bandits[0]}, ${bandits[1]}) victory!`);
                         message.push("Game ended");
-                        
+
                     } else if (bandits.length === 3) {
                         message.push(`Bandits (${bandits[0]}, ${bandits[1]}, ${bandits[2]}) victory!`);
                         message.push("Game ended");
                     }
-    
+
                     this.endGame();
-                    
+
                 } else if (aliveRoles.includes("Renegade") && (!aliveRoles.includes("Sheriff") && !aliveRoles.includes("Vice") && !aliveRoles.includes("Bandit"))) {
                     // RENEGADE WIN
                     message.push(`Renegade (${this.getNameOfPlayersByRole("Renegade")[0]}) victory!`);
                     message.push("Game ended");
                     this.endGame();
-    
+
                 } else if (this.numOfPlayers === 2) {
                     // 1v1 WIN
                     message.push(`${this.getNameOfCurrentTurnPlayer()} is winner!`);
@@ -1056,34 +1095,34 @@ class Game {
         return message;
     }
 
-    jesseJonesTarget(target, playerName = this.getNameOfCurrentTurnPlayer()) {
+    jesseJonesTarget(target: string, playerName = this.getNameOfCurrentTurnPlayer()) {
 
         // continue with turn
         this.draw(1, playerName);
         this.setAllPlayable(playerName);
-        
+
         this.awaitDrawChoice = false;
-        
+
         // if targer is player, steal random card from his hand
         // get random card from target hand
-        const randomCard = this.getPlayerHand(target)[Math.floor(Math.random()*this.getPlayerHand(target).length)];
+        const randomCard = this.getPlayerHand(target)[Math.floor(Math.random() * this.getPlayerHand(target).length)];
         if (!randomCard) return;
-        
+
         const currentPlayerHand = this.players[playerName].hand;
         const targetPlayerHand = this.players[target].hand;
         // remove card from hand
-        for(var i = 0; i < targetPlayerHand.length; i++) {
-            if(targetPlayerHand[i].digit === randomCard.digit && targetPlayerHand[i].type === randomCard.type) {
+        for (var i = 0; i < targetPlayerHand.length; i++) {
+            if (targetPlayerHand[i].digit === randomCard.digit && targetPlayerHand[i].type === randomCard.type) {
                 targetPlayerHand.splice(i, 1);
                 break;
             }
         }
         currentPlayerHand.push(randomCard);
-        
+
         return `${playerName} stole 1 card from ${target} because he's Jesse Jones`;
     }
 
-    jourdonnaisBarel(playerName){
+    jourdonnaisBarel(playerName: string) {
         const drawnCard = this.deck[0];
         this.deck.shift();
         this.stack.push(drawnCard)
@@ -1106,7 +1145,7 @@ class Game {
     }
 
     // ******************* SETERS *******************
-    setPlayable(cardName, playerName) {
+    setPlayable(cardName: string, playerName: string) {
         // sets cardName in playerName hand to isPlayable = true
         for (var card of this.players[playerName].hand) {
             if (card.name === cardName) {
@@ -1115,7 +1154,7 @@ class Game {
         }
     }
 
-    setNotPlayable(cardName, playerName) {
+    setNotPlayable(cardName: string, playerName: string) {
         // sets cardName in playerName hand to isPlayable = false
         for (var card of this.players[playerName].hand) {
             if (card.name === cardName) {
@@ -1124,7 +1163,7 @@ class Game {
         }
     }
 
-    setAllPlayable(playerName) {
+    setAllPlayable(playerName: string) {
         // sets all cards in playerName hand to isPlayable = true
         for (var card of this.players[playerName].hand) {
             card.isPlayable = true;
@@ -1142,14 +1181,14 @@ class Game {
         }
     }
 
-    setAllNotPlayable(playerName) {
+    setAllNotPlayable(playerName: string) {
         // sets cards in playerName hand to isPlayable = false
         for (var card of this.players[playerName].hand) {
             card.isPlayable = false;
         }
     }
 
-    setCardOnTablePlayable(cardName, playerName) {
+    setCardOnTablePlayable(cardName: string, playerName: string) {
         // sets cardName in playerName table to isPlayable = true
         for (var card of this.players[playerName].table) {
             if (card.name === cardName) {
@@ -1158,7 +1197,7 @@ class Game {
         }
     }
 
-    setCardOnTableNotPlayable(cardName, playerName) {
+    setCardOnTableNotPlayable(cardName: string, playerName: string) {
         // sets cardName in playerName hand to isPlayable = false
         for (var card of this.players[playerName].table) {
             if (card.name === cardName) {
@@ -1167,25 +1206,25 @@ class Game {
         }
     }
 
-    setAllCardsOnTableNotPlayable(playerName) {
+    setAllCardsOnTableNotPlayable(playerName: string) {
         // sets cards in playerName hand to isPlayable = false
         for (var card of this.players[playerName].table) {
             card.isPlayable = false;
         }
     }
 
-    setMancatoBeerNotPlayable(playerName) {
+    setMancatoBeerNotPlayable(playerName: string) {
         if (this.players[playerName].character.health >= this.players[playerName].character.maxHealth) {
             this.setNotPlayable("Beer", playerName) // let player play beer if not max HP
         }
         this.setNotPlayable("Mancato!", playerName) // let player play beer if not max HP
-        
-        if (this.players[playerName].character.name === "Calamity Janet" && this.players[playerName].table.filter(item => item.name === 'Vulcanic').length > 0) {
+
+        if (this.players[playerName].character.name === "Calamity Janet" && this.players[playerName].table.filter((item: Card) => item.name === 'Vulcanic').length > 0) {
             this.setPlayable("Mancato!", playerName);
         }
     }
 
-    setCharacter(playerName, characterName) {
+    setCharacter(playerName: string, characterName: string) {
         // sets player character and resolves his health and starting hand size
         this.players[playerName].character.name = characterName;
 
@@ -1201,7 +1240,7 @@ class Game {
     // ******************* GETERS *******************
     getAllPlayersInfo() {
         // returns array [{name, numberOfCards, health, table}]
-        let state = [];
+        let state: { name: string; numberOfCards: number; health: number; table: Card[] }[] = [];
         for (var player of Object.keys(this.players)) {
             state.push({
                 name: player,
@@ -1215,7 +1254,7 @@ class Game {
 
     getCharacters() {
         // returns array [{name, character}]
-        let state = [];
+        let state: { name: string; character: string }[] = [];
         for (var player of Object.keys(this.players)) {
             state.push({
                 name: player,
@@ -1227,18 +1266,19 @@ class Game {
 
     getNumOfCardsInEachHand() {
         // returns array [{name, numberOfCards}]
-        let state = [];
+        let state: { name: string; numberOfCards: number }[] = [];
         for (var player of Object.keys(this.players)) {
             state.push({
                 name: player,
-                numberOfCards: this.players[player].hand.length})
+                numberOfCards: this.players[player].hand.length
+            })
         }
         return state;
     }
 
     getPlayersLosingHealth() {
         // return array [{name, isLosingHealth}]
-        let state = [];
+        let state: { name: string; isLosingHealth: boolean }[] = [];
         for (var player of Object.keys(this.players)) {
             state.push({
                 name: player,
@@ -1252,7 +1292,7 @@ class Game {
         // TODO: this does not have tu run every turn?
         // return array [{name, hasDynamite}]
         // if is players current turn and has dynamite in table, set hasDynamite = true
-        let state = [];
+        let state: { name: string; hasDynamite: boolean; isInPrison: boolean; actionRequired: boolean }[] = [];
         for (var player of Object.keys(this.players)) {
             // if player is on turn and has dynamite on table
             let dynamiteFound = false;
@@ -1261,7 +1301,7 @@ class Game {
             if (player === this.getNameOfCurrentTurnPlayer()) {
                 if (this.getPlayerHasDynamite(player)) {
                     dynamiteFound = true
-                } 
+                }
                 if (this.getPlayerIsInPrison(player)) {
                     prisonFound = true;
                 }
@@ -1282,10 +1322,10 @@ class Game {
         return state;
     }
 
-    getPlayersInRange(playerName, range) {
+    getPlayersInRange(playerName: string, range: string | number) {
         // returns array of alive players closer than range to playerName
         // return array of all players if range === "max"
-        
+
         const playerNames = Object.keys(this.players)   // array of player names;
         for (const player of playerNames) {
             if (this.players[player].character.health <= 0) {
@@ -1293,21 +1333,21 @@ class Game {
             }
         }
 
-        if  (range === "max" || range === "max_not_sheriff") {
+        if (range === "max" || range === "max_not_sheriff") {
             // ******** MAX RANGE ********
-            let result = [];
+            let result: string[] = [];
             for (const player of playerNames) {
                 if (this.players[player].character.health > 0 && player !== playerName) {
                     // if player is alive
-    
+
                     if (range === "max") {
                         result.push(player);
-    
+
                     } else if (range === "max_not_sheriff") {
                         if (this.players[player].character.role !== "Sheriff") {
                             result.push(player);
                         }
-    
+
                     }
                 }
             }
@@ -1316,7 +1356,7 @@ class Game {
 
         } else if (range === "one_not_gun") {
             // ******** Panico range ********
-            let result = [];
+            let result: string[] = [];
 
             range = 1;
 
@@ -1325,56 +1365,56 @@ class Game {
                 range += 1;
             }
             // if player has Apaloosa, increase range by 1
-            if (this.players[playerName].table.some(card => card.name === 'Apaloosa')) range += 1;
-            
+            if (this.players[playerName].table.some((card: Card) => card.name === 'Apaloosa')) range += 1;
+
             const playerIndex = playerNames.indexOf(playerName) + playerNames.length;
             const concatArray = playerNames.concat(playerNames.concat(playerNames));    // = [...arr, ...arr, ...arr]
-            
+
             for (let i = 0; i < concatArray.length; i++) {
                 let currentName = concatArray[i];
-                
+
                 if (currentName !== playerName && this.players[currentName].character.health > 0) {
                     let currentRange = range;
-                    if (this.players[currentName].table.some(card => card.name === 'Mustang')) currentRange -= 1;
+                    if (this.players[currentName].table.some((card: Card) => card.name === 'Mustang')) currentRange -= 1;
                     if (this.players[currentName].character.name === "Paul Regret") currentRange -= 1;
-                    
+
                     if (Math.abs(i - playerIndex) <= currentRange) {
                         result.push(currentName);
                     }
                 };
-                    
+
             }
-                
+
             return result;
-        } else {
+        } else if (typeof range === "number") {
             // ******** CUSTOM RANGE ********
-            let result = [];
-    
+            let result: string[] = [];
+
             if (this.players[playerName].character.name === 'Rose Doolan') {
                 // Rose Doolan works as Apaloosa
                 range += 1;
             }
-            
+
             // if player has Apaloosa, increase range by 1
-            if (this.players[playerName].table.some(card => card.name === 'Apaloosa')) range += 1;
+            if (this.players[playerName].table.some((card: Card) => card.name === 'Apaloosa')) range += 1;
             // if player has Schofield, increase range by 1
-            if (this.players[playerName].table.some(card => card.name === 'Schofield')) range += 1;
+            if (this.players[playerName].table.some((card: Card) => card.name === 'Schofield')) range += 1;
             // if player has Remington, increase range by 2
-            if (this.players[playerName].table.some(card => card.name === 'Remington')) range += 2;
+            if (this.players[playerName].table.some((card: Card) => card.name === 'Remington')) range += 2;
             // if player has Rev. Carabine, increase range by 3
-            if (this.players[playerName].table.some(card => card.name === 'Rev. Carabine')) range += 3;
+            if (this.players[playerName].table.some((card: Card) => card.name === 'Rev. Carabine')) range += 3;
             // if player has Winchester, increase range by 4
-            if (this.players[playerName].table.some(card => card.name === 'Winchester')) range += 4;
-    
+            if (this.players[playerName].table.some((card: Card) => card.name === 'Winchester')) range += 4;
+
             const playerIndex = playerNames.indexOf(playerName) + playerNames.length;
             const concatArray = playerNames.concat(playerNames.concat(playerNames));    // = [...arr, ...arr, ...arr]
-    
+
             for (let i = 0; i < concatArray.length; i++) {
                 const currentName = concatArray[i];
 
                 if (currentName !== playerName && this.players[currentName].character.health > 0) {
                     let currentRange = range;
-                    if (this.players[currentName].table.some(card => card.name === 'Mustang')) currentRange -= 1;
+                    if (this.players[currentName].table.some((card: Card) => card.name === 'Mustang')) currentRange -= 1;
                     if (this.players[currentName].character.name === "Paul Regret") currentRange -= 1;
 
                     if (Math.abs(i - playerIndex) <= currentRange) {
@@ -1386,7 +1426,7 @@ class Game {
         }
     }
 
-    getPlayerHand(playerName) {
+    getPlayerHand(playerName: string) {
         return (this.players[playerName].hand);
     }
 
@@ -1395,12 +1435,12 @@ class Game {
         }
     }
 
-    getPlayerHasDynamite(playerName) {
-        return (this.players[playerName].table.some(card => card.name === 'Dynamite'));
+    getPlayerHasDynamite(playerName: string) {
+        return (this.players[playerName].table.some((card: Card) => card.name === 'Dynamite'));
     }
 
-    getPlayerIsInPrison(playerName) {
-        return (this.players[playerName].table.some(card => card.name === 'Prigione'));
+    getPlayerIsInPrison(playerName: string) {
+        return (this.players[playerName].table.some((card: Card) => card.name === 'Prigione'));
     }
 
     getTopStackCard() {
@@ -1415,12 +1455,16 @@ class Game {
         return this.players;
     }
 
-    getNameOfCurrentTurnPlayer () {
+    getNameOfCurrentTurnPlayer(): string {
         // returns name of player who is on turn
-        return Object.keys(this.players).find(key => this.players[key].id === this.playerRoundId)
+        // const currentPlayer = Object.keys(this.players).find(key => this.players[key].id === this.playerRoundId)
+
+        const currentPlayer = this.playerNames[Math.floor(this.playerRoundId)];
+
+        return currentPlayer;
     }
 
-    getNameOfPreviousTurnPlayer () {
+    getNameOfPreviousTurnPlayer() {
         // returns name of player who was on turn before this turn
         let prevId = this.playerRoundId - 1;
         if (prevId < 0) {
@@ -1440,10 +1484,10 @@ class Game {
         return true;
     }
 
-    getNameOfPlayersByRole(role) {
+    getNameOfPlayersByRole(role: string) {
         // return array of playerNames who have specified role
         // except for bandits array length should be 1
-        let names = [];
+        let names: string[] = [];
         for (const player of Object.keys(this.players)) {
             if (this.players[player].character.role === role) {
                 names.push(player);
@@ -1456,11 +1500,11 @@ class Game {
     putStackIntoDeck() {
         this.deck = this.stack;
         this.stack = [this.deck[this.deck.length - 1]]
-     
+
         this.shuffleDeck();
     }
 
-    setIsLosingHealth(bool, player) {
+    setIsLosingHealth(bool: boolean, player: string) {
         this.players[player].isLosingHealth = bool;
     }
 
@@ -1477,8 +1521,9 @@ class Game {
         } else {
             firstPlayerName = Object.keys(this.players).find(player => this.players[player].id === 0);
         }
-
-        this.playerRoundId = this.players[firstPlayerName].id;
+        if (!firstPlayerName) {
+            return;
+        }
 
         if (this.players[firstPlayerName].character.name === "Lucky Duke") {
             // populate create draw choice for Kit Carlson
@@ -1488,7 +1533,7 @@ class Game {
                 this.drawChoice.push(card);
                 this.deck.shift();
             }
-            
+
         } else if (this.players[firstPlayerName].character.name === "Jesse Jones") {
             this.awaitDrawChoice = true;
 
@@ -1500,7 +1545,7 @@ class Game {
                 this.drawChoice.push(card);
                 this.deck.shift();
             }
-        
+
         } else {
             this.draw(2, firstPlayerName);
             this.setAllPlayable(firstPlayerName);
@@ -1510,26 +1555,26 @@ class Game {
     }
 
     shuffleDeck() {
-        let currentIndex = this.deck.length,  randomIndex;
-      
+        let currentIndex = this.deck.length, randomIndex;
+
         // While there remain elements to shuffle.
         while (currentIndex != 0) {
-      
-          // Pick a remaining element.
-          randomIndex = Math.floor(Math.random() * currentIndex);
-          currentIndex--;
-      
-          // And swap it with the current element.
-          [this.deck[currentIndex], this.deck[randomIndex]] = [
-            this.deck[randomIndex], this.deck[currentIndex]];
+
+            // Pick a remaining element.
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [this.deck[currentIndex], this.deck[randomIndex]] = [
+                this.deck[randomIndex], this.deck[currentIndex]];
         }
     }
 
     endTurn() {
         //find who was previous player
-        let message = [];
+        let message: string[] = [];
         const previousPlayerName = this.getNameOfCurrentTurnPlayer()
-        
+
         if (this.players[previousPlayerName].character.name === "Suzy Lafayette" && this.players[previousPlayerName].hand.length === 0) {
             // Suzy Lafayette draws a card on turn end if hand empty
             message.push("Suzy Lafayette has hand empty, so she draws 1 card");
@@ -1546,40 +1591,40 @@ class Game {
             if (this.players[this.getNameOfCurrentTurnPlayer()].character.health > 0) {
                 // if the next player is alive, continue and set his turn
                 break;
-            }            
+            }
         }
 
         // this is next player in line
         const currentPlayerName = this.getNameOfCurrentTurnPlayer();
         this.bangCanBeUsed = true;
-        
+
         message.push(`End of turn, next player: ${currentPlayerName}`);
 
         this.setAllNotPlayable(previousPlayerName);
 
         if (this.getPlayerHasDynamite(currentPlayerName) && this.getPlayerIsInPrison(currentPlayerName)) {
             this.setCardOnTablePlayable("Dynamite", currentPlayerName);
-            
+
             this.players[currentPlayerName].isInPrison = true;
             this.setCardOnTablePlayable("Prigione", currentPlayerName);
             return message;
         }
-        
+
         if (this.getPlayerHasDynamite(currentPlayerName)) {
             this.setCardOnTablePlayable("Dynamite", currentPlayerName);
             return message;
-            
+
         } else if (this.getPlayerIsInPrison(currentPlayerName)) {
             this.players[currentPlayerName].isInPrison = true;
             this.setCardOnTablePlayable("Prigione", currentPlayerName);
             return message;
-        
+
         } else if (this.players[currentPlayerName].character.name === "Jesse Jones") {
             this.awaitDrawChoice = true;
-            
+
         } else if (this.players[currentPlayerName].character.name === "Pedro Ramirez" && this.stack.length > 0) {
             this.awaitDrawChoice = true;
-        
+
         } else if (this.players[currentPlayerName].character.name === "Kit Carlson") {
             // populate create draw choice for Kit Carlson
             this.drawChoice = [];
@@ -1588,7 +1633,7 @@ class Game {
                 this.drawChoice.push(card);
                 this.deck.shift();
             }
-        
+
         } else if (this.players[currentPlayerName].character.name === "Lucky Duke") {
             // populate create draw choice for Kit Carlson
             this.drawChoice = [];
@@ -1600,26 +1645,26 @@ class Game {
 
         } else {
             // proceed and draw
-            if (this.players[currentPlayerName].character.name === "Black Jack" && (this.deck[1].type === "hearts" || this.deck[1].type === "diamonds")){
+            if (this.players[currentPlayerName].character.name === "Black Jack" && (this.deck[1].type === "hearts" || this.deck[1].type === "diamonds")) {
                 // Black Jack can draw 3 on hearts or diamonds
                 message.push(`${currentPlayerName} is Black Jack and drew ${this.deck[1].name} ${this.deck[1].type} as a second card so he draws another card`);
                 this.draw(3, currentPlayerName);
             } else {
                 message.push(this.draw(2, currentPlayerName));
             }
-            this.setAllPlayable(currentPlayerName);     
+            this.setAllPlayable(currentPlayerName);
         }
 
         return message;
     }
 
-    removePlayer(playerName) {
+    removePlayer(playerName: string) {
         if (playerName === this.getNameOfCurrentTurnPlayer() && Object.keys(this.players).length > 1) {
             // if player turn and another player in game
             // next turn
             this.endTurn()
         }
-        const numberOfBeersInHand = this.players[playerName].hand.filter(item => item.name === 'Beer').length;
+        const numberOfBeersInHand = this.players[playerName].hand.filter((item: Card) => item.name === 'Beer').length;
         this.players[playerName].character.health = 0 + numberOfBeersInHand;
         let message;
         for (let i = 0; i < numberOfBeersInHand + 1; i++) {
@@ -1630,11 +1675,11 @@ class Game {
     }
 
     genCharacterChoices() {
-        let res = {};
+        let res: any = {};
         const playerNames = Object.keys(this.players);
 
         for (let i = 0; i < this.numOfPlayers; i++) {
-            let playerChoice = []
+            let playerChoice: string[] = []
             for (let i = 0; i < 2; i++) {
                 const randIndex = Math.floor(Math.random() * this.namesOfCharacters.length);
                 // add to player choice
@@ -1662,6 +1707,8 @@ class Game {
         } else if (this.numOfPlayers === 6) {
             roles = ["Sheriff", "Renegade", "Bandit", "Bandit", "Bandit", "Vice"]
         }
+        if (!roles) return;
+
         for (let player of Object.keys(this.players)) {
             // get random role, splice from roles
             const randIndex = Math.floor(Math.random() * roles.length);
@@ -1696,5 +1743,3 @@ class Game {
         }
     }
 }
-
-module.exports = Game;

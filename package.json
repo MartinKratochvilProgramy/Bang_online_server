@@ -13,6 +13,10 @@
     "nodemon": "^2.0.15",
     "socket.io": "^4.4.1",
     "test": "^3.2.1",
+    "ts-node": "^10.9.1",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.4"
   }
 }
