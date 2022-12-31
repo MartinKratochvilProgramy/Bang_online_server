@@ -26,7 +26,7 @@ export class Game {
 
     constructor(playerNames: string[], deck: Card[]) {
         this.playerNames = playerNames;
-        this.numOfPlayers = playerNames.length;
+        this.numOfPlayers = this.playerNames.length;
         this.namesOfCharacters = ["Bart Cassidy", "Black Jack", "Calamity Janet", "El Gringo", "Jesse Jones", "Jourdonnais", "Kit Carlson", "Lucky Duke", "Paul Regret", "Pedro Ramirez", "Rose Doolan", "Slab the Killer", "Suzy Lafayette", "Vulture Sam", "Willy the Kid"]
         // this.namesOfCharacters = ["Slab the Killer", "Calamity Janet", "Jourdonnais", "El Gringo"] 
         this.knownRoles = {}
@@ -35,7 +35,7 @@ export class Game {
         this.stack = [];
         this.emporio = [];
         this.drawChoice = [];
-        // this.players = {}
+        this.players = {}
         this.playerRoundId = 0;
         this.bangCanBeUsed = true;
         this.duelActive = false;

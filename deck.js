@@ -1,4 +1,7 @@
-export const deck = [
+"use strict";
+exports.__esModule = true;
+exports.deck = void 0;
+exports.deck = [
     {
         name: "Bang!",
         rimColor: "yellow",
@@ -445,161 +448,143 @@ export const deck = [
         rimColor: "blue",
         digit: 10,
         type: "spades",
-        class: "gun",
-        isPlayable: false,
-
+        "class": "gun",
+        isPlayable: false
     },
     {
         name: "Vulcanic",
         rimColor: "blue",
         digit: 10,
         type: "clubs",
-        class: "gun",
-        isPlayable: false,
-
+        "class": "gun",
+        isPlayable: false
     },
     {
         name: "Remington",
         rimColor: "blue",
         digit: 13,
         type: "clubs",
-        class: "gun",
-        isPlayable: false,
-
+        "class": "gun",
+        isPlayable: false
     },
     {
         name: "Schofield",
         rimColor: "blue",
         digit: 12,
         type: "clubs",
-        class: "gun",
-        isPlayable: false,
-
+        "class": "gun",
+        isPlayable: false
     },
     {
         name: "Schofield",
         rimColor: "blue",
         digit: 11,
         type: "clubs",
-        class: "gun",
-        isPlayable: false,
-
+        "class": "gun",
+        isPlayable: false
     },
     {
         name: "Schofield",
         rimColor: "blue",
         digit: 13,
         type: "spades",
-        class: "gun",
-        isPlayable: false,
-
+        "class": "gun",
+        isPlayable: false
     },
     {
         name: "Rev. Carabine",
         rimColor: "blue",
         digit: 1,
         type: "clubs",
-        class: "gun",
-        isPlayable: false,
-
+        "class": "gun",
+        isPlayable: false
     },
     {
         name: "Winchester",
         rimColor: "blue",
         digit: 8,
         type: "spades",
-        class: "gun",
-        isPlayable: false,
-
+        "class": "gun",
+        isPlayable: false
     },
     {
         name: "Mustang",
         rimColor: "blue",
         digit: 8,
         type: "hearts",
-        class: "horse",
-        isPlayable: false,
-
+        "class": "horse",
+        isPlayable: false
     },
     {
         name: "Mustang",
         rimColor: "blue",
         digit: 9,
         type: "hearts",
-        class: "horse",
-        isPlayable: false,
-
+        "class": "horse",
+        isPlayable: false
     },
     {
         name: "Apaloosa",
         rimColor: "blue",
         digit: 1,
         type: "spades",
-        class: "horse",
-        isPlayable: false,
-
+        "class": "horse",
+        isPlayable: false
     },
     {
         name: "Apaloosa",
         rimColor: "blue",
         digit: 2,
         type: "spades",
-        class: "horse",
-        isPlayable: false,
-
+        "class": "horse",
+        isPlayable: false
     },
     {
         name: "Prigione",
         rimColor: "blue",
         digit: 10,
         type: "spades",
-        class: "prison",
-        isPlayable: false,
-
+        "class": "prison",
+        isPlayable: false
     },
     {
         name: "Prigione",
         rimColor: "blue",
         digit: 11,
         type: "spades",
-        class: "prison",
-        isPlayable: false,
-
+        "class": "prison",
+        isPlayable: false
     },
     {
         name: "Prigione",
         rimColor: "blue",
         digit: 4,
         type: "hearts",
-        class: "prison",
-        isPlayable: false,
-
+        "class": "prison",
+        isPlayable: false
     },
     {
         name: "Barilo",
         rimColor: "blue",
         digit: 13,
         type: "spades",
-        class: "barel",
-        isPlayable: false,
-
+        "class": "barel",
+        isPlayable: false
     },
     {
         name: "Barilo",
         rimColor: "blue",
         digit: 12,
         type: "spades",
-        class: "barel",
-        isPlayable: false,
-
+        "class": "barel",
+        isPlayable: false
     },
     {
         name: "Dynamite",
         rimColor: "blue",
         digit: 2,
         type: "spades",
-        class: "dynamite",
-        isPlayable: false,
-
+        "class": "dynamite",
+        isPlayable: false
     },
-]
+];

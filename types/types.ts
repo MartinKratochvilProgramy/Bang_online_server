@@ -2,9 +2,9 @@ export interface Card {
     name: string;
     rimColor: string;
     digit: number;
-    type: string;
+    type: string; //"hearts" | "spades" | "diamonds" | "clubs" | ""
     isPlayable: boolean;
-    class?: "horse" | "dynamite" | "gun" | "prison" | "barel";
+    class?: string; //"horse" | "dynamite" | "gun" | "prison" | "barel"
 }
 
 export interface RoomInfo {
