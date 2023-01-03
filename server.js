@@ -74,15 +74,19 @@ io.on("connection", (socket) => {
           if (rooms[room].game === null) {
             // game not yet started in game -> simple splice
             if(rooms[room].players[i].id === socket.id) {
+
               rooms[room].players.splice(rooms[room].players.indexOf(rooms[room].players[i].username), 1);
               io.to(room).emit("get_players", rooms[room].players);
               io.emit("rooms", getRoomsInfo());
-            }
-            if(rooms[room].players.length <= 0) {
-              // if room empty, delete it
-              delete rooms[room];
-              console.log("Room ", room, " deleted")
-              console.log("Existing rooms ", Object.keys(rooms));
+
+              if(rooms[room].players.length <= 0) {
+                // if room empty, delete it
+                delete rooms[room];
+                console.log("Room ", room, " deleted")
+                console.log("Existing rooms ", Object.keys(rooms));
+                io.emit("rooms", getRoomsInfo());
+                return;
+              }
             }
   
           } else {
