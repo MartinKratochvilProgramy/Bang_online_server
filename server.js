@@ -78,6 +78,12 @@ io.on("connection", (socket) => {
               io.to(room).emit("get_players", rooms[room].players);
               io.emit("rooms", getRoomsInfo());
             }
+            if(rooms[room].players.length <= 0) {
+              // if room empty, delete it
+              delete rooms[room];
+              console.log("Room ", room, " deleted")
+              console.log("Existing rooms ", Object.keys(rooms));
+            }
   
           } else {
             // game exists
