@@ -8,6 +8,7 @@ export const characterChoice = (io: any, data: any) => {
 
         if (rooms[roomName].game.getAllPlayersChoseCharacter()) {
             // if all char choices went through, start game
+            rooms[roomName].game.initRoles();
             io.to(roomName).emit("known_roles", rooms[roomName].game.knownRoles)
 
             startGame(io, roomName);

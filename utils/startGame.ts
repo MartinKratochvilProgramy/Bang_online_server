@@ -2,18 +2,18 @@ import { rooms } from "../server";
 
 export const startGame = (io: any, roomName: any) => {
     try {
-        rooms[roomName].game.initRoles();
+        
         io.to(roomName).emit("console", rooms[roomName].game.startGame());
 
         let characters = []
         for (var player of Object.keys(rooms[roomName].game.players)) {
             characters.push({ playerName: player, character: rooms[roomName].game.players[player].character.name })
         }
-        io.to(roomName).emit("characters", characters);
-        io.to(roomName).emit("current_player", rooms[roomName].game.getNameOfCurrentTurnPlayer());
-        io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game.getPlayersWithActionRequired());
-
         const currentPlayer = rooms[roomName].game.getNameOfCurrentTurnPlayer(); // get current player
+
+        io.to(roomName).emit("characters", characters);
+        io.to(roomName).emit("current_player", currentPlayer);
+        io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game.getPlayersWithActionRequired());
 
         if (rooms[roomName].game.players[currentPlayer].character.name === "Kit Carlson") {
             io.to(roomName).emit("update_draw_choices", "Kit Carlson");

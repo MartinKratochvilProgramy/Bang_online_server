@@ -28,7 +28,7 @@ export class Game {
         this.playerNames = playerNames;
         this.numOfPlayers = this.playerNames.length;
         this.namesOfCharacters = ["Bart Cassidy", "Black Jack", "Calamity Janet", "El Gringo", "Jesse Jones", "Jourdonnais", "Kit Carlson", "Lucky Duke", "Paul Regret", "Pedro Ramirez", "Rose Doolan", "Slab the Killer", "Suzy Lafayette", "Vulture Sam", "Willy the Kid"]
-        // this.namesOfCharacters = ["Slab the Killer", "Calamity Janet", "Jourdonnais", "El Gringo"] 
+        // this.namesOfCharacters = ["Slab the Killer", "Calamity Janet", "Lucky Duke", "Kit Carlson"] 
         this.knownRoles = {}
         this.deck = [...deck];  // create new copy of deck
         this.gameEnded = false;
@@ -878,6 +878,7 @@ export class Game {
             return message;
         } else {
             // next player round
+            this.setAllCardsOnTableNotPlayable(playerName)
             this.endTurn();
             return message;
         }
@@ -1709,20 +1710,25 @@ export class Game {
         }
         if (!roles) return;
 
-        for (let player of Object.keys(this.players)) {
+        
+        // for (let player of Object.keys(this.players)) {
+        for (let i = 0; i < Object.keys(this.players).length; i++) {
+            const player = this.playerNames[i]
             // get random role, splice from roles
             const randIndex = Math.floor(Math.random() * roles.length);
             const role = roles.splice(randIndex, 1)[0];
             // add role to player
             this.players[player].character.role = role;
-
+            
             // sherif +1 HP
             if (role === "Sheriff") {
                 this.players[player].character.maxHealth += 1;
                 this.players[player].character.health += 1;
                 this.players[player].character.startingHandSize += 1;
-
+                
                 this.knownRoles[player] = role;
+
+                this.playerRoundId = i;
             } else {
                 this.knownRoles[player] = null;
             }

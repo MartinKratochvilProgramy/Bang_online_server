@@ -55,7 +55,7 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const ws = require('ws');
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 4000;
 
 const io = new Server(server,
   {
