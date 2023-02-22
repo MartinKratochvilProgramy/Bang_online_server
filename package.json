@@ -4,7 +4,9 @@
   "main": "server.ts",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon server.ts",
+    "start-dev": "nodemon server.ts",
+    "start": "node build/server.js",
+    "build": "tsc server.ts --outDir ./build",
     "test": "jest"
   },
   "dependencies": {
