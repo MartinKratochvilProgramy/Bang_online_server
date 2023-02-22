@@ -6,12 +6,14 @@ export const getRoomsInfo = (rooms: any) => {
         // [{roomName, numOfPlayers, gameActive}]
         const res: RoomInfo[] = []
         for (const room of Object.keys(rooms)) {
-            const roomInfo = {
-                name: room,
-                numOfPlayers: rooms[room].players.length,
-                gameActive: rooms[room].game === null ? false : true
+            if (rooms[room].players.length > 0) {
+                const roomInfo = {
+                    name: room,
+                    numOfPlayers: rooms[room].players.length,
+                    gameActive: rooms[room].game === null ? false : true
+                }
+                res.push(roomInfo);
             }
-            res.push(roomInfo);
         }
         return res;
     } catch (error) {

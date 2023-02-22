@@ -27,8 +27,8 @@ export class Game {
     constructor(playerNames: string[], deck: Card[]) {
         this.playerNames = playerNames;
         this.numOfPlayers = this.playerNames.length;
-        this.namesOfCharacters = ["Bart Cassidy", "Black Jack", "Calamity Janet", "El Gringo", "Jesse Jones", "Jourdonnais", "Kit Carlson", "Lucky Duke", "Paul Regret", "Pedro Ramirez", "Rose Doolan", "Slab the Killer", "Suzy Lafayette", "Vulture Sam", "Willy the Kid"]
-        // this.namesOfCharacters = ["Slab the Killer", "Calamity Janet", "Lucky Duke", "Kit Carlson"] 
+        // this.namesOfCharacters = ["Bart Cassidy", "Black Jack", "Calamity Janet", "El Gringo", "Jesse Jones", "Jourdonnais", "Kit Carlson", "Lucky Duke", "Paul Regret", "Pedro Ramirez", "Rose Doolan", "Slab the Killer", "Suzy Lafayette", "Vulture Sam", "Willy the Kid"]
+        this.namesOfCharacters = ["Jesse Jones", "Calamity Janet", "Lucky Duke", "Kit Carlson"]
         this.knownRoles = {}
         this.deck = [...deck];  // create new copy of deck
         this.gameEnded = false;
@@ -140,7 +140,7 @@ export class Game {
     }
 
     // ******************* USE CARDS *******************
-    useBang(target: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
+    useBang(target: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()): string[] {
         this.discard("Bang!", cardDigit, cardType, playerName);
         this.setAllNotPlayable(playerName);
 
@@ -563,7 +563,7 @@ export class Game {
         }
     }
 
-    getStackCardPR(playerName: string) {
+    getStackCardPR(playerName: string): string[] {
         // place card in player hand
         this.players[playerName].hand.push(this.getTopStackCard());
         // remove from stack
@@ -1096,18 +1096,17 @@ export class Game {
         return message;
     }
 
-    jesseJonesTarget(target: string, playerName = this.getNameOfCurrentTurnPlayer()) {
+    jesseJonesTarget(target: string, playerName = this.getNameOfCurrentTurnPlayer()): string[] {
 
         // continue with turn
         this.draw(1, playerName);
-        this.setAllPlayable(playerName);
 
         this.awaitDrawChoice = false;
 
         // if targer is player, steal random card from his hand
         // get random card from target hand
         const randomCard = this.getPlayerHand(target)[Math.floor(Math.random() * this.getPlayerHand(target).length)];
-        if (!randomCard) return;
+        if (!randomCard) return ['No card found'];
 
         const currentPlayerHand = this.players[playerName].hand;
         const targetPlayerHand = this.players[target].hand;
@@ -1119,8 +1118,9 @@ export class Game {
             }
         }
         currentPlayerHand.push(randomCard);
+        this.setAllPlayable(playerName);
 
-        return `${playerName} stole 1 card from ${target} because he's Jesse Jones`;
+        return [`${playerName} stole 1 card from ${target} because he's Jesse Jones`];
     }
 
     jourdonnaisBarel(playerName: string) {
@@ -1710,7 +1710,7 @@ export class Game {
         }
         if (!roles) return;
 
-        
+
         // for (let player of Object.keys(this.players)) {
         for (let i = 0; i < Object.keys(this.players).length; i++) {
             const player = this.playerNames[i]
@@ -1719,13 +1719,13 @@ export class Game {
             const role = roles.splice(randIndex, 1)[0];
             // add role to player
             this.players[player].character.role = role;
-            
+
             // sherif +1 HP
             if (role === "Sheriff") {
                 this.players[player].character.maxHealth += 1;
                 this.players[player].character.health += 1;
                 this.players[player].character.startingHandSize += 1;
-                
+
                 this.knownRoles[player] = role;
 
                 this.playerRoundId = i;
