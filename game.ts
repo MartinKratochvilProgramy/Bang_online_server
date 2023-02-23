@@ -53,6 +53,7 @@ export class Game {
             this.players[playerNames[i]] = {
                 id: i,
                 hand: [],
+                prevHand: [],
                 table: [],
                 isLosingHealth: false,
                 mancatoPool: 0,
@@ -1426,6 +1427,10 @@ export class Game {
             }
             return result;
         }
+    }
+
+    getPlayerPrevHand(playerName: string) {
+        return (this.players[playerName].prevHand);
     }
 
     getPlayerHand(playerName: string) {
