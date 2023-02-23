@@ -9,6 +9,7 @@ export class Game {
     deck: Card[];
     gameEnded: boolean;
     stack: Card[];
+    prevTopStackCard: Card;
     emporio: Card[];
     drawChoice: Card[];
     players: any;
@@ -33,6 +34,7 @@ export class Game {
         this.deck = [...deck];  // create new copy of deck
         this.gameEnded = false;
         this.stack = [];
+        this.prevTopStackCard = this.stack[0]
         this.emporio = [];
         this.drawChoice = [];
         this.players = {}
