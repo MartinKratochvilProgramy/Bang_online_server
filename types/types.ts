@@ -17,3 +17,10 @@ export interface Characters {
     playerName: string;
     character: string;
 }
+
+export interface GameState {
+    name: string;
+    numberOfCards: number;
+    health: number;
+    table: Card[]
+}

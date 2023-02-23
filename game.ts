@@ -1,4 +1,4 @@
-import { Card } from "./types/types";
+import { Card, GameState } from "./types/types";
 
 export class Game {
 
@@ -24,6 +24,7 @@ export class Game {
     sidKetchumDiscarded: boolean;
     awaitDrawChoice: boolean;
     nextEmporioTurn: string | null;
+    prevGameState: GameState[];
 
     constructor(playerNames: string[], deck: Card[]) {
         this.playerNames = playerNames;
@@ -49,6 +50,7 @@ export class Game {
         this.sidKetchumDiscarded = false;
         this.awaitDrawChoice = false;
         this.nextEmporioTurn = null;
+        this.prevGameState = []
 
         // init players
         for (let i = 0; i < this.numOfPlayers; i++) {

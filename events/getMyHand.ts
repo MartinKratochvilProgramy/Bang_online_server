@@ -6,7 +6,6 @@ export const getMyHand = (socket: any, data: any) => {
     const roomName = data.currentRoom;
     const username = data.username;
     try {
-
         const prevHand: Card[] = rooms[roomName].game.getPlayerPrevHand(username);
         const currentHand: Card[] = rooms[roomName].game.getPlayerHand(username);
 
@@ -14,7 +13,8 @@ export const getMyHand = (socket: any, data: any) => {
             rooms[roomName].game.getNameOfCurrentTurnPlayer() === username ||
             rooms[roomName].game.duelActive ||
             rooms[roomName].game.indianiActive ||
-            rooms[roomName].game.gatlingActive
+            rooms[roomName].game.gatlingActive ||
+            rooms[roomName].game.players[username].isLosingHealth
         ) {
             socket.emit("my_hand", currentHand);
             rooms[roomName].game.players[username].prevHand = [...currentHand]
