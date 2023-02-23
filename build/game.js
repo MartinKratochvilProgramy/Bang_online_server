@@ -14,8 +14,8 @@ var Game = /** @class */ (function () {
     function Game(playerNames, deck) {
         this.playerNames = playerNames;
         this.numOfPlayers = this.playerNames.length;
-        // this.namesOfCharacters = ["Bart Cassidy", "Black Jack", "Calamity Janet", "El Gringo", "Jesse Jones", "Jourdonnais", "Kit Carlson", "Lucky Duke", "Paul Regret", "Pedro Ramirez", "Rose Doolan", "Slab the Killer", "Suzy Lafayette", "Vulture Sam", "Willy the Kid"]
-        this.namesOfCharacters = ["Jesse Jones", "Calamity Janet", "Lucky Duke", "Kit Carlson"];
+        this.namesOfCharacters = ["Bart Cassidy", "Black Jack", "Calamity Janet", "El Gringo", "Jesse Jones", "Jourdonnais", "Kit Carlson", "Lucky Duke", "Paul Regret", "Pedro Ramirez", "Rose Doolan", "Slab the Killer", "Suzy Lafayette", "Vulture Sam", "Willy the Kid"];
+        // this.namesOfCharacters = ["Jesse Jones", "Calamity Janet", "Lucky Duke", "Kit Carlson"]
         this.knownRoles = {};
         this.deck = __spreadArray([], deck, true); // create new copy of deck
         this.gameEnded = false;
@@ -848,6 +848,9 @@ var Game = /** @class */ (function () {
             if (!someoneLosingHealth) {
                 this.gatlingActive = false;
                 this.indianiActive = false;
+            }
+            else {
+                this.setAllNotPlayable(this.getNameOfCurrentTurnPlayer());
             }
         }
         // 0 health -> lose game
