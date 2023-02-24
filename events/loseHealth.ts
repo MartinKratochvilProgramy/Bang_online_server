@@ -1,5 +1,6 @@
 import { updateGameState } from "../utils";
 import { rooms } from "../server";
+import { updatePlayerHands } from "../utils/updatePlayerHands";
 
 export const loseHealth = (io: any, data: any) => {
     const roomName = data.currentRoom;
@@ -17,7 +18,7 @@ export const loseHealth = (io: any, data: any) => {
         io.to(roomName).emit("indiani_active", rooms[roomName].game.indianiActive);
         io.to(roomName).emit("duel_active", rooms[roomName].game.duelActive);  // this is not optimal, however fixing it would require creating loseHealthInDuel() method...
 
-        io.to(roomName).emit("update_hands");
+        updatePlayerHands(io, roomName);
         io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
         io.to(roomName).emit("update_all_players_info", rooms[roomName].game.getAllPlayersInfo());
 

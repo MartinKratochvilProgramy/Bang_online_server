@@ -6,7 +6,6 @@ export { sendMessage } from "./sendMessage";
 export { startGameEvent } from "./startGameEvent";
 export { characterChoice } from "./characterChoice";
 export { getMyRole } from "./getMyRole";
-export { getMyHand } from "./getMyHand";
 export { getMyDrawChoice } from "./getMyDrawChoice";
 export { playBang } from "./playBang";
 export { playBangAsCJ } from "./playBangAsCJ";

@@ -1,9 +1,11 @@
 import { rooms } from "../server";
 import { compareCards } from "./compareCards";
+import { updatePlayerHands } from "./updatePlayerHands";
 
-export const updateGameState = (io: any, roomName: any) => {
+
+export const updateGameState = (io: any, roomName: string) => {
     try {
-        io.to(roomName).emit("update_hands");
+        updatePlayerHands(io, roomName);
 
         // update topStackCard only if is different
         const prevTopStackCard = rooms[roomName].game.prevTopStackCard;

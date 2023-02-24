@@ -8,7 +8,6 @@ import {
   startGameEvent,
   characterChoice,
   getMyRole,
-  getMyHand,
   getMyDrawChoice,
   playBang,
   playBangAsCJ,
@@ -88,9 +87,6 @@ io.on("connection", (socket: any) => {
   socket.on("character_choice", (data: any) => { characterChoice(io, data) });
 
   socket.on("get_my_role", (data: any) => { getMyRole(socket, data) });
-
-  // TODO: rename -> get_player_hand
-  socket.on("get_my_hand", (data: any) => { getMyHand(socket, data) });
 
   // TODO: rename -> get_player_draw_choice
   socket.on("get_my_draw_choice", (data: any) => { getMyDrawChoice(socket, data) });
