@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.startGame = void 0;
 var server_1 = require("../server");
+var updatePlayerHands_1 = require("./updatePlayerHands");
 var startGame = function (io, roomName) {
     try {
         io.to(roomName).emit("console", server_1.rooms[roomName].game.startGame());
@@ -24,6 +25,7 @@ var startGame = function (io, roomName) {
             io.to(roomName).emit("update_draw_choices", "Jesse Jones");
         }
         io.to(roomName).emit("game_started", { allPlayersInfo: server_1.rooms[roomName].game.getAllPlayersInfo(), allCharactersInfo: server_1.rooms[roomName].game.getCharacters() });
+        (0, updatePlayerHands_1.updatePlayerHands)(io, roomName);
     }
     catch (error) {
         console.log("Error on startGame():");

@@ -3,6 +3,7 @@ exports.__esModule = true;
 exports.loseHealth = void 0;
 var utils_1 = require("../utils");
 var server_1 = require("../server");
+var updatePlayerHands_1 = require("../utils/updatePlayerHands");
 var loseHealth = function (io, data) {
     var roomName = data.currentRoom;
     try {
@@ -16,7 +17,7 @@ var loseHealth = function (io, data) {
         // on indiani, emit state
         io.to(roomName).emit("indiani_active", server_1.rooms[roomName].game.indianiActive);
         io.to(roomName).emit("duel_active", server_1.rooms[roomName].game.duelActive); // this is not optimal, however fixing it would require creating loseHealthInDuel() method...
-        io.to(roomName).emit("update_hands");
+        (0, updatePlayerHands_1.updatePlayerHands)(io, roomName);
         io.to(roomName).emit("update_players_losing_health", server_1.rooms[roomName].game.getPlayersLosingHealth());
         io.to(roomName).emit("update_all_players_info", server_1.rooms[roomName].game.getAllPlayersInfo());
         if (message[message.length - 1] === "Game ended") {

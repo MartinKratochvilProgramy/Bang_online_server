@@ -20,6 +20,7 @@ var Game = /** @class */ (function () {
         this.deck = __spreadArray([], deck, true); // create new copy of deck
         this.gameEnded = false;
         this.stack = [];
+        this.prevTopStackCard = this.stack[0];
         this.emporio = [];
         this.drawChoice = [];
         this.players = {};
@@ -34,11 +35,13 @@ var Game = /** @class */ (function () {
         this.sidKetchumDiscarded = false;
         this.awaitDrawChoice = false;
         this.nextEmporioTurn = null;
+        this.prevGameState = [];
         // init players
         for (var i = 0; i < this.numOfPlayers; i++) {
             this.players[playerNames[i]] = {
                 id: i,
                 hand: [],
+                prevHand: [],
                 table: [],
                 isLosingHealth: false,
                 mancatoPool: 0,
@@ -1294,6 +1297,9 @@ var Game = /** @class */ (function () {
             }
             return result;
         }
+    };
+    Game.prototype.getPlayerPrevHand = function (playerName) {
+        return (this.players[playerName].prevHand);
     };
     Game.prototype.getPlayerHand = function (playerName) {
         return (this.players[playerName].hand);

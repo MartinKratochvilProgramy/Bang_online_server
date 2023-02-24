@@ -11,7 +11,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
-exports.requestPlayersInRange = exports.endTurnEvent = exports.discard = exports.jourdonnaisBarel = exports.drawFromDeck = exports.jesseJonesTarget = exports.usePrigione = exports.useDynamite = exports.useBarel = exports.loseHealth = exports.placeBlueCardOnTable = exports.playPanicoOnTableCard = exports.playPanico = exports.playCatBallouOnTableCard = exports.playCatBallou = exports.playPrigione = exports.playDuel = exports.playIndiani = exports.playGatling = exports.playWellsfargo = exports.playDiligenza = exports.getStackCardPR = exports.getChoiceCardLD = exports.getChoiceCardKC = exports.getEmporioCard = exports.playEmporio = exports.playSaloon = exports.playBeer = exports.playMancatoInDuel = exports.playMancatoAsCJ = exports.playMancato = exports.playMancatoOnIndiani = exports.playBangOnIndiani = exports.playBangInDuel = exports.playBangAsCJ = exports.playBang = exports.getMyDrawChoice = exports.getMyHand = exports.getMyRole = exports.characterChoice = exports.startGameEvent = exports.sendMessage = exports.createRoom = exports.leaveRoom = exports.disconnect = exports.joinRoom = void 0;
+exports.requestPlayersInRange = exports.endTurnEvent = exports.discard = exports.jourdonnaisBarel = exports.drawFromDeck = exports.jesseJonesTarget = exports.usePrigione = exports.useDynamite = exports.useBarel = exports.loseHealth = exports.placeBlueCardOnTable = exports.playPanicoOnTableCard = exports.playPanico = exports.playCatBallouOnTableCard = exports.playCatBallou = exports.playPrigione = exports.playDuel = exports.playIndiani = exports.playGatling = exports.playWellsfargo = exports.playDiligenza = exports.getStackCardPR = exports.getChoiceCardLD = exports.getChoiceCardKC = exports.getEmporioCard = exports.playEmporio = exports.playSaloon = exports.playBeer = exports.playMancatoInDuel = exports.playMancatoAsCJ = exports.playMancato = exports.playMancatoOnIndiani = exports.playBangOnIndiani = exports.playBangInDuel = exports.playBangAsCJ = exports.playBang = exports.getMyDrawChoice = exports.getMyRole = exports.characterChoice = exports.startGameEvent = exports.sendMessage = exports.createRoom = exports.leaveRoom = exports.disconnect = exports.joinRoom = void 0;
 var joinRoom_1 = require("./joinRoom");
 __createBinding(exports, joinRoom_1, "joinRoom");
 var disconnect_1 = require("./disconnect");
@@ -28,8 +28,6 @@ var characterChoice_1 = require("./characterChoice");
 __createBinding(exports, characterChoice_1, "characterChoice");
 var getMyRole_1 = require("./getMyRole");
 __createBinding(exports, getMyRole_1, "getMyRole");
-var getMyHand_1 = require("./getMyHand");
-__createBinding(exports, getMyHand_1, "getMyHand");
 var getMyDrawChoice_1 = require("./getMyDrawChoice");
 __createBinding(exports, getMyDrawChoice_1, "getMyDrawChoice");
 var playBang_1 = require("./playBang");
