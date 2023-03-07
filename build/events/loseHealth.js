@@ -6,11 +6,12 @@ var server_1 = require("../server");
 var updatePlayerHands_1 = require("../utils/updatePlayerHands");
 var loseHealth = function (io, data) {
     var roomName = data.currentRoom;
+    var username = data.username;
     try {
-        var message = server_1.rooms[roomName].game.loseHealth(data.username);
+        var message = server_1.rooms[roomName].game.loseHealth(username);
         io.to(roomName).emit("console", message);
         // player death -> show his role
-        if (server_1.rooms[roomName].game.players[data.username].character.health <= 0) {
+        if (server_1.rooms[roomName].game.players[username].character.health <= 0) {
             io.to(roomName).emit("known_roles", server_1.rooms[roomName].game.knownRoles);
             (0, utils_1.updateGameState)(io, roomName);
         }
@@ -18,10 +19,16 @@ var loseHealth = function (io, data) {
         io.to(roomName).emit("indiani_active", server_1.rooms[roomName].game.indianiActive);
         io.to(roomName).emit("duel_active", server_1.rooms[roomName].game.duelActive); // this is not optimal, however fixing it would require creating loseHealthInDuel() method...
         (0, updatePlayerHands_1.updatePlayerHands)(io, roomName);
+        // this is to deactivate potentially active barrel
+        // TODO: optimize table update
+        io.to(roomName).emit("update_table", {
+            username: username,
+            table: server_1.rooms[roomName].game.getPlayerTable(username)
+        });
         io.to(roomName).emit("update_players_losing_health", server_1.rooms[roomName].game.getPlayersLosingHealth());
         io.to(roomName).emit("update_health", {
-            username: data.username,
-            health: server_1.rooms[roomName].game.players[data.username].character.health
+            username: username,
+            health: server_1.rooms[roomName].game.players[username].character.health
         });
         if (message[message.length - 1] === "Game ended") {
             // game over      

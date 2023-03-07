@@ -1,15 +1,17 @@
 import { updateGameState } from "../utils";
 import { rooms } from "../server";
 import { updatePlayerHands } from "../utils/updatePlayerHands";
+import { updatePlayerTables } from "../utils/updatePlayerTables";
 
 export const loseHealth = (io: any, data: any) => {
     const roomName = data.currentRoom;
+    const username = data.username;
     try {
-        const message = rooms[roomName].game.loseHealth(data.username)
+        const message = rooms[roomName].game.loseHealth(username)
         io.to(roomName).emit("console", message);
 
         // player death -> show his role
-        if (rooms[roomName].game.players[data.username].character.health <= 0) {
+        if (rooms[roomName].game.players[username].character.health <= 0) {
             io.to(roomName).emit("known_roles", rooms[roomName].game.knownRoles);
             updateGameState(io, roomName);
         }
@@ -19,10 +21,18 @@ export const loseHealth = (io: any, data: any) => {
         io.to(roomName).emit("duel_active", rooms[roomName].game.duelActive);  // this is not optimal, however fixing it would require creating loseHealthInDuel() method...
 
         updatePlayerHands(io, roomName);
+
+        // this is to deactivate potentially active barrel
+        // TODO: optimize table update
+        io.to(roomName).emit("update_table", {
+            username: username,
+            table: rooms[roomName].game.getPlayerTable(username)
+        })
+
         io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
         io.to(roomName).emit("update_health", {
-            username: data.username,
-            health: rooms[roomName].game.players[data.username].character.health
+            username: username,
+            health: rooms[roomName].game.players[username].character.health
         });
 
         if (message[message.length - 1] === "Game ended") {

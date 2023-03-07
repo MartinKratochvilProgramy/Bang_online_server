@@ -15,6 +15,7 @@ var compareTables_1 = require("./compareTables");
 function updatePlayerTables(io, roomName) {
     for (var i = 0; i < server_1.rooms[roomName].players.length; i++) {
         var player = server_1.rooms[roomName].players[i];
+        // TODO: this updates all player tables
         io.to(roomName).emit("update_table", {
             username: player.username,
             table: server_1.rooms[roomName].game.getPlayerTable(player.username)

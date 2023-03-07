@@ -8,6 +8,10 @@ var playBeer = function (io, data) {
     try {
         io.to(roomName).emit("console", server_1.rooms[roomName].game.useBeer(data.username, data.cardDigit, data.cardType));
         (0, utils_1.updateGameState)(io, roomName);
+        io.to(roomName).emit("update_health", {
+            username: data.username,
+            health: server_1.rooms[roomName].game.players[data.username].character.health
+        });
     }
     catch (error) {
         console.log("Error in room ".concat(roomName, ":"));
