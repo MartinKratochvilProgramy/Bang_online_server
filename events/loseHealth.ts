@@ -20,7 +20,10 @@ export const loseHealth = (io: any, data: any) => {
 
         updatePlayerHands(io, roomName);
         io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
-        io.to(roomName).emit("update_all_players_info", rooms[roomName].game.getAllPlayersInfo());
+        io.to(roomName).emit("update_health", {
+            username: data.username,
+            health: rooms[roomName].game.players[data.username].character.health
+        });
 
         if (message[message.length - 1] === "Game ended") {
             // game over      
