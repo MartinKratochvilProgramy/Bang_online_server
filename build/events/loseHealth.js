@@ -19,7 +19,10 @@ var loseHealth = function (io, data) {
         io.to(roomName).emit("duel_active", server_1.rooms[roomName].game.duelActive); // this is not optimal, however fixing it would require creating loseHealthInDuel() method...
         (0, updatePlayerHands_1.updatePlayerHands)(io, roomName);
         io.to(roomName).emit("update_players_losing_health", server_1.rooms[roomName].game.getPlayersLosingHealth());
-        io.to(roomName).emit("update_all_players_info", server_1.rooms[roomName].game.getAllPlayersInfo());
+        io.to(roomName).emit("update_health", {
+            username: data.username,
+            health: server_1.rooms[roomName].game.players[data.username].character.health
+        });
         if (message[message.length - 1] === "Game ended") {
             // game over      
             // emit who won

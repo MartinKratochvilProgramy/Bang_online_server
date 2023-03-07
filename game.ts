@@ -59,6 +59,7 @@ export class Game {
                 hand: [],
                 prevHand: [],
                 table: [],
+                prevTable: [],
                 isLosingHealth: false,
                 mancatoPool: 0,
                 character: {
@@ -1439,6 +1440,14 @@ export class Game {
 
     getPlayerHand(playerName: string) {
         return (this.players[playerName].hand);
+    }
+
+    getPlayerPrevTable(playerName: string) {
+        return (this.players[playerName].prevTable);
+    }
+
+    getPlayerTable(playerName: string) {
+        return (this.players[playerName].table);
     }
 
     getHands() {

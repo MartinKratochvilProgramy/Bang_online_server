@@ -43,6 +43,7 @@ var Game = /** @class */ (function () {
                 hand: [],
                 prevHand: [],
                 table: [],
+                prevTable: [],
                 isLosingHealth: false,
                 mancatoPool: 0,
                 character: {
@@ -1303,6 +1304,12 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getPlayerHand = function (playerName) {
         return (this.players[playerName].hand);
+    };
+    Game.prototype.getPlayerPrevTable = function (playerName) {
+        return (this.players[playerName].prevTable);
+    };
+    Game.prototype.getPlayerTable = function (playerName) {
+        return (this.players[playerName].table);
     };
     Game.prototype.getHands = function () {
         for (var _i = 0, _a = Object.keys(this.players); _i < _a.length; _i++) {

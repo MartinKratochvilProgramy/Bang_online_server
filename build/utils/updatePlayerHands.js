@@ -29,6 +29,10 @@ function emitHandToSocket(io, roomName, player) {
         server_1.rooms[roomName].game.gatlingActive ||
         server_1.rooms[roomName].game.players[player.username].isLosingHealth) {
         io.to(player.id).emit("my_hand", currentHand);
+        io.to(roomName).emit("update_number_of_cards", {
+            username: player.username,
+            handSize: currentHand.length
+        });
         server_1.rooms[roomName].game.players[player.username].prevHand = __spreadArray([], currentHand, true);
     }
 }
