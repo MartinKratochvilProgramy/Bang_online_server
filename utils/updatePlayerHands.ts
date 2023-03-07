@@ -26,6 +26,10 @@ function emitHandToSocket(io: any, roomName: string, player: Player) {
         rooms[roomName].game.players[player.username].isLosingHealth
     ) {
         io.to(player.id).emit("my_hand", currentHand)
+        io.to(roomName).emit("update_number_of_cards", {
+            username: player.username,
+            handSize: currentHand.length
+        })
         rooms[roomName].game.players[player.username].prevHand = [...currentHand]
     }
 }

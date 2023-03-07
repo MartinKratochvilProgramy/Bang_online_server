@@ -15,7 +15,7 @@ export const updateGameState = (io: any, roomName: string) => {
             io.to(roomName).emit("update_top_stack_card", topStackCard);
         }
 
-        io.to(roomName).emit("update_all_players_info", rooms[roomName].game.getAllPlayersInfo());
+        // io.to(roomName).emit("update_all_players_info", rooms[roomName].game.getAllPlayersInfo());
     } catch (error) {
         console.log(`Error on updateGameState():`);
         console.log(error);
