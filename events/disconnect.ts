@@ -1,5 +1,6 @@
 import { getRoomsInfo, updateGameState, nextTurn } from "../utils";
 import { rooms } from "../server";
+import { Player } from "../types/player";
 
 export const disconnect = (socket: any, io: any) => {
 
@@ -12,7 +13,11 @@ export const disconnect = (socket: any, io: any) => {
                 if (rooms[room].game === null) {
                     // game not yet started in game -> simple splice
                     if (rooms[room].players[i].id === socket.id) {
-                        rooms[room].players.splice(rooms[room].players.indexOf(rooms[room].players[i].username), 1);
+                        const targetPlayer: Player = {
+                            username: rooms[room].players[i].username,
+                            id: rooms[room].players[i].id
+                        }
+                        rooms[room].players.splice(rooms[room].players.indexOf(targetPlayer), 1);
                         io.to(room).emit("get_players", rooms[room].players);
                         io.emit("rooms", getRoomsInfo(rooms));
 
@@ -32,7 +37,7 @@ export const disconnect = (socket: any, io: any) => {
                     if (rooms[room].players[i].id === socket.id) {
 
                         io.to(room).emit("console", [`${rooms[room].players[i].username} disconnected`]);
-                        const message = rooms[room].game.removePlayer(rooms[room].players[i].username);
+                        const message = rooms[room].game!.removePlayer(rooms[room].players[i].username);
 
                         // if game still active, check game-end
                         // player dies when disconnecting, check game-end
@@ -42,7 +47,7 @@ export const disconnect = (socket: any, io: any) => {
                             io.to(room).emit("game_ended", message[message.length - 2]);
                             io.to(room).emit("console", [message[message.length - 2], message[message.length - 1]]);
                         }
-                        io.to(room).emit("known_roles", rooms[room].game.knownRoles);
+                        io.to(room).emit("known_roles", rooms[room].game!.knownRoles);
 
                         rooms[room].players.splice(i, 1);
                         io.emit("rooms", getRoomsInfo(rooms));

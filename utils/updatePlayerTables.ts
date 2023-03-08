@@ -13,7 +13,7 @@ export function updatePlayerTables(io: any, roomName: string) {
         // TODO: this updates all player tables
         io.to(roomName).emit("update_table", {
             username: player.username,
-            table: rooms[roomName].game.getPlayerTable(player.username)
+            table: rooms[roomName].game!.getPlayerTable(player.username)
         })
 
         // emitTable(io, roomName, player);
@@ -21,8 +21,8 @@ export function updatePlayerTables(io: any, roomName: string) {
 }
 
 function emitTable(io: any, roomName: string, player: Player) {
-    const prevTable: Card[] = rooms[roomName].game.getPlayerPrevTable(player.username);
-    const currentTable: Card[] = rooms[roomName].game.getPlayerTable(player.username);
+    const prevTable: Card[] = rooms[roomName].game!.getPlayerPrevTable(player.username);
+    const currentTable: Card[] = rooms[roomName].game!.getPlayerTable(player.username);
 
     console.log(prevTable, currentTable);
 
@@ -34,6 +34,6 @@ function emitTable(io: any, roomName: string, player: Player) {
             username: player.username,
             table: currentTable
         })
-        rooms[roomName].game.players[player.username].prevTable = [...currentTable]
+        rooms[roomName].game!.players[player.username].prevTable = [...currentTable]
     }
 }

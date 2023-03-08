@@ -3,14 +3,15 @@ import { rooms } from "../server";
 
 export const playSaloon = (io: any, data: any) => {
     const roomName = data.currentRoom;
+    if (rooms[roomName].game === null) return;
     try {
-        io.to(roomName).emit("console", rooms[roomName].game.useSaloon(data.username, data.cardDigit, data.cardType));
+        io.to(roomName).emit("console", rooms[roomName].game!.useSaloon(data.username, data.cardDigit, data.cardType));
         updateGameState(io, roomName);
-        for (let i = 0; i < rooms[roomName].game.playerNames.length; i++) {
-            const playerName = rooms[roomName].game.playerNames[i];
+        for (let i = 0; i < rooms[roomName].game!.playerNames.length; i++) {
+            const playerName = rooms[roomName].game!.playerNames[i];
             io.to(roomName).emit("update_health", {
                 username: playerName,
-                health: rooms[roomName].game.players[playerName].character.health
+                health: rooms[roomName].game!.players[playerName].character.health
             });
         }
     } catch (error) {

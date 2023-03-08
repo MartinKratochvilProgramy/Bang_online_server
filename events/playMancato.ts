@@ -3,9 +3,10 @@ import { rooms } from "../server";
 
 export const playMancato = (io: any, data: any) => {
     const roomName = data.currentRoom;
+    if (rooms[roomName].game === null) return;
     try {
-        io.to(roomName).emit("console", rooms[roomName].game.useMancato(data.username, data.cardDigit, data.cardType));
-        io.to(roomName).emit("update_players_losing_health", rooms[roomName].game.getPlayersLosingHealth());
+        io.to(roomName).emit("console", rooms[roomName].game!.useMancato(data.username, data.cardDigit, data.cardType));
+        io.to(roomName).emit("update_players_losing_health", rooms[roomName].game!.getPlayersLosingHealth());
         updateGameState(io, roomName);
     } catch (error) {
         console.log(`Error in room ${roomName}:`);

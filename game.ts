@@ -1686,7 +1686,7 @@ export class Game {
         }
         const numberOfBeersInHand = this.players[playerName].hand.filter((item: Card) => item.name === 'Beer').length;
         this.players[playerName].character.health = 0 + numberOfBeersInHand;
-        let message;
+        let message: string[] = [];
         for (let i = 0; i < numberOfBeersInHand + 1; i++) {
             message = this.loseHealth(playerName);
         }

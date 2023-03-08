@@ -10,6 +10,7 @@ export const leaveRoom = (socket: any, io: any, data: any) => {
         rooms[roomName].players.splice(rooms[roomName].players.indexOf(data.username), 1);
         io.to(roomName).emit("get_players", rooms[roomName].players);
 
+        if (rooms[roomName].game === null) return;
 
         if (rooms[roomName].players.length <= 0) {
             // if room empty, delete it
@@ -21,7 +22,7 @@ export const leaveRoom = (socket: any, io: any, data: any) => {
             if (rooms[roomName].game !== null) {
                 // if game exists
                 // tell game a player left
-                rooms[roomName].game.removePlayer(data.username);
+                rooms[roomName].game!.removePlayer(data.username);
                 // send info to client
                 updateGameState(io, roomName);
                 nextTurn(io, roomName);

@@ -1,21 +1,13 @@
-import { rooms } from "../server";
-import { compareCards } from "./compareCards";
 import { updatePlayerHands } from "./updatePlayerHands";
 import { updatePlayerTables } from "./updatePlayerTables";
+import { updateTopStackCard } from "./updateTopStackCard";
 
 
 export const updateGameState = (io: any, roomName: string) => {
     try {
         updatePlayerHands(io, roomName);
         updatePlayerTables(io, roomName);
-
-        // update topStackCard only if is different
-        const prevTopStackCard = rooms[roomName].game.prevTopStackCard;
-        const topStackCard = rooms[roomName].game.getTopStackCard();
-        if (!compareCards(topStackCard, prevTopStackCard)) {
-            rooms[roomName].game.prevTopStackCard = topStackCard
-            io.to(roomName).emit("update_top_stack_card", topStackCard);
-        }
+        updateTopStackCard(io, roomName);
 
         // io.to(roomName).emit("update_all_players_info", rooms[roomName].game.getAllPlayersInfo());
     } catch (error) {

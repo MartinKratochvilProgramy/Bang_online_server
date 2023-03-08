@@ -7,6 +7,11 @@ export type Rooms = {
 
 interface Room {
     players: Player[],
-    messages: string[],
+    messages: Message[],
     game: Game | null
+}
+
+interface Message {
+  username: string,
+  message: string
 }

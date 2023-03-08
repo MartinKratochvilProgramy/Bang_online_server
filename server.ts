@@ -67,7 +67,7 @@ const io = new Server(server,
   }
 );
 
-export let rooms: Rooms;
+export let rooms: Rooms = {};
 
 io.on("connection", (socket: any) => {
   socket.emit("rooms", getRoomsInfo(rooms));

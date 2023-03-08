@@ -11,21 +11,22 @@ export function updatePlayerHands(io: any, roomName: string) {
 }
 
 function emitHandToSocket(io: any, roomName: string, player: Player) {
-    const prevHand: Card[] = rooms[roomName].game.getPlayerPrevHand(player.username);
-    const currentHand: Card[] = rooms[roomName].game.getPlayerHand(player.username);
+    if (rooms[roomName].game === null) return;
+    const prevHand: Card[] = rooms[roomName].game!.getPlayerPrevHand(player.username);
+    const currentHand: Card[] = rooms[roomName].game!.getPlayerHand(player.username);
 
     if (!compareHands(prevHand, currentHand) ||
-        rooms[roomName].game.getNameOfCurrentTurnPlayer() === player.username ||
-        rooms[roomName].game.duelActive ||
-        rooms[roomName].game.indianiActive ||
-        rooms[roomName].game.gatlingActive ||
-        rooms[roomName].game.players[player.username].isLosingHealth
+        rooms[roomName].game!.getNameOfCurrentTurnPlayer() === player.username ||
+        rooms[roomName].game!.duelActive ||
+        rooms[roomName].game!.indianiActive ||
+        rooms[roomName].game!.gatlingActive ||
+        rooms[roomName].game!.players[player.username].isLosingHealth
     ) {
         io.to(player.id).emit("my_hand", currentHand)
         io.to(roomName).emit("update_number_of_cards", {
             username: player.username,
             handSize: currentHand.length
         })
-        rooms[roomName].game.players[player.username].prevHand = [...currentHand]
+        rooms[roomName].game!.players[player.username].prevHand = [...currentHand]
     }
 }
