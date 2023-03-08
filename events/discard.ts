@@ -19,6 +19,10 @@ export const discard = (io: any, socket: any, data: any) => {
             io.to(socketID).emit("my_hand", rooms[roomName].game!.getPlayerHand(username));
             // updateGameState(io, roomName)
         }
+        io.to(roomName).emit("update_number_of_cards", {
+            username: username,
+            handSize: rooms[roomName].game!.getPlayerHand(username).length
+        })
         updateTopStackCard(io, roomName);
     } catch (error) {
         console.log(`Error in room ${roomName}:`);
