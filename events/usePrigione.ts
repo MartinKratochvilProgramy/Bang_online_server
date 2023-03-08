@@ -1,12 +1,23 @@
 import { rooms } from "../server";
-import { updateGameState } from "../utils/updateGameState";
+import { updatePlayerTables } from "../utils/updatePlayerTables";
 
 export const usePrigione = (io: any, data: any) => {
     const roomName = data.currentRoom;
+    
     if (rooms[roomName].game === null) return;
+    
     try {
         io.to(roomName).emit("console", rooms[roomName].game!.usePrigione(data.username, data.card));
-        updateGameState(io, roomName);
+        
+        const username = rooms[roomName].game!.getNameOfCurrentTurnPlayer();
+        const socketID = rooms[roomName].players.find(player => player.username === username)!.id;
+        io.to(socketID).emit("my_hand", rooms[roomName].game!.getPlayerHand(username));
+        io.to(roomName).emit("update_number_of_cards", {
+            username: username,
+            handSize: rooms[roomName].game!.getPlayerHand(username).length
+        })
+        updatePlayerTables(io, roomName);
+
         io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game!.getPlayersWithActionRequired());
 
         const currentPlayer = rooms[roomName].game!.getNameOfCurrentTurnPlayer();
