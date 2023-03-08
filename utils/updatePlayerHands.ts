@@ -1,11 +1,7 @@
 import { rooms } from "../server";
+import { Player } from "../types/player";
 import { Card } from "../types/types";
 import { compareHands } from "./compareHands";
-
-interface Player {
-    username: string;
-    id: string;
-}
 
 export function updatePlayerHands(io: any, roomName: string) {
     for (let i = 0; i < rooms[roomName].players.length; i++) {

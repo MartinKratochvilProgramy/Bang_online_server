@@ -46,6 +46,7 @@ import {
   endTurnEvent,
   requestPlayersInRange
 } from "./events";
+import { Rooms } from "./types/room";
 
 const express = require("express");
 const app = express();
@@ -66,7 +67,7 @@ const io = new Server(server,
   }
 );
 
-export let rooms: any = {}
+export let rooms: Rooms;
 
 io.on("connection", (socket: any) => {
   socket.emit("rooms", getRoomsInfo(rooms));
