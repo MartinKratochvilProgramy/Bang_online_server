@@ -1,5 +1,5 @@
-import { updateGameState } from "../utils";
 import { rooms } from "../server";
+import { updateGameState } from "../utils/updateGameState";
 import { updatePlayerHands } from "../utils/updatePlayerHands";
 
 export const getChoiceCardKC = (io: any, data: any) => {

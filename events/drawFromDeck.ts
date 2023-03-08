@@ -1,4 +1,4 @@
-import { updateGameState } from "../utils";
+import { updateGameState } from "../utils/updateGameState";
 import { rooms } from "../server";
 
 export const drawFromDeck = (io: any, data: any) => {

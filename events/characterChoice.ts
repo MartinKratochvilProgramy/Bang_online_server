@@ -1,4 +1,4 @@
-import { startGame } from "../utils";
+import { startGame } from "../utils/startGame";
 import { rooms } from "../server";
 
 export const characterChoice = (io: any, data: any) => {

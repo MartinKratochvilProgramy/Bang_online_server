@@ -1,4 +1,6 @@
-import { getRoomsInfo, updateGameState, nextTurn } from "../utils";
+import { getRoomsInfo} from "../utils/getRoomsInfo";
+import { updateGameState } from "../utils/updateGameState";
+import { nextTurn } from "../utils/nextTurn";
 import { rooms } from "../server";
 import { Player } from "../types/player";
 

@@ -1,5 +1,7 @@
-import { getRoomsInfo, updateGameState, nextTurn } from "../utils";
 import { rooms } from "../server";
+import { getRoomsInfo } from "../utils/getRoomsInfo";
+import { updateGameState } from "../utils/updateGameState";
+import { nextTurn } from "../utils/nextTurn";
 
 export const leaveRoom = (socket: any, io: any, data: any) => {
     const roomName = data.currentRoom;

@@ -1,7 +1,6 @@
-import { updateGameState } from "../utils";
 import { rooms } from "../server";
+import { updateGameState } from "../utils/updateGameState";
 import { updatePlayerHands } from "../utils/updatePlayerHands";
-import { updatePlayerTables } from "../utils/updatePlayerTables";
 
 export const loseHealth = (io: any, data: any) => {
     const roomName = data.currentRoom;

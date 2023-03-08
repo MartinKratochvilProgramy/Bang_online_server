@@ -1,4 +1,4 @@
-import { endTurn } from "../utils";
+import { endTurn } from "../utils/endTurn";
 import { rooms } from "../server";
 import { updateTopStackCard } from "../utils/updateTopStackCard";
 

@@ -1,5 +1,6 @@
-import { updateGameState, endTurn } from "../utils";
 import { rooms } from "../server";
+import { updateGameState } from "../utils/updateGameState";
+import { endTurn } from "../utils/endTurn";
 
 export const useDynamite = (io: any, data: any) => {
     const roomName = data.currentRoom;

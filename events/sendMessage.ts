@@ -1,5 +1,4 @@
 import { rooms } from "../server";
-var uuid = require('uuid');
 
 export const sendMessage = (io: any, data: any,) => {
     const roomName = data.currentRoom;

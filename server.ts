@@ -1,4 +1,4 @@
-import { getRoomsInfo } from "./utils";
+import { getRoomsInfo } from "./utils/getRoomsInfo";
 import {
   joinRoom,
   disconnect,

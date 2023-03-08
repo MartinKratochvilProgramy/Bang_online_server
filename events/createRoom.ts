@@ -1,4 +1,4 @@
-import { getRoomsInfo } from "../utils";
+import { getRoomsInfo } from "../utils/getRoomsInfo";
 import { rooms } from "../server";
 
 export const createRoom = (io: any, roomName: string) => {

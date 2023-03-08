@@ -1,7 +1,7 @@
-import { getRoomsInfo } from "../utils";
 import { rooms } from "../server";
 import { Game } from "../game";
 import { deck } from "../deck";
+import { getRoomsInfo } from "../utils/getRoomsInfo";
 
 export const startGameEvent = (io: any, data: any) => {
     const roomName = data.currentRoom;

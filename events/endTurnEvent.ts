@@ -1,4 +1,4 @@
-import { endTurn } from "../utils";
+import { endTurn } from "../utils/endTurn";
 
 export const endTurnEvent = (io: any, roomName: any) => {
     try {
