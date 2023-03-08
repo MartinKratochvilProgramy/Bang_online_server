@@ -13,7 +13,7 @@ export const loseHealth = (io: any, data: any) => {
         // player death -> show his role
         if (rooms[roomName].game!.players[username].character.health <= 0) {
             io.to(roomName).emit("known_roles", rooms[roomName].game!.knownRoles);
-            updateGameState(io, roomName);
+            // updateGameState(io, roomName);
         }
 
         // on indiani, emit state
