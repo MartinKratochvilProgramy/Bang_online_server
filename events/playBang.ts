@@ -1,4 +1,5 @@
 import { rooms } from "../server";
+import { updatePlayerTables } from "../utils/updatePlayerTables";
 import { updateTopStackCard } from "../utils/updateTopStackCard";
 
 export const playBang = (io: any, data: any) => {
@@ -24,6 +25,7 @@ export const playBang = (io: any, data: any) => {
             handSize: rooms[roomName].game!.getPlayerHand(target).length
         })
         updateTopStackCard(io, roomName);
+        updatePlayerTables(io, roomName);
 
         if (rooms[roomName].game!.players[data.target].character.name === "Jourdonnais") {
             io.to(roomName).emit("jourdonnais_can_use_barel");

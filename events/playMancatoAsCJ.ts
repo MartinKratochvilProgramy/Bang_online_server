@@ -1,4 +1,5 @@
 import { rooms } from "../server";
+import { updatePlayerTables } from "../utils/updatePlayerTables";
 import { updateTopStackCard } from "../utils/updateTopStackCard";
 
 export const playMancatoAsCJ = (io: any, data: any) => {
@@ -26,6 +27,7 @@ export const playMancatoAsCJ = (io: any, data: any) => {
             handSize: rooms[roomName].game!.getPlayerHand(target).length
         })
         updateTopStackCard(io, roomName);
+        updatePlayerTables(io, roomName);
     } catch (error) {
         console.log(`Error in room ${roomName}:`);
         console.log(error);

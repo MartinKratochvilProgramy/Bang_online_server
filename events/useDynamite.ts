@@ -1,6 +1,6 @@
 import { rooms } from "../server";
-import { updateGameState } from "../utils/updateGameState";
 import { endTurn } from "../utils/endTurn";
+import { updatePlayerTables } from "../utils/updatePlayerTables";
 
 export const useDynamite = (io: any, data: any) => {
     const roomName = data.currentRoom;
@@ -10,7 +10,13 @@ export const useDynamite = (io: any, data: any) => {
         const message = rooms[roomName].game!.useDynamite(username, data.card);
         io.to(roomName).emit("console", message);
 
-        updateGameState(io, roomName);
+        const socketID = rooms[roomName].players.find(player => player.username === username)!.id;
+        io.to(socketID).emit("my_hand", rooms[roomName].game!.getPlayerHand(username));
+        io.to(roomName).emit("update_number_of_cards", {
+            username: username,
+            handSize: rooms[roomName].game!.getPlayerHand(username).length
+        })
+        updatePlayerTables(io, roomName);
 
         if (message[message.length - 1] === "Game ended") {
             // game over      
