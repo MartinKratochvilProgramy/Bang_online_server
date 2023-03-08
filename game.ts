@@ -21,7 +21,7 @@ export class Game {
     duelPlayers: any;
     duelTurnIndex: number;
     luckyDukeFirstDraw: boolean;
-    sidKetchumDiscarded: boolean;
+    // sidKetchumDiscarded: boolean;
     awaitDrawChoice: boolean;
     nextEmporioTurn: string | null;
     prevGameState: GameState[];
@@ -30,7 +30,7 @@ export class Game {
         this.playerNames = playerNames;
         this.numOfPlayers = this.playerNames.length;
         this.namesOfCharacters = ["Bart Cassidy", "Black Jack", "Calamity Janet", "El Gringo", "Jesse Jones", "Jourdonnais", "Kit Carlson", "Lucky Duke", "Paul Regret", "Pedro Ramirez", "Rose Doolan", "Slab the Killer", "Suzy Lafayette", "Vulture Sam", "Willy the Kid"]
-        // this.namesOfCharacters = ["Jesse Jones", "Calamity Janet", "Lucky Duke", "Kit Carlson"]
+        // this.namesOfCharacters = ["Jesse Jones", "Calamity Janet", "Sid Ketchum", "Kit Carlson"]
         this.knownRoles = {}
         this.deck = [...deck];  // create new copy of deck
         this.gameEnded = false;
@@ -47,7 +47,7 @@ export class Game {
         this.duelPlayers = [];
         this.duelTurnIndex = 0;
         this.luckyDukeFirstDraw = true;
-        this.sidKetchumDiscarded = false;
+        // this.sidKetchumDiscarded = false;
         this.awaitDrawChoice = false;
         this.nextEmporioTurn = null;
         this.prevGameState = []
@@ -135,14 +135,14 @@ export class Game {
         this.stack.push(cardToDiscard);
 
         // SK special case for when discard 2 => gain life
-        if (this.players[playerName].character.name === "Sid Ketchum") {
-            if (this.sidKetchumDiscarded === true && this.players[playerName].character.health < this.players[playerName].character.maxHealth) {
-                this.players[playerName].character.health += 1
-                this.sidKetchumDiscarded = false;
-            } else {
-                this.sidKetchumDiscarded = true;
-            }
-        }
+        // if (this.players[playerName].character.name === "Sid Ketchum") {
+        //     if (this.sidKetchumDiscarded === true && this.players[playerName].character.health < this.players[playerName].character.maxHealth) {
+        //         this.players[playerName].character.health += 1
+        //         this.sidKetchumDiscarded = false;
+        //     } else {
+        //         this.sidKetchumDiscarded = true;
+        //     }
+        // }
     }
 
     // ******************* USE CARDS *******************

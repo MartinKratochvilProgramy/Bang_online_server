@@ -17,12 +17,10 @@ export const endTurn = (io: any, roomName: any) => {
 
         io.to(roomName).emit("current_player", currentPlayer);
         io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game!.getPlayersWithActionRequired());
-        updateGameState(io, roomName)
 
-        // update hands
+        // update game state
         io.to(prevPlayerID).emit("my_hand", rooms[roomName].game!.getPlayerHand(prevPlayer));
         io.to(currentPlayerID).emit("my_hand", rooms[roomName].game!.getPlayerHand(currentPlayer));
-
         updatePlayerTables(io, roomName);
         updateTopStackCard(io, roomName);
 

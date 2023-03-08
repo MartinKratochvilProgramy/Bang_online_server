@@ -1,5 +1,6 @@
-import { updateGameState, endTurn } from "../utils";
+import { endTurn } from "../utils";
 import { rooms } from "../server";
+import { updateTopStackCard } from "../utils/updateTopStackCard";
 
 export const discard = (io: any, socket: any, data: any) => {
     const roomName = data.currentRoom;
@@ -9,20 +10,16 @@ export const discard = (io: any, socket: any, data: any) => {
 
         rooms[roomName].game!.discard(data.card.name, data.card.digit, data.card.type, username);
         
+        const socketID = rooms[roomName].players.find(player => player.username === username)!.id
+        
         if (rooms[roomName].game!.players[username].hand.length <= rooms[roomName].game!.players[username].character.health) {
-            // special case for when SK is discarding
-            if (rooms[roomName].game!.players[username].character.name !== "Sid Ketchum") {
-                // if less of equal cards in hand -> endTurn
-                const socketID = rooms[roomName].players.find(player => player.username === username)
-
-                socket.to(socketID).emit("end_discard");
-                endTurn(io, roomName);
-            } else {
-                updateGameState(io, roomName)
-            }
+            io.to(socketID).emit("end_discard");
+            endTurn(io, roomName);
         } else {
-            updateGameState(io, roomName)
+            io.to(socketID).emit("my_hand", rooms[roomName].game!.getPlayerHand(username));
+            // updateGameState(io, roomName)
         }
+        updateTopStackCard(io, roomName);
     } catch (error) {
         console.log(`Error in room ${roomName}:`);
         console.log(error);
