@@ -27,8 +27,6 @@ export const playCatBallou = (io: any, data: any) => {
             handSize: rooms[roomName].game!.getPlayerHand(target).length
         })
 
-        console.log(userID, targetID);
-
         updateTopStackCard(io, roomName);
 
     } catch (error) {
