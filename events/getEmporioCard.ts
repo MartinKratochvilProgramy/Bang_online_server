@@ -17,6 +17,14 @@ export const getEmporioCard = (io: any, data: any) => {
             username: username,
             handSize: rooms[roomName].game!.getPlayerHand(username).length
         })
+
+        if ( rooms[roomName].game!.emporio.length === 0) {
+            // activate current turn player's hand if emporio empty
+            const currentPlayer = rooms[roomName].game!.getNameOfCurrentTurnPlayer();
+
+            const currentPlayerID = rooms[roomName].players.find(player => player.username === currentPlayer)!.id;
+            io.to(currentPlayerID).emit("my_hand", rooms[roomName].game!.getPlayerHand(currentPlayer));
+        }
     } catch (error) {
         console.log(`Error in room ${roomName}:`);
         console.log(error);
