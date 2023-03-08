@@ -1,5 +1,4 @@
 import { rooms } from "../server";
-import { updateGameState } from "../utils/updateGameState";
 import { updatePlayerTables } from "../utils/updatePlayerTables";
 
 export const playCatBallouOnTableCard = (io: any, data: any) => {
