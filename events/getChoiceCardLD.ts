@@ -1,5 +1,4 @@
 import { rooms } from "../server";
-import { updateGameState } from "../utils/updateGameState";
 import { updateTopStackCard } from "../utils/updateTopStackCard";
 
 export const getChoiceCardLD = (io: any, data: any) => {
@@ -9,7 +8,7 @@ export const getChoiceCardLD = (io: any, data: any) => {
     if (rooms[roomName].game === null) return;
     try {
         rooms[roomName].game!.getChoiceCardLD(data.username, data.card);
-        
+
         const socketID = rooms[roomName].players.find(player => player.username === username)!.id;
         io.to(socketID).emit("my_hand", rooms[roomName].game!.getPlayerHand(username));
         io.to(roomName).emit("update_number_of_cards", {

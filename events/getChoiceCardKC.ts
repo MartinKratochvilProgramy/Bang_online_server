@@ -1,6 +1,4 @@
 import { rooms } from "../server";
-import { updateGameState } from "../utils/updateGameState";
-import { updatePlayerHands } from "../utils/updatePlayerHands";
 import { updateTopStackCard } from "../utils/updateTopStackCard";
 
 export const getChoiceCardKC = (io: any, data: any) => {

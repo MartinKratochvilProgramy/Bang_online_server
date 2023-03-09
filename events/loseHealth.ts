@@ -1,5 +1,4 @@
 import { rooms } from "../server";
-import { updateGameState } from "../utils/updateGameState";
 import { updatePlayerHands } from "../utils/updatePlayerHands";
 
 export const loseHealth = (io: any, data: any) => {

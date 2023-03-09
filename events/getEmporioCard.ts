@@ -1,5 +1,4 @@
 import { rooms } from "../server";
-import { updateGameState } from "../utils/updateGameState";
 
 export const getEmporioCard = (io: any, data: any) => {
     const roomName = data.currentRoom;
@@ -10,7 +9,7 @@ export const getEmporioCard = (io: any, data: any) => {
         rooms[roomName].game!.getEmporioCard(data.username, data.card);
         // send emporio state to clients
         io.to(roomName).emit("emporio_state", { cards: rooms[roomName].game!.emporio, nextEmporioTurn: rooms[roomName].game!.nextEmporioTurn });
-        
+
         const socketID = rooms[roomName].players.find(player => player.username === username)!.id;
         io.to(socketID).emit("my_hand", rooms[roomName].game!.getPlayerHand(username));
         io.to(roomName).emit("update_number_of_cards", {
@@ -18,7 +17,7 @@ export const getEmporioCard = (io: any, data: any) => {
             handSize: rooms[roomName].game!.getPlayerHand(username).length
         })
 
-        if ( rooms[roomName].game!.emporio.length === 0) {
+        if (rooms[roomName].game!.emporio.length === 0) {
             // activate current turn player's hand if emporio empty
             const currentPlayer = rooms[roomName].game!.getNameOfCurrentTurnPlayer();
 

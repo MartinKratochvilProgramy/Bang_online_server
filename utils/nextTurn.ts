@@ -2,6 +2,9 @@ import { updateGameState } from "./updateGameState";
 import { rooms } from "../server";
 
 export const nextTurn = (io: any, roomName: any) => {
+    // this is being called on disconnect or leaveRoom
+    // it is therefore not that expensive to use updateGameState
+    // TODO: this uses updateGameState
     if (rooms[roomName].game === null) return;
     try {
         const currentPlayer = rooms[roomName].game!.getNameOfCurrentTurnPlayer(); // get current player

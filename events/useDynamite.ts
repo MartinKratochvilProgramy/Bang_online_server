@@ -26,7 +26,7 @@ export const useDynamite = (io: any, data: any) => {
             return;
         }
         if (rooms[roomName].game!.players[username].character.health <= 0) {
-            endTurn(io, roomName); // TODO: updateGameState is also called here
+            endTurn(io, roomName);
             return;
         }
 

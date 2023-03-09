@@ -1,4 +1,3 @@
-import { updateGameState } from "./updateGameState";
 import { rooms } from "../server";
 import { updatePlayerTables } from "./updatePlayerTables";
 import { updateTopStackCard } from "./updateTopStackCard";
@@ -9,9 +8,9 @@ export const endTurn = (io: any, roomName: any) => {
     try {
         const prevPlayer = rooms[roomName].game!.getNameOfCurrentTurnPlayer(); // get prev player
         const prevPlayerID = rooms[roomName].players.find(player => player.username === prevPlayer)!.id
-        
+
         io.to(roomName).emit("console", rooms[roomName].game!.endTurn());
-        
+
         const currentPlayer = rooms[roomName].game!.getNameOfCurrentTurnPlayer(); // get current player
         const currentPlayerID = rooms[roomName].players.find(player => player.username === currentPlayer)!.id
 
