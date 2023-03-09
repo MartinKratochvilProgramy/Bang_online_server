@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.getEmporioCard = void 0;
 var server_1 = require("../server");
+var updatePlayersHand_1 = require("../utils/updatePlayersHand");
 var getEmporioCard = function (io, data) {
     var roomName = data.currentRoom;
     var username = data.username;
@@ -11,12 +12,7 @@ var getEmporioCard = function (io, data) {
         server_1.rooms[roomName].game.getEmporioCard(data.username, data.card);
         // send emporio state to clients
         io.to(roomName).emit("emporio_state", { cards: server_1.rooms[roomName].game.emporio, nextEmporioTurn: server_1.rooms[roomName].game.nextEmporioTurn });
-        var socketID = server_1.rooms[roomName].players.find(function (player) { return player.username === username; }).id;
-        io.to(socketID).emit("my_hand", server_1.rooms[roomName].game.getPlayerHand(username));
-        io.to(roomName).emit("update_number_of_cards", {
-            username: username,
-            handSize: server_1.rooms[roomName].game.getPlayerHand(username).length
-        });
+        (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, username);
         if (server_1.rooms[roomName].game.emporio.length === 0) {
             // activate current turn player's hand if emporio empty
             var currentPlayer_1 = server_1.rooms[roomName].game.getNameOfCurrentTurnPlayer();
