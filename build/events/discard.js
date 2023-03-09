@@ -4,7 +4,7 @@ exports.discard = void 0;
 var endTurn_1 = require("../utils/endTurn");
 var server_1 = require("../server");
 var updateTopStackCard_1 = require("../utils/updateTopStackCard");
-var discard = function (io, socket, data) {
+var discard = function (io, data) {
     var roomName = data.currentRoom;
     var username = data.username;
     try {
@@ -16,10 +16,7 @@ var discard = function (io, socket, data) {
             io.to(socketID).emit("end_discard");
             (0, endTurn_1.endTurn)(io, roomName);
         }
-        else {
-            io.to(socketID).emit("my_hand", server_1.rooms[roomName].game.getPlayerHand(username));
-            // updateGameState(io, roomName)
-        }
+        io.to(socketID).emit("my_hand", server_1.rooms[roomName].game.getPlayerHand(username));
         io.to(roomName).emit("update_number_of_cards", {
             username: username,
             handSize: server_1.rooms[roomName].game.getPlayerHand(username).length

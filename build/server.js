@@ -64,7 +64,7 @@ io.on("connection", function (socket) {
     socket.on("jesse_jones_target", function (data) { (0, events_1.jesseJonesTarget)(io, data); });
     socket.on("draw_from_deck", function (data) { (0, events_1.drawFromDeck)(io, data); });
     socket.on("jourdonnais_barel", function (data) { (0, events_1.jourdonnaisBarel)(io, data); });
-    socket.on("discard", function (data) { (0, events_1.discard)(io, socket, data); });
+    socket.on("discard", function (data) { (0, events_1.discard)(io, data); });
     socket.on("end_turn", function (roomName) { (0, events_1.endTurnEvent)(io, roomName); });
     socket.on("request_players_in_range", function (data) { (0, events_1.requestPlayersInRange)(socket, data); });
 });

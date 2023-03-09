@@ -158,7 +158,7 @@ io.on("connection", (socket: any) => {
 
   socket.on("jourdonnais_barel", (data: any) => { jourdonnaisBarel(io, data) });
 
-  socket.on("discard", (data: any) => { discard(io, socket, data) });
+  socket.on("discard", (data: any) => { discard(io, data) });
 
   socket.on("end_turn", (roomName: any) => { endTurnEvent(io, roomName) });
 
