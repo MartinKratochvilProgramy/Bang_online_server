@@ -1,5 +1,4 @@
 import { rooms } from "../server";
-import { updateGameState } from "../utils/updateGameState";
 
 export const jesseJonesTarget = (io: any, data: any) => {
     const roomName = data.currentRoom;
@@ -10,14 +9,15 @@ export const jesseJonesTarget = (io: any, data: any) => {
     try {
         io.to(roomName).emit("console", rooms[roomName].game!.jesseJonesTarget(target));
 
-        updateGameState(io, roomName);
-
         const socketID = rooms[roomName].players.find(player => player.username === username)!.id;
         io.to(socketID).emit("my_hand", rooms[roomName].game!.getPlayerHand(username));
         io.to(roomName).emit("update_number_of_cards", {
             username: username,
             handSize: rooms[roomName].game!.getPlayerHand(username).length
         })
+
+        const targetID = rooms[roomName].players.find(player => player.username === target)!.id;
+        io.to(targetID).emit("my_hand", rooms[roomName].game!.getPlayerHand(target));
         io.to(roomName).emit("update_number_of_cards", {
             username: target,
             handSize: rooms[roomName].game!.getPlayerHand(target).length
