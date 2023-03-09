@@ -2,12 +2,11 @@ import { rooms } from "../server";
 import { Game } from "../game";
 import { deck } from "../deck";
 import { getRoomsInfo } from "../utils/getRoomsInfo";
-import { deckDynamite } from "../testDecks/deckDynamite";
 
 export const startGameEvent = (io: any, data: any) => {
     const roomName = data.currentRoom;
     try {
-        rooms[roomName].game = new Game(data.players, deckDynamite);
+        rooms[roomName].game = new Game(data.players, deck);
         console.log("Game started in room ", roomName, data.players);
         io.emit("rooms", getRoomsInfo(rooms));
 
