@@ -1,4 +1,5 @@
 import { rooms } from "../server";
+import { updateDrawChoices } from "./updateDrawChoices";
 import { updatePlayerTables } from "./updatePlayerTables";
 import { updateTopStackCard } from "./updateTopStackCard";
 
@@ -27,18 +28,8 @@ export const endTurn = (io: any, roomName: any) => {
         if (rooms[roomName].game!.getPlayerIsInPrison(currentPlayer)) return;
         if (rooms[roomName].game!.getPlayerHasDynamite(currentPlayer)) return;
 
-        if (rooms[roomName].game!.players[currentPlayer].character.name === "Kit Carlson") {
-            io.to(currentPlayerID).emit("update_draw_choices", "Kit Carlson");
+        updateDrawChoices(io, roomName, currentPlayer);
 
-        } else if (rooms[roomName].game!.players[currentPlayer].character.name === "Lucky Duke") {
-            io.to(currentPlayerID).emit("update_draw_choices", "Lucky Duke");
-
-        } else if (rooms[roomName].game!.players[currentPlayer].character.name === "Pedro Ramirez" && rooms[roomName].game!.stack.length > 0) {
-            io.to(currentPlayerID).emit("update_draw_choices", "Pedro Ramirez");
-
-        } else if (rooms[roomName].game!.players[currentPlayer].character.name === "Jesse Jones") {
-            io.to(currentPlayerID).emit("update_draw_choices", "Jesse Jones");
-        }
     } catch (error) {
         console.log(`Error on endTurn():`);
         console.log(error);

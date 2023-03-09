@@ -1,5 +1,7 @@
 import { rooms } from "../server";
 import { endTurn } from "../utils/endTurn";
+import { updateDrawChoices } from "../utils/updateDrawChoices";
+import { updatePlayersHand } from "../utils/updatePlayersHand";
 import { updatePlayerTables } from "../utils/updatePlayerTables";
 
 export const useDynamite = (io: any, data: any) => {
@@ -13,12 +15,9 @@ export const useDynamite = (io: any, data: any) => {
 
         io.to(roomName).emit("console", message);
 
-        const socketID = rooms[roomName].players.find(player => player.username === username)!.id;
-        io.to(socketID).emit("my_hand", rooms[roomName].game!.getPlayerHand(username));
-        io.to(roomName).emit("update_number_of_cards", {
-            username: username,
-            handSize: rooms[roomName].game!.getPlayerHand(username).length
-        })
+        updatePlayersHand(io, roomName, username);
+
+        updatePlayerTables(io, roomName);
 
         if (message.includes("Dynamite exploded!")) {
             io.to(roomName).emit("update_health", {
@@ -27,8 +26,6 @@ export const useDynamite = (io: any, data: any) => {
             });
         }
 
-        updatePlayerTables(io, roomName);
-
         if (message.includes("Game ended")) {
             // game over      
             // emit who won
@@ -36,6 +33,7 @@ export const useDynamite = (io: any, data: any) => {
             console.log("Game ended in room ", roomName);
             return;
         }
+
         if (rooms[roomName].game!.players[username].character.health <= 0) {
             endTurn(io, roomName);
             return;
@@ -44,18 +42,8 @@ export const useDynamite = (io: any, data: any) => {
         io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game!.getPlayersWithActionRequired());
 
         if (!rooms[roomName].game!.getPlayerIsInPrison(username) && !rooms[roomName].game!.getPlayerHasDynamite(username)) {
-            if (rooms[roomName].game!.players[username].character.name === "Kit Carlson") {
-                io.to(roomName).emit("update_draw_choices", "Kit Carlson");
-
-            } else if (rooms[roomName].game!.players[username].character.name === "Lucky Duke") {
-                io.to(roomName).emit("update_draw_choices", "Lucky Duke");
-
-            } else if (rooms[roomName].game!.players[username].character.name === "Pedro Ramirez" && rooms[roomName].game!.stack.length > 0) {
-                io.to(roomName).emit("update_draw_choices", "Pedro Ramirez");
-
-            } else if (rooms[roomName].game!.players[username].character.name === "Jesse Jones") {
-                io.to(roomName).emit("update_draw_choices", "Jesse Jones");
-            }
+            const currentPlayer = rooms[roomName].game!.getNameOfCurrentTurnPlayer();
+            updateDrawChoices(io, roomName, currentPlayer);
         }
 
     } catch (error) {

@@ -29,8 +29,8 @@ export class Game {
     constructor(playerNames: string[], deck: Card[]) {
         this.playerNames = playerNames;
         this.numOfPlayers = this.playerNames.length;
-        this.namesOfCharacters = ["Bart Cassidy", "Black Jack", "Calamity Janet", "El Gringo", "Jesse Jones", "Jourdonnais", "Kit Carlson", "Lucky Duke", "Paul Regret", "Pedro Ramirez", "Rose Doolan", "Slab the Killer", "Suzy Lafayette", "Vulture Sam", "Willy the Kid"]
-        // this.namesOfCharacters = ["Calamity Janet", "Jesse Jones", "Black Jack", "Kit Carlson"]
+        // this.namesOfCharacters = ["Bart Cassidy", "Black Jack", "Calamity Janet", "El Gringo", "Jesse Jones", "Jourdonnais", "Kit Carlson", "Lucky Duke", "Paul Regret", "Pedro Ramirez", "Rose Doolan", "Slab the Killer", "Suzy Lafayette", "Vulture Sam", "Willy the Kid"]
+        this.namesOfCharacters = ["Kit Carlson", "Jesse Jones", "Pedro Ramirez", "Lucky Duke"]
         this.knownRoles = {}
         this.deck = [...deck];  // create new copy of deck
         this.gameEnded = false;

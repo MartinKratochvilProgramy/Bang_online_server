@@ -15,7 +15,8 @@ export const getChoiceCardKC = (io: any, data: any) => {
             username: username,
             handSize: rooms[roomName].game!.getPlayerHand(username).length
         })
-        io.to(socketID).emit("update_draw_choices", "Kit Carlson");
+
+        io.to(socketID).emit("my_draw_choice", rooms[roomName].game!.drawChoice);
 
         updateTopStackCard(io, roomName);
 

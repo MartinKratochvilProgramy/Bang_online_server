@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.startGame = void 0;
 var server_1 = require("../server");
+var updateDrawChoices_1 = require("./updateDrawChoices");
 var updatePlayerHands_1 = require("./updatePlayerHands");
 var startGame = function (io, roomName) {
     if (server_1.rooms[roomName].game === null)
@@ -17,15 +18,7 @@ var startGame = function (io, roomName) {
         io.to(roomName).emit("characters", characters);
         io.to(roomName).emit("current_player", currentPlayer);
         io.to(roomName).emit("update_players_with_action_required", server_1.rooms[roomName].game.getPlayersWithActionRequired());
-        if (server_1.rooms[roomName].game.players[currentPlayer].character.name === "Kit Carlson") {
-            io.to(roomName).emit("update_draw_choices", "Kit Carlson");
-        }
-        else if (server_1.rooms[roomName].game.players[currentPlayer].character.name === "Lucky Duke") {
-            io.to(roomName).emit("update_draw_choices", "Lucky Duke");
-        }
-        else if (server_1.rooms[roomName].game.players[currentPlayer].character.name === "Jesse Jones") {
-            io.to(roomName).emit("update_draw_choices", "Jesse Jones");
-        }
+        (0, updateDrawChoices_1.updateDrawChoices)(io, roomName, currentPlayer);
         io.to(roomName).emit("game_started", { allPlayersInfo: server_1.rooms[roomName].game.getAllPlayersInfo(), allCharactersInfo: server_1.rooms[roomName].game.getCharacters() });
         (0, updatePlayerHands_1.updatePlayerHands)(io, roomName);
     }

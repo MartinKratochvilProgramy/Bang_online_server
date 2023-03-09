@@ -16,7 +16,8 @@ export const getChoiceCardLD = (io: any, data: any) => {
             username: username,
             handSize: rooms[roomName].game!.getPlayerHand(username).length
         })
-        io.to(socketID).emit("update_draw_choices", "Lucky Duke");
+
+        io.to(socketID).emit("my_draw_choice", rooms[roomName].game!.drawChoice);
 
         updateTopStackCard(io, roomName);
     } catch (error) {

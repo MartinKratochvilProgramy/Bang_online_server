@@ -29,8 +29,6 @@ io.on("connection", function (socket) {
     socket.on("start_game", function (data) { (0, events_1.startGameEvent)(io, data); });
     socket.on("character_choice", function (data) { (0, events_1.characterChoice)(io, data); });
     socket.on("get_my_role", function (data) { (0, events_1.getMyRole)(socket, data); });
-    // TODO: rename -> get_player_draw_choice
-    socket.on("get_my_draw_choice", function (data) { (0, events_1.getMyDrawChoice)(socket, data); });
     socket.on("play_bang", function (data) { (0, events_1.playBang)(io, data); });
     socket.on("play_bang_as_CJ", function (data) { (0, events_1.playBangAsCJ)(io, data); });
     socket.on("play_bang_in_duel", function (data) { (0, events_1.playBangInDuel)(io, data); });

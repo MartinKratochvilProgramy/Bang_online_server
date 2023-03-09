@@ -89,9 +89,6 @@ io.on("connection", (socket: any) => {
 
   socket.on("get_my_role", (data: any) => { getMyRole(socket, data) });
 
-  // TODO: rename -> get_player_draw_choice
-  socket.on("get_my_draw_choice", (data: any) => { getMyDrawChoice(socket, data) });
-
   socket.on("play_bang", (data: any) => { playBang(io, data) });
 
   socket.on("play_bang_as_CJ", (data: any) => { playBangAsCJ(io, data) });

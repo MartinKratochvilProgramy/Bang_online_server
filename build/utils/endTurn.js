@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.endTurn = void 0;
 var server_1 = require("../server");
+var updateDrawChoices_1 = require("./updateDrawChoices");
 var updatePlayerTables_1 = require("./updatePlayerTables");
 var updateTopStackCard_1 = require("./updateTopStackCard");
 var endTurn = function (io, roomName) {
@@ -24,18 +25,7 @@ var endTurn = function (io, roomName) {
             return;
         if (server_1.rooms[roomName].game.getPlayerHasDynamite(currentPlayer_1))
             return;
-        if (server_1.rooms[roomName].game.players[currentPlayer_1].character.name === "Kit Carlson") {
-            io.to(currentPlayerID).emit("update_draw_choices", "Kit Carlson");
-        }
-        else if (server_1.rooms[roomName].game.players[currentPlayer_1].character.name === "Lucky Duke") {
-            io.to(currentPlayerID).emit("update_draw_choices", "Lucky Duke");
-        }
-        else if (server_1.rooms[roomName].game.players[currentPlayer_1].character.name === "Pedro Ramirez" && server_1.rooms[roomName].game.stack.length > 0) {
-            io.to(currentPlayerID).emit("update_draw_choices", "Pedro Ramirez");
-        }
-        else if (server_1.rooms[roomName].game.players[currentPlayer_1].character.name === "Jesse Jones") {
-            io.to(currentPlayerID).emit("update_draw_choices", "Jesse Jones");
-        }
+        (0, updateDrawChoices_1.updateDrawChoices)(io, roomName, currentPlayer_1);
     }
     catch (error) {
         console.log("Error on endTurn():");

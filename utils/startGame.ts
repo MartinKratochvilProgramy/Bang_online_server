@@ -1,4 +1,5 @@
 import { rooms } from "../server";
+import { updateDrawChoices } from "./updateDrawChoices";
 import { updatePlayerHands } from "./updatePlayerHands";
 
 export const startGame = (io: any, roomName: any) => {
@@ -16,15 +17,7 @@ export const startGame = (io: any, roomName: any) => {
         io.to(roomName).emit("current_player", currentPlayer);
         io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game!.getPlayersWithActionRequired());
 
-        if (rooms[roomName].game!.players[currentPlayer].character.name === "Kit Carlson") {
-            io.to(roomName).emit("update_draw_choices", "Kit Carlson");
-
-        } else if (rooms[roomName].game!.players[currentPlayer].character.name === "Lucky Duke") {
-            io.to(roomName).emit("update_draw_choices", "Lucky Duke");
-
-        } else if (rooms[roomName].game!.players[currentPlayer].character.name === "Jesse Jones") {
-            io.to(roomName).emit("update_draw_choices", "Jesse Jones");
-        }
+        updateDrawChoices(io, roomName, currentPlayer);
 
         io.to(roomName).emit("game_started", { allPlayersInfo: rooms[roomName].game!.getAllPlayersInfo(), allCharactersInfo: rooms[roomName].game!.getCharacters() });
         updatePlayerHands(io, roomName)

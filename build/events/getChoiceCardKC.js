@@ -16,7 +16,7 @@ var getChoiceCardKC = function (io, data) {
             username: username,
             handSize: server_1.rooms[roomName].game.getPlayerHand(username).length
         });
-        io.to(socketID).emit("update_draw_choices", "Kit Carlson");
+        io.to(socketID).emit("my_draw_choice", server_1.rooms[roomName].game.drawChoice);
         (0, updateTopStackCard_1.updateTopStackCard)(io, roomName);
     }
     catch (error) {
