@@ -20,6 +20,8 @@ function updatePlayerHands(io, roomName) {
 }
 exports.updatePlayerHands = updatePlayerHands;
 function emitHandToSocket(io, roomName, player) {
+    if (server_1.rooms[roomName].game === null)
+        return;
     var prevHand = server_1.rooms[roomName].game.getPlayerPrevHand(player.username);
     var currentHand = server_1.rooms[roomName].game.getPlayerHand(player.username);
     if (!(0, compareHands_1.compareHands)(prevHand, currentHand) ||

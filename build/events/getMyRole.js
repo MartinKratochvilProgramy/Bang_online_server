@@ -4,6 +4,8 @@ exports.getMyRole = void 0;
 var server_1 = require("../server");
 var getMyRole = function (socket, data) {
     var roomName = data.currentRoom;
+    if (server_1.rooms[roomName].game === null)
+        return;
     try {
         socket.emit("my_role", server_1.rooms[roomName].game.players[data.username].character.role);
     }

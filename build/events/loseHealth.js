@@ -1,19 +1,20 @@
 "use strict";
 exports.__esModule = true;
 exports.loseHealth = void 0;
-var utils_1 = require("../utils");
 var server_1 = require("../server");
 var updatePlayerHands_1 = require("../utils/updatePlayerHands");
 var loseHealth = function (io, data) {
     var roomName = data.currentRoom;
     var username = data.username;
+    if (server_1.rooms[roomName].game === null)
+        return;
     try {
         var message = server_1.rooms[roomName].game.loseHealth(username);
         io.to(roomName).emit("console", message);
         // player death -> show his role
         if (server_1.rooms[roomName].game.players[username].character.health <= 0) {
             io.to(roomName).emit("known_roles", server_1.rooms[roomName].game.knownRoles);
-            (0, utils_1.updateGameState)(io, roomName);
+            // updateGameState(io, roomName);
         }
         // on indiani, emit state
         io.to(roomName).emit("indiani_active", server_1.rooms[roomName].game.indianiActive);

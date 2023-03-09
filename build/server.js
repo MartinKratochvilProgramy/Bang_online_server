@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.rooms = void 0;
-var utils_1 = require("./utils");
+var getRoomsInfo_1 = require("./utils/getRoomsInfo");
 var events_1 = require("./events");
 var express = require("express");
 var app = express();
@@ -19,7 +19,7 @@ var io = new Server(server, {
 });
 exports.rooms = {};
 io.on("connection", function (socket) {
-    socket.emit("rooms", (0, utils_1.getRoomsInfo)(exports.rooms));
+    socket.emit("rooms", (0, getRoomsInfo_1.getRoomsInfo)(exports.rooms));
     socket.on("join_room", function (data) { (0, events_1.joinRoom)(socket, io, data); });
     socket.on("disconnect", function () { (0, events_1.disconnect)(socket, io); });
     socket.on("leave_room", function (data) { (0, events_1.leaveRoom)(socket, io, data); });

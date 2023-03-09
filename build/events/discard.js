@@ -1,26 +1,30 @@
 "use strict";
 exports.__esModule = true;
 exports.discard = void 0;
-var utils_1 = require("../utils");
+var endTurn_1 = require("../utils/endTurn");
 var server_1 = require("../server");
+var updateTopStackCard_1 = require("../utils/updateTopStackCard");
 var discard = function (io, socket, data) {
     var roomName = data.currentRoom;
+    var username = data.username;
     try {
-        server_1.rooms[roomName].game.discard(data.card.name, data.card.digit, data.card.type, data.username);
-        if (server_1.rooms[roomName].game.players[data.username].hand.length <= server_1.rooms[roomName].game.players[data.username].character.health) {
-            // special case for when SK is discarding
-            if (server_1.rooms[roomName].game.players[data.username].character.name !== "Sid Ketchum") {
-                // if less of equal cards in hand -> endTurn
-                socket.emit("end_discard");
-                (0, utils_1.endTurn)(io, roomName);
-            }
-            else {
-                (0, utils_1.updateGameState)(io, roomName);
-            }
+        if (server_1.rooms[roomName].game === null)
+            return;
+        server_1.rooms[roomName].game.discard(data.card.name, data.card.digit, data.card.type, username);
+        var socketID = server_1.rooms[roomName].players.find(function (player) { return player.username === username; }).id;
+        if (server_1.rooms[roomName].game.players[username].hand.length <= server_1.rooms[roomName].game.players[username].character.health) {
+            io.to(socketID).emit("end_discard");
+            (0, endTurn_1.endTurn)(io, roomName);
         }
         else {
-            (0, utils_1.updateGameState)(io, roomName);
+            io.to(socketID).emit("my_hand", server_1.rooms[roomName].game.getPlayerHand(username));
+            // updateGameState(io, roomName)
         }
+        io.to(roomName).emit("update_number_of_cards", {
+            username: username,
+            handSize: server_1.rooms[roomName].game.getPlayerHand(username).length
+        });
+        (0, updateTopStackCard_1.updateTopStackCard)(io, roomName);
     }
     catch (error) {
         console.log("Error in room ".concat(roomName, ":"));

@@ -8,6 +8,9 @@ export const useDynamite = (io: any, data: any) => {
     if (rooms[roomName].game === null) return;
     try {
         const message = rooms[roomName].game!.useDynamite(username, data.card);
+        console.log(message);
+
+
         io.to(roomName).emit("console", message);
 
         const socketID = rooms[roomName].players.find(player => player.username === username)!.id;
@@ -16,9 +19,17 @@ export const useDynamite = (io: any, data: any) => {
             username: username,
             handSize: rooms[roomName].game!.getPlayerHand(username).length
         })
+
+        if (message.includes("Dynamite exploded!")) {
+            io.to(roomName).emit("update_health", {
+                username: username,
+                health: rooms[roomName].game!.players[username].character.health
+            });
+        }
+
         updatePlayerTables(io, roomName);
 
-        if (message[message.length - 1] === "Game ended") {
+        if (message.includes("Game ended")) {
             // game over      
             // emit who won
             io.to(roomName).emit("game_ended", message[message.length - 2]);

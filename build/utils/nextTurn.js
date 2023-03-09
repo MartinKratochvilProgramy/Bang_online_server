@@ -4,6 +4,11 @@ exports.nextTurn = void 0;
 var updateGameState_1 = require("./updateGameState");
 var server_1 = require("../server");
 var nextTurn = function (io, roomName) {
+    // this is being called on disconnect or leaveRoom
+    // it is therefore not that expensive to use updateGameState
+    // TODO: this uses updateGameState
+    if (server_1.rooms[roomName].game === null)
+        return;
     try {
         var currentPlayer = server_1.rooms[roomName].game.getNameOfCurrentTurnPlayer(); // get current player
         if (server_1.rooms[roomName].game.players[currentPlayer].character.name === "Kit Carlson") {

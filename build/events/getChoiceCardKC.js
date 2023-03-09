@@ -1,16 +1,23 @@
 "use strict";
 exports.__esModule = true;
 exports.getChoiceCardKC = void 0;
-var utils_1 = require("../utils");
 var server_1 = require("../server");
-var updatePlayerHands_1 = require("../utils/updatePlayerHands");
+var updateTopStackCard_1 = require("../utils/updateTopStackCard");
 var getChoiceCardKC = function (io, data) {
     var roomName = data.currentRoom;
+    var username = data.username;
+    if (server_1.rooms[roomName].game === null)
+        return;
     try {
         server_1.rooms[roomName].game.getChoiceCardKC(data.username, data.card);
-        (0, utils_1.updateGameState)(io, roomName);
-        io.to(roomName).emit("update_draw_choices", "Kit Carlson");
-        (0, updatePlayerHands_1.updatePlayerHands)(io, roomName);
+        var socketID = server_1.rooms[roomName].players.find(function (player) { return player.username === username; }).id;
+        io.to(socketID).emit("my_hand", server_1.rooms[roomName].game.getPlayerHand(username));
+        io.to(roomName).emit("update_number_of_cards", {
+            username: username,
+            handSize: server_1.rooms[roomName].game.getPlayerHand(username).length
+        });
+        (0, updateTopStackCard_1.updateTopStackCard)(io, roomName);
+        io.to(socketID).emit("update_draw_choices", "Kit Carlson");
     }
     catch (error) {
         console.log("Error in room ".concat(roomName, ":"));

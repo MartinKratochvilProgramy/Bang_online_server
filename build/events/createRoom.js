@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.createRoom = void 0;
-var utils_1 = require("../utils");
+var getRoomsInfo_1 = require("../utils/getRoomsInfo");
 var server_1 = require("../server");
 var createRoom = function (io, roomName) {
     try {
@@ -10,7 +10,7 @@ var createRoom = function (io, roomName) {
             messages: [],
             game: null
         };
-        io.emit("rooms", (0, utils_1.getRoomsInfo)(server_1.rooms));
+        io.emit("rooms", (0, getRoomsInfo_1.getRoomsInfo)(server_1.rooms));
     }
     catch (error) {
         console.log("Error in room ".concat(roomName, ":"));

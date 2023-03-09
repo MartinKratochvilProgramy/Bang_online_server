@@ -4,6 +4,8 @@ exports.requestPlayersInRange = void 0;
 var server_1 = require("../server");
 var requestPlayersInRange = function (socket, data) {
     var roomName = data.currentRoom;
+    if (server_1.rooms[roomName].game === null)
+        return;
     try {
         socket.emit("players_in_range", server_1.rooms[roomName].game.getPlayersInRange(data.username, data.range));
     }

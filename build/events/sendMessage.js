@@ -2,7 +2,6 @@
 exports.__esModule = true;
 exports.sendMessage = void 0;
 var server_1 = require("../server");
-var uuid = require('uuid');
 var sendMessage = function (io, data) {
     var roomName = data.currentRoom;
     try {

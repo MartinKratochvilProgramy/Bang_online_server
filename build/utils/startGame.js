@@ -4,6 +4,8 @@ exports.startGame = void 0;
 var server_1 = require("../server");
 var updatePlayerHands_1 = require("./updatePlayerHands");
 var startGame = function (io, roomName) {
+    if (server_1.rooms[roomName].game === null)
+        return;
     try {
         io.to(roomName).emit("console", server_1.rooms[roomName].game.startGame());
         var characters = [];
