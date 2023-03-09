@@ -6,6 +6,7 @@ export const getChoiceCardLD = (io: any, data: any) => {
     const username = data.username;
 
     if (rooms[roomName].game === null) return;
+
     try {
         rooms[roomName].game!.getChoiceCardLD(data.username, data.card);
 
@@ -15,8 +16,9 @@ export const getChoiceCardLD = (io: any, data: any) => {
             username: username,
             handSize: rooms[roomName].game!.getPlayerHand(username).length
         })
-        updateTopStackCard(io, roomName);
         io.to(socketID).emit("update_draw_choices", "Lucky Duke");
+
+        updateTopStackCard(io, roomName);
     } catch (error) {
         console.log(`Error in room ${roomName}:`);
         console.log(error);

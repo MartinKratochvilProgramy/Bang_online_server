@@ -1,4 +1,5 @@
 import { rooms } from "../server";
+import { updatePlayersHand } from "../utils/updatePlayersHand";
 import { updateTopStackCard } from "../utils/updateTopStackCard";
 
 export const playMancatoInDuel = (io: any, data: any) => {
@@ -7,24 +8,12 @@ export const playMancatoInDuel = (io: any, data: any) => {
     try {
         io.to(roomName).emit("console", rooms[roomName].game!.useMancatoInDuel(data.cardDigit, data.cardType, data.username));
         io.to(roomName).emit("update_players_losing_health", rooms[roomName].game!.getPlayersLosingHealth());
-        
+
         const player1 = rooms[roomName].game!.duelPlayers[0];
         const player2 = rooms[roomName].game!.duelPlayers[1];
-        
-        const socketID1 = rooms[roomName].players.find(player => player.username === player1)!.id;
-        const socketID2 = rooms[roomName].players.find(player => player.username === player2)!.id;
 
-        io.to(socketID1).emit("my_hand", rooms[roomName].game!.getPlayerHand(player1));
-        io.to(socketID2).emit("my_hand", rooms[roomName].game!.getPlayerHand(player2));
-
-        io.to(roomName).emit("update_number_of_cards", {
-            username: player1,
-            handSize: rooms[roomName].game!.getPlayerHand(player1).length
-        })
-        io.to(roomName).emit("update_number_of_cards", {
-            username: player2,
-            handSize: rooms[roomName].game!.getPlayerHand(player2).length
-        })
+        updatePlayersHand(io, roomName, player1);
+        updatePlayersHand(io, roomName, player2);
 
         updateTopStackCard(io, roomName);
     } catch (error) {
