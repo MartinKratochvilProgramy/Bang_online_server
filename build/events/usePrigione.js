@@ -18,7 +18,7 @@ var usePrigione = function (io, data) {
         var currentPlayer = server_1.rooms[roomName].game.getNameOfCurrentTurnPlayer();
         io.to(roomName).emit("current_player", currentPlayer);
         (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, currentPlayer);
-        (0, updatePlayersTable_1.updatePlayersTable)(io, roomName, currentPlayer);
+        (0, updatePlayersTable_1.updatePlayersTable)(io, roomName, currentPlayer); // TODO: this can be removed?
         if (server_1.rooms[roomName].game.getPlayerIsInPrison(currentPlayer) || server_1.rooms[roomName].game.getPlayerHasDynamite(currentPlayer))
             return;
         (0, updateDrawChoices_1.updateDrawChoices)(io, roomName, currentPlayer);
