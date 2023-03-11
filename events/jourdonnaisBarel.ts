@@ -1,5 +1,5 @@
 import { rooms } from "../server";
-import { updatePlayerTables } from "../utils/updatePlayerTables";
+import { updatePlayersTable } from "../utils/updatePlayersTable";
 
 export const jourdonnaisBarel = (io: any, data: any) => {
     const roomName = data.currentRoom;
@@ -11,7 +11,7 @@ export const jourdonnaisBarel = (io: any, data: any) => {
         io.to(roomName).emit("console", rooms[roomName].game!.jourdonnaisBarel(data.username));
         io.to(roomName).emit("update_players_losing_health", rooms[roomName].game!.getPlayersLosingHealth());
 
-        updatePlayerTables(io, roomName);
+        updatePlayersTable(io, roomName, username);
 
         const socketID = rooms[roomName].players.find(player => player.username === username)!.id;
         io.to(socketID).emit("my_hand", rooms[roomName].game!.getPlayerHand(username))
