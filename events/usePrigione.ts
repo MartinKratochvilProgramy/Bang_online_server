@@ -22,7 +22,7 @@ export const usePrigione = (io: any, data: any) => {
         io.to(roomName).emit("current_player", currentPlayer);
 
         updatePlayersHand(io, roomName, currentPlayer);
-        updatePlayersTable(io, roomName, currentPlayer);
+        updatePlayersTable(io, roomName, currentPlayer);    // TODO: this can be removed?
 
         if (rooms[roomName].game!.getPlayerIsInPrison(currentPlayer) || rooms[roomName].game!.getPlayerHasDynamite(currentPlayer)) return;
 
