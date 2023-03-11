@@ -4,8 +4,6 @@ import { updatePlayersTable } from "../utils/updatePlayersTable";
 import { updateTopStackCard } from "../utils/updateTopStackCard";
 
 export const playBang = (io: any, data: any) => {
-    const start = Date.now()
-
     const roomName = data.currentRoom;
     const username = data.username;
     const target = data.target;
@@ -26,9 +24,6 @@ export const playBang = (io: any, data: any) => {
         if (rooms[roomName].game!.players[data.target].character.name === "Jourdonnais") {
             io.to(roomName).emit("jourdonnais_can_use_barel");
         }
-
-        const end = Date.now()
-        console.log(`${end - start}ms`);
     } catch (error) {
         console.log(`Error in room ${roomName}:`);
         console.log(error);
