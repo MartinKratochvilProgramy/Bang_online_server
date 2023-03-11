@@ -1,6 +1,5 @@
 import { rooms } from "../server";
 import { updatePlayersHand } from "../utils/updatePlayersHand";
-import { updatePlayerTables } from "../utils/updatePlayerTables";
 import { updateTopStackCard } from "../utils/updateTopStackCard";
 
 export const playCatBallou = (io: any, data: any) => {
@@ -16,8 +15,6 @@ export const playCatBallou = (io: any, data: any) => {
 
         updatePlayersHand(io, roomName, username);
         updatePlayersHand(io, roomName, target);
-
-        updatePlayerTables(io, roomName);
 
         updateTopStackCard(io, roomName);
 

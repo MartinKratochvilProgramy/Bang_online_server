@@ -1,7 +1,7 @@
 import { rooms } from "../server";
 import { updateDrawChoices } from "../utils/updateDrawChoices";
 import { updatePlayersHand } from "../utils/updatePlayersHand";
-import { updatePlayerTables } from "../utils/updatePlayerTables";
+import { updatePlayersTable } from "../utils/updatePlayersTable";
 
 export const usePrigione = (io: any, data: any) => {
     const roomName = data.currentRoom;
@@ -11,10 +11,11 @@ export const usePrigione = (io: any, data: any) => {
     try {
         io.to(roomName).emit("console", rooms[roomName].game!.usePrigione(data.username, data.card));
 
-        const username = rooms[roomName].game!.getNameOfCurrentTurnPlayer();
+        const username = data.username;
+
         updatePlayersHand(io, roomName, username);
 
-        updatePlayerTables(io, roomName);
+        updatePlayersTable(io, roomName, username);
 
         io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game!.getPlayersWithActionRequired());
 

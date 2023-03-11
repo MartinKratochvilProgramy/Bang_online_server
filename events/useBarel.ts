@@ -1,12 +1,13 @@
 import { rooms } from "../server";
-import { updatePlayerTables } from "../utils/updatePlayerTables";
+import { updatePlayersTable } from "../utils/updatePlayersTable";
 
 export const useBarel = (io: any, data: any) => {
     const roomName = data.currentRoom;
+    const username = data.username;
     try {
-        io.to(roomName).emit("console", rooms[roomName].game!.useBarel(data.username));
+        io.to(roomName).emit("console", rooms[roomName].game!.useBarel(username));
 
-        updatePlayerTables(io, roomName);
+        updatePlayersTable(io, roomName, username);
 
         io.to(roomName).emit("update_players_losing_health", rooms[roomName].game!.getPlayersLosingHealth());
     } catch (error) {

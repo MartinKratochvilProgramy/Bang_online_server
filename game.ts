@@ -337,16 +337,13 @@ export class Game {
         return message;
     }
 
-    useCatBallouOnTableCard(activeCard: Card, target: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
+    useCatBallouOnTableCard(target: string, activeCard: Card, cardName: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
         this.discard("Cat Balou", activeCard.digit, activeCard.type, playerName);
 
-        for (let player of Object.keys(this.players)) {
-            // remove from table object where name === target
-            for (let j = 0; j < this.players[player].table.length; j++) {
-                if (this.players[player].table[j].name === target && this.players[player].table[j].digit === cardDigit && this.players[player].table[j].type === cardType) {
-                    const foundCard = this.players[player].table.splice(j, 1)[0];
-                    this.stack.push(foundCard);
-                }
+        for (let j = 0; j < this.players[target].table.length; j++) {
+            if (this.players[target].table[j].name === cardName && this.players[target].table[j].digit === cardDigit && this.players[target].table[j].type === cardType) {
+                const foundCard = this.players[target].table.splice(j, 1)[0];
+                this.stack.push(foundCard);
             }
         }
         return [`${playerName} used Cat Balou on ${target}`];
@@ -387,17 +384,14 @@ export class Game {
         return [`${playerName} used Panico on ${target}`];
     }
 
-    usePanicoOnTableCard(activeCard: Card, target: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
+    usePanicoOnTableCard(target: string, activeCard: Card, cardName: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
         this.discard("Panico", activeCard.digit, activeCard.type, playerName);
 
-        for (let player of Object.keys(this.players)) {
-            // remove from table object where name === target
-            for (let j = 0; j < this.players[player].table.length; j++) {
-                if (this.players[player].table[j].name === target && this.players[player].table[j].digit === cardDigit && this.players[player].table[j].type === cardType) {
-                    const foundCard = this.players[player].table.splice(j, 1)[0];
-                    foundCard.isPlayable = true;
-                    this.players[playerName].hand.push(foundCard);
-                }
+        for (let j = 0; j < this.players[target].table.length; j++) {
+            if (this.players[target].table[j].name === cardName && this.players[target].table[j].digit === cardDigit && this.players[target].table[j].type === cardType) {
+                const foundCard = this.players[target].table.splice(j, 1)[0];
+                foundCard.isPlayable = true;
+                this.players[playerName].hand.push(foundCard);
             }
         }
 
@@ -1450,11 +1444,6 @@ export class Game {
         return (this.players[playerName].table);
     }
 
-    getHands() {
-        for (var player of Object.keys(this.players)) {
-        }
-    }
-
     getPlayerHasDynamite(playerName: string) {
         return (this.players[playerName].table.some((card: Card) => card.name === 'Dynamite'));
     }
@@ -1477,11 +1466,16 @@ export class Game {
 
     getNameOfCurrentTurnPlayer(): string {
         // returns name of player who is on turn
-        // const currentPlayer = Object.keys(this.players).find(key => this.players[key].id === this.playerRoundId)
-
-        const currentPlayer = this.playerNames[Math.floor(this.playerRoundId)];
+        const currentPlayer = this.playerNames[this.playerRoundId];
 
         return currentPlayer;
+    }
+
+    getNameOfNextTurnPlayer(): string {
+        // returns name of player who is on turn
+        const nextPlayer = this.playerNames[Math.floor((this.playerRoundId + 1) % this.numOfPlayers)];
+
+        return nextPlayer;
     }
 
     getNameOfPreviousTurnPlayer() {

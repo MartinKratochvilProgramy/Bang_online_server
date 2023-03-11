@@ -5,18 +5,19 @@ var server_1 = require("../server");
 var endTurn_1 = require("../utils/endTurn");
 var updateDrawChoices_1 = require("../utils/updateDrawChoices");
 var updatePlayersHand_1 = require("../utils/updatePlayersHand");
-var updatePlayerTables_1 = require("../utils/updatePlayerTables");
+var updatePlayersTable_1 = require("../utils/updatePlayersTable");
 var useDynamite = function (io, data) {
     var roomName = data.currentRoom;
     var username = data.username;
+    var nextPlayer = server_1.rooms[roomName].game.getNameOfNextTurnPlayer();
     if (server_1.rooms[roomName].game === null)
         return;
     try {
         var message = server_1.rooms[roomName].game.useDynamite(username, data.card);
-        console.log(message);
         io.to(roomName).emit("console", message);
         (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, username);
-        (0, updatePlayerTables_1.updatePlayerTables)(io, roomName);
+        (0, updatePlayersTable_1.updatePlayersTable)(io, roomName, username);
+        (0, updatePlayersTable_1.updatePlayersTable)(io, roomName, nextPlayer);
         if (message.includes("Dynamite exploded!")) {
             io.to(roomName).emit("update_health", {
                 username: username,

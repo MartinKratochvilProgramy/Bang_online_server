@@ -1,10 +1,11 @@
 import { rooms } from "../server";
 import { updatePlayersHand } from "../utils/updatePlayersHand";
-import { updatePlayerTables } from "../utils/updatePlayerTables";
+import { updatePlayersTable } from "../utils/updatePlayersTable";
 
 export const playPrigione = (io: any, data: any) => {
     const roomName = data.currentRoom;
     const username = data.username;
+    const target = data.target;
 
     if (rooms[roomName].game === null) return;
 
@@ -13,7 +14,7 @@ export const playPrigione = (io: any, data: any) => {
 
         updatePlayersHand(io, roomName, username);
 
-        updatePlayerTables(io, roomName);
+        updatePlayersTable(io, roomName, target);
     } catch (error) {
         console.log(`Error in room ${roomName}:`);
         console.log(error);

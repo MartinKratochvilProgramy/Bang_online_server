@@ -2,22 +2,24 @@ import { rooms } from "../server";
 import { endTurn } from "../utils/endTurn";
 import { updateDrawChoices } from "../utils/updateDrawChoices";
 import { updatePlayersHand } from "../utils/updatePlayersHand";
-import { updatePlayerTables } from "../utils/updatePlayerTables";
+import { updatePlayersTable } from "../utils/updatePlayersTable";
 
 export const useDynamite = (io: any, data: any) => {
     const roomName = data.currentRoom;
     const username = data.username;
+    const nextPlayer = rooms[roomName].game!.getNameOfNextTurnPlayer();
+
     if (rooms[roomName].game === null) return;
+
     try {
         const message = rooms[roomName].game!.useDynamite(username, data.card);
-        console.log(message);
-
 
         io.to(roomName).emit("console", message);
 
         updatePlayersHand(io, roomName, username);
 
-        updatePlayerTables(io, roomName);
+        updatePlayersTable(io, roomName, username);
+        updatePlayersTable(io, roomName, nextPlayer);
 
         if (message.includes("Dynamite exploded!")) {
             io.to(roomName).emit("update_health", {

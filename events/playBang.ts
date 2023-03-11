@@ -1,6 +1,6 @@
 import { rooms } from "../server";
 import { updatePlayersHand } from "../utils/updatePlayersHand";
-import { updatePlayerTables } from "../utils/updatePlayerTables";
+import { updatePlayersTable } from "../utils/updatePlayersTable";
 import { updateTopStackCard } from "../utils/updateTopStackCard";
 
 export const playBang = (io: any, data: any) => {
@@ -15,10 +15,11 @@ export const playBang = (io: any, data: any) => {
         io.to(roomName).emit("update_players_losing_health", rooms[roomName].game!.getPlayersLosingHealth());
 
         updatePlayersHand(io, roomName, username);
+
         updatePlayersHand(io, roomName, target);
+        updatePlayersTable(io, roomName, target);
 
         updateTopStackCard(io, roomName);
-        updatePlayerTables(io, roomName);
 
         if (rooms[roomName].game!.players[data.target].character.name === "Jourdonnais") {
             io.to(roomName).emit("jourdonnais_can_use_barel");

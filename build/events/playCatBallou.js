@@ -3,7 +3,6 @@ exports.__esModule = true;
 exports.playCatBallou = void 0;
 var server_1 = require("../server");
 var updatePlayersHand_1 = require("../utils/updatePlayersHand");
-var updatePlayerTables_1 = require("../utils/updatePlayerTables");
 var updateTopStackCard_1 = require("../utils/updateTopStackCard");
 var playCatBallou = function (io, data) {
     var _a;
@@ -16,7 +15,6 @@ var playCatBallou = function (io, data) {
         io.to(roomName).emit("console", server_1.rooms[roomName].game.useCatBallou(data.target, data.cardDigit, data.cardType));
         (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, username);
         (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, target);
-        (0, updatePlayerTables_1.updatePlayerTables)(io, roomName);
         (0, updateTopStackCard_1.updateTopStackCard)(io, roomName);
     }
     catch (error) {

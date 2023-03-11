@@ -1,6 +1,6 @@
 import { rooms } from "../server";
 import { updatePlayersHand } from "../utils/updatePlayersHand";
-import { updatePlayerTables } from "../utils/updatePlayerTables";
+import { updatePlayersTable } from "../utils/updatePlayersTable";
 
 export const placeBlueCardOnTable = (io: any, data: any) => {
     const roomName = data.currentRoom;
@@ -13,7 +13,7 @@ export const placeBlueCardOnTable = (io: any, data: any) => {
 
         updatePlayersHand(io, roomName, username);
 
-        updatePlayerTables(io, roomName);
+        updatePlayersTable(io, roomName, username);
     } catch (error) {
         console.log(`Error in room ${roomName}:`);
         console.log(error);

@@ -3,6 +3,7 @@ exports.__esModule = true;
 exports.playMancato = void 0;
 var server_1 = require("../server");
 var updatePlayersHand_1 = require("../utils/updatePlayersHand");
+var updatePlayersTable_1 = require("../utils/updatePlayersTable");
 var updateTopStackCard_1 = require("../utils/updateTopStackCard");
 var playMancato = function (io, data) {
     var roomName = data.currentRoom;
@@ -17,6 +18,7 @@ var playMancato = function (io, data) {
         var currentPlayer_1 = server_1.rooms[roomName].game.getNameOfCurrentTurnPlayer();
         var currentPlayerID = server_1.rooms[roomName].players.find(function (player) { return player.username === currentPlayer_1; }).id;
         io.to(currentPlayerID).emit("my_hand", server_1.rooms[roomName].game.getPlayerHand(currentPlayer_1));
+        (0, updatePlayersTable_1.updatePlayersTable)(io, roomName, username);
         (0, updateTopStackCard_1.updateTopStackCard)(io, roomName);
     }
     catch (error) {

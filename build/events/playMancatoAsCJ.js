@@ -3,7 +3,7 @@ exports.__esModule = true;
 exports.playMancatoAsCJ = void 0;
 var server_1 = require("../server");
 var updatePlayersHand_1 = require("../utils/updatePlayersHand");
-var updatePlayerTables_1 = require("../utils/updatePlayerTables");
+var updatePlayersTable_1 = require("../utils/updatePlayersTable");
 var updateTopStackCard_1 = require("../utils/updateTopStackCard");
 var playMancatoAsCJ = function (io, data) {
     var roomName = data.currentRoom;
@@ -16,8 +16,8 @@ var playMancatoAsCJ = function (io, data) {
         io.to(roomName).emit("update_players_losing_health", server_1.rooms[roomName].game.getPlayersLosingHealth());
         (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, username);
         (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, target);
+        (0, updatePlayersTable_1.updatePlayersTable)(io, roomName, target);
         (0, updateTopStackCard_1.updateTopStackCard)(io, roomName);
-        (0, updatePlayerTables_1.updatePlayerTables)(io, roomName);
     }
     catch (error) {
         console.log("Error in room ".concat(roomName, ":"));

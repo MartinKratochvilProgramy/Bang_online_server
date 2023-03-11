@@ -1,5 +1,6 @@
 import { rooms } from "../server";
 import { updatePlayersHand } from "../utils/updatePlayersHand";
+import { updatePlayersTable } from "../utils/updatePlayersTable";
 import { updateTopStackCard } from "../utils/updateTopStackCard";
 
 export const playBangAsCJ = (io: any, data: any) => {
@@ -13,6 +14,7 @@ export const playBangAsCJ = (io: any, data: any) => {
         io.to(roomName).emit("update_players_losing_health", rooms[roomName].game!.getPlayersLosingHealth());
 
         updatePlayersHand(io, roomName, username);
+        updatePlayersTable(io, roomName, username);
 
         updateTopStackCard(io, roomName);
 

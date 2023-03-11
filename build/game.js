@@ -280,17 +280,13 @@ var Game = /** @class */ (function () {
         message.push("".concat(target, " discarded ").concat(randomCard.name));
         return message;
     };
-    Game.prototype.useCatBallouOnTableCard = function (activeCard, target, cardDigit, cardType, playerName) {
+    Game.prototype.useCatBallouOnTableCard = function (target, activeCard, cardName, cardDigit, cardType, playerName) {
         if (playerName === void 0) { playerName = this.getNameOfCurrentTurnPlayer(); }
         this.discard("Cat Balou", activeCard.digit, activeCard.type, playerName);
-        for (var _i = 0, _a = Object.keys(this.players); _i < _a.length; _i++) {
-            var player = _a[_i];
-            // remove from table object where name === target
-            for (var j = 0; j < this.players[player].table.length; j++) {
-                if (this.players[player].table[j].name === target && this.players[player].table[j].digit === cardDigit && this.players[player].table[j].type === cardType) {
-                    var foundCard = this.players[player].table.splice(j, 1)[0];
-                    this.stack.push(foundCard);
-                }
+        for (var j = 0; j < this.players[target].table.length; j++) {
+            if (this.players[target].table[j].name === cardName && this.players[target].table[j].digit === cardDigit && this.players[target].table[j].type === cardType) {
+                var foundCard = this.players[target].table.splice(j, 1)[0];
+                this.stack.push(foundCard);
             }
         }
         return ["".concat(playerName, " used Cat Balou on ").concat(target)];
@@ -329,18 +325,14 @@ var Game = /** @class */ (function () {
         this.setMancatoBeerNotPlayable(playerName);
         return ["".concat(playerName, " used Panico on ").concat(target)];
     };
-    Game.prototype.usePanicoOnTableCard = function (activeCard, target, cardDigit, cardType, playerName) {
+    Game.prototype.usePanicoOnTableCard = function (target, activeCard, cardName, cardDigit, cardType, playerName) {
         if (playerName === void 0) { playerName = this.getNameOfCurrentTurnPlayer(); }
         this.discard("Panico", activeCard.digit, activeCard.type, playerName);
-        for (var _i = 0, _a = Object.keys(this.players); _i < _a.length; _i++) {
-            var player = _a[_i];
-            // remove from table object where name === target
-            for (var j = 0; j < this.players[player].table.length; j++) {
-                if (this.players[player].table[j].name === target && this.players[player].table[j].digit === cardDigit && this.players[player].table[j].type === cardType) {
-                    var foundCard = this.players[player].table.splice(j, 1)[0];
-                    foundCard.isPlayable = true;
-                    this.players[playerName].hand.push(foundCard);
-                }
+        for (var j = 0; j < this.players[target].table.length; j++) {
+            if (this.players[target].table[j].name === cardName && this.players[target].table[j].digit === cardDigit && this.players[target].table[j].type === cardType) {
+                var foundCard = this.players[target].table.splice(j, 1)[0];
+                foundCard.isPlayable = true;
+                this.players[playerName].hand.push(foundCard);
             }
         }
         return ["".concat(playerName, " used Panico on ").concat(target)];
@@ -1310,11 +1302,6 @@ var Game = /** @class */ (function () {
     Game.prototype.getPlayerTable = function (playerName) {
         return (this.players[playerName].table);
     };
-    Game.prototype.getHands = function () {
-        for (var _i = 0, _a = Object.keys(this.players); _i < _a.length; _i++) {
-            var player = _a[_i];
-        }
-    };
     Game.prototype.getPlayerHasDynamite = function (playerName) {
         return (this.players[playerName].table.some(function (card) { return card.name === 'Dynamite'; }));
     };
@@ -1332,9 +1319,13 @@ var Game = /** @class */ (function () {
     };
     Game.prototype.getNameOfCurrentTurnPlayer = function () {
         // returns name of player who is on turn
-        // const currentPlayer = Object.keys(this.players).find(key => this.players[key].id === this.playerRoundId)
-        var currentPlayer = this.playerNames[Math.floor(this.playerRoundId)];
+        var currentPlayer = this.playerNames[this.playerRoundId];
         return currentPlayer;
+    };
+    Game.prototype.getNameOfNextTurnPlayer = function () {
+        // returns name of player who is on turn
+        var nextPlayer = this.playerNames[Math.floor((this.playerRoundId + 1) % this.numOfPlayers)];
+        return nextPlayer;
     };
     Game.prototype.getNameOfPreviousTurnPlayer = function () {
         var _this = this;
