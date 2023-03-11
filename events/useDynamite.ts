@@ -17,8 +17,9 @@ export const useDynamite = (io: any, data: any) => {
         io.to(roomName).emit("console", message);
 
         updatePlayersHand(io, roomName, username);
-
         updatePlayersTable(io, roomName, username);
+
+        updatePlayersHand(io, roomName, nextPlayer);
         updatePlayersTable(io, roomName, nextPlayer);
 
         if (message.includes("Dynamite exploded!")) {

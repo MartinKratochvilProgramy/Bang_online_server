@@ -4,6 +4,7 @@ exports.endTurn = void 0;
 var server_1 = require("../server");
 var updateDrawChoices_1 = require("./updateDrawChoices");
 var updatePlayersHand_1 = require("./updatePlayersHand");
+var updatePlayersTable_1 = require("./updatePlayersTable");
 var endTurn = function (io, roomName) {
     if (server_1.rooms[roomName].game === null)
         return;
@@ -11,6 +12,7 @@ var endTurn = function (io, roomName) {
         io.to(roomName).emit("console", server_1.rooms[roomName].game.endTurn());
         var currentPlayer = server_1.rooms[roomName].game.getNameOfCurrentTurnPlayer(); // get current player
         (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, currentPlayer);
+        (0, updatePlayersTable_1.updatePlayersTable)(io, roomName, currentPlayer);
         io.to(roomName).emit("current_player", currentPlayer);
         io.to(roomName).emit("update_players_with_action_required", server_1.rooms[roomName].game.getPlayersWithActionRequired());
         if (server_1.rooms[roomName].game.getPlayerIsInPrison(currentPlayer))

@@ -17,6 +17,7 @@ var useDynamite = function (io, data) {
         io.to(roomName).emit("console", message);
         (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, username);
         (0, updatePlayersTable_1.updatePlayersTable)(io, roomName, username);
+        (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, nextPlayer);
         (0, updatePlayersTable_1.updatePlayersTable)(io, roomName, nextPlayer);
         if (message.includes("Dynamite exploded!")) {
             io.to(roomName).emit("update_health", {

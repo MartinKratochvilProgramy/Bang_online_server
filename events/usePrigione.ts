@@ -14,13 +14,15 @@ export const usePrigione = (io: any, data: any) => {
         const username = data.username;
 
         updatePlayersHand(io, roomName, username);
-
         updatePlayersTable(io, roomName, username);
 
         io.to(roomName).emit("update_players_with_action_required", rooms[roomName].game!.getPlayersWithActionRequired());
 
         const currentPlayer = rooms[roomName].game!.getNameOfCurrentTurnPlayer();
         io.to(roomName).emit("current_player", currentPlayer);
+
+        updatePlayersHand(io, roomName, currentPlayer);
+        updatePlayersTable(io, roomName, currentPlayer);
 
         if (rooms[roomName].game!.getPlayerIsInPrison(currentPlayer) || rooms[roomName].game!.getPlayerHasDynamite(currentPlayer)) return;
 
