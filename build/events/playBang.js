@@ -6,6 +6,7 @@ var updatePlayersHand_1 = require("../utils/updatePlayersHand");
 var updatePlayersTable_1 = require("../utils/updatePlayersTable");
 var updateTopStackCard_1 = require("../utils/updateTopStackCard");
 var playBang = function (io, data) {
+    var start = Date.now();
     var roomName = data.currentRoom;
     var username = data.username;
     var target = data.target;
@@ -21,6 +22,8 @@ var playBang = function (io, data) {
         if (server_1.rooms[roomName].game.players[data.target].character.name === "Jourdonnais") {
             io.to(roomName).emit("jourdonnais_can_use_barel");
         }
+        var end = Date.now();
+        console.log("".concat(end - start, "ms"));
     }
     catch (error) {
         console.log("Error in room ".concat(roomName, ":"));
