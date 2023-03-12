@@ -9,13 +9,15 @@ var http = require("http");
 var Server = require("socket.io").Server;
 var server = http.createServer(app);
 var ws = require('ws');
+var parser = require("socket.io-msgpack-parser");
 var PORT = process.env.PORT || 4000;
 var io = new Server(server, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"]
     },
-    wsEngine: ws.Server
+    wsEngine: ws.Server,
+    parser: parser
 });
 exports.rooms = {};
 io.on("connection", function (socket) {
