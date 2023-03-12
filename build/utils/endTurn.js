@@ -9,7 +9,12 @@ var endTurn = function (io, roomName) {
     if (server_1.rooms[roomName].game === null)
         return;
     try {
+        var prevPlayer = server_1.rooms[roomName].game.getNameOfCurrentTurnPlayer(); // get current player
         io.to(roomName).emit("console", server_1.rooms[roomName].game.endTurn());
+        if (server_1.rooms[roomName].game.players[prevPlayer].character.role === "Suzy Lafayette" && server_1.rooms[roomName].game.players[prevPlayer].hand.lenght === 0) {
+            // Suzy Lafayette draws 1 card if she has none, so update
+            (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, prevPlayer);
+        }
         var currentPlayer = server_1.rooms[roomName].game.getNameOfCurrentTurnPlayer(); // get current player
         (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, currentPlayer);
         (0, updatePlayersTable_1.updatePlayersTable)(io, roomName, currentPlayer);

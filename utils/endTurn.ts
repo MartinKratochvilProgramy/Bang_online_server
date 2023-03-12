@@ -7,7 +7,14 @@ export const endTurn = (io: any, roomName: any) => {
     if (rooms[roomName].game === null) return;
 
     try {
+        const prevPlayer = rooms[roomName].game!.getNameOfCurrentTurnPlayer(); // get current player
+
         io.to(roomName).emit("console", rooms[roomName].game!.endTurn());
+
+        if (rooms[roomName].game!.players[prevPlayer].character.role === "Suzy Lafayette" && rooms[roomName].game!.players[prevPlayer].hand.lenght === 0) {
+            // Suzy Lafayette draws 1 card if she has none, so update
+            updatePlayersHand(io, roomName, prevPlayer);
+        }
 
         const currentPlayer = rooms[roomName].game!.getNameOfCurrentTurnPlayer(); // get current player
 
