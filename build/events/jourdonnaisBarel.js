@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.jourdonnaisBarel = void 0;
 var server_1 = require("../server");
+var updatePlayersHand_1 = require("../utils/updatePlayersHand");
 var updatePlayersTable_1 = require("../utils/updatePlayersTable");
 var jourdonnaisBarel = function (io, data) {
     var roomName = data.currentRoom;
@@ -14,6 +15,7 @@ var jourdonnaisBarel = function (io, data) {
         (0, updatePlayersTable_1.updatePlayersTable)(io, roomName, username);
         var socketID = server_1.rooms[roomName].players.find(function (player) { return player.username === username; }).id;
         io.to(socketID).emit("my_hand", server_1.rooms[roomName].game.getPlayerHand(username));
+        (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, server_1.rooms[roomName].game.getNameOfCurrentTurnPlayer());
     }
     catch (error) {
         console.log("Error in room ".concat(roomName, ":"));

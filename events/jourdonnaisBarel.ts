@@ -1,4 +1,5 @@
 import { rooms } from "../server";
+import { updatePlayersHand } from "../utils/updatePlayersHand";
 import { updatePlayersTable } from "../utils/updatePlayersTable";
 
 export const jourdonnaisBarel = (io: any, data: any) => {
@@ -15,6 +16,8 @@ export const jourdonnaisBarel = (io: any, data: any) => {
 
         const socketID = rooms[roomName].players.find(player => player.username === username)!.id;
         io.to(socketID).emit("my_hand", rooms[roomName].game!.getPlayerHand(username))
+
+        updatePlayersHand(io, roomName, rooms[roomName].game!.getNameOfCurrentTurnPlayer())
     } catch (error) {
         console.log(`Error in room ${roomName}:`);
         console.log(error);
