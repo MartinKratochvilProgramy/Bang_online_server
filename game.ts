@@ -9,7 +9,6 @@ export class Game {
     deck: Card[];
     gameEnded: boolean;
     stack: Card[];
-    prevTopStackCard: Card;
     emporio: Card[];
     drawChoice: Card[];
     players: any;
@@ -35,7 +34,6 @@ export class Game {
         this.deck = [...deck];  // create new copy of deck
         this.gameEnded = false;
         this.stack = [];
-        this.prevTopStackCard = this.stack[0]
         this.emporio = [];
         this.drawChoice = [];
         this.players = {}
@@ -575,7 +573,7 @@ export class Game {
 
         this.awaitDrawChoice = false;
 
-        return ["Pedro Ramirez drew first crad from stack"];
+        return ["Pedro Ramirez drew first card from stack"];
     }
 
     useDiligenza(playerName = this.getNameOfCurrentTurnPlayer(), cardDigit: number, cardType: string) {
