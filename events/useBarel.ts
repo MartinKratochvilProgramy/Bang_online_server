@@ -1,6 +1,7 @@
 import { rooms } from "../server";
 import { updatePlayersHand } from "../utils/updatePlayersHand";
 import { updatePlayersTable } from "../utils/updatePlayersTable";
+import { updateTopStackCard } from "../utils/updateTopStackCard";
 
 export const useBarel = (io: any, data: any) => {
     const roomName = data.currentRoom;
@@ -11,6 +12,8 @@ export const useBarel = (io: any, data: any) => {
         updatePlayersHand(io, roomName, rooms[roomName].game!.getNameOfCurrentTurnPlayer())
 
         updatePlayersTable(io, roomName, username);
+
+        updateTopStackCard(io, roomName);
 
         io.to(roomName).emit("update_players_losing_health", rooms[roomName].game!.getPlayersLosingHealth());
     } catch (error) {
