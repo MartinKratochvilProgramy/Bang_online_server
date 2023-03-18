@@ -56,7 +56,7 @@ const server = http.createServer(app);
 const ws = require('ws');
 const parser = require("socket.io-msgpack-parser");
 
-const PORT = process.env.PORT || 4001;
+const PORT = process.env.PORT || 4000;
 
 const io = new Server(server,
   {

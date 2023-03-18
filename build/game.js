@@ -149,7 +149,12 @@ var Game = /** @class */ (function () {
         var message = [];
         this.players[playerName].mancatoPool -= 1;
         this.discard("Bang!", cardDigit, cardType, playerName);
-        message.push("".concat(playerName, " used Bang! as Mancato!"));
+        if (this.gatlingActive) {
+            message.push("".concat(playerName, " used Bang! as Mancato! on Gatling"));
+        }
+        else {
+            message.push("".concat(playerName, " used Bang! as Mancato!"));
+        }
         if (this.players[playerName].mancatoPool === 0) {
             this.setCardOnTableNotPlayable("Barilo", playerName);
             this.setAllNotPlayable(playerName);
@@ -174,7 +179,7 @@ var Game = /** @class */ (function () {
         for (var _i = 0, _a = this.getPlayersLosingHealth(); _i < _a.length; _i++) {
             var player = _a[_i];
             if (player.isLosingHealth)
-                return ["".concat(playerName, " used Bang!")];
+                return ["".concat(playerName, " used Bang! on Indiani")];
         }
         this.setAllPlayable(this.getNameOfCurrentTurnPlayer());
         this.indianiActive = false;
@@ -189,11 +194,11 @@ var Game = /** @class */ (function () {
         for (var _i = 0, _a = this.getPlayersLosingHealth(); _i < _a.length; _i++) {
             var player = _a[_i];
             if (player.isLosingHealth)
-                return ["".concat(playerName, " used Mancato! as Bang!")];
+                return ["".concat(playerName, " used Mancato! as Bang! on Indiani")];
         }
         this.setAllPlayable(this.getNameOfCurrentTurnPlayer());
         this.indianiActive = false;
-        return ["".concat(playerName, " used Mancato! as Bang!")];
+        return ["".concat(playerName, " used Mancato! as Bang! on Indiani")];
     };
     Game.prototype.useBangInDuel = function (cardDigit, cardType, playerName) {
         // special case of Bang! use, sets the next turn of the duel state

@@ -176,7 +176,12 @@ export class Game {
         this.players[playerName].mancatoPool -= 1;
 
         this.discard("Bang!", cardDigit, cardType, playerName);
-        message.push(`${playerName} used Bang! as Mancato!`);
+
+        if (this.gatlingActive) {
+            message.push(`${playerName} used Bang! as Mancato! on Gatling`);
+        } else {
+            message.push(`${playerName} used Bang! as Mancato!`);
+        }
 
         if (this.players[playerName].mancatoPool === 0) {
             this.setCardOnTableNotPlayable("Barilo", playerName);
@@ -205,7 +210,7 @@ export class Game {
         // if there is player loosing health, return
         // if no player is found, set playable for playerPlaceholder
         for (const player of this.getPlayersLosingHealth()) {
-            if (player.isLosingHealth) return [`${playerName} used Bang!`];
+            if (player.isLosingHealth) return [`${playerName} used Bang! on Indiani`];
         }
         this.setAllPlayable(this.getNameOfCurrentTurnPlayer());
         this.indianiActive = false;
@@ -222,12 +227,12 @@ export class Game {
         // if there is player loosing health, return
         // if no player is found, set playable for playerPlaceholder
         for (const player of this.getPlayersLosingHealth()) {
-            if (player.isLosingHealth) return [`${playerName} used Mancato! as Bang!`];
+            if (player.isLosingHealth) return [`${playerName} used Mancato! as Bang! on Indiani`];
         }
         this.setAllPlayable(this.getNameOfCurrentTurnPlayer());
         this.indianiActive = false;
 
-        return [`${playerName} used Mancato! as Bang!`];
+        return [`${playerName} used Mancato! as Bang! on Indiani`];
     }
 
     useBangInDuel(cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {
