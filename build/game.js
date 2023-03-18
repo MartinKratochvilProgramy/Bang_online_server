@@ -20,7 +20,6 @@ var Game = /** @class */ (function () {
         this.deck = __spreadArray([], deck, true); // create new copy of deck
         this.gameEnded = false;
         this.stack = [];
-        this.prevTopStackCard = this.stack[0];
         this.emporio = [];
         this.drawChoice = [];
         this.players = {};
@@ -504,7 +503,7 @@ var Game = /** @class */ (function () {
         this.draw(1, playerName);
         this.setAllPlayable(playerName);
         this.awaitDrawChoice = false;
-        return ["Pedro Ramirez drew first crad from stack"];
+        return ["Pedro Ramirez drew first card from stack"];
     };
     Game.prototype.useDiligenza = function (playerName, cardDigit, cardType) {
         if (playerName === void 0) { playerName = this.getNameOfCurrentTurnPlayer(); }
