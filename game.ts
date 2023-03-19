@@ -29,7 +29,7 @@ export class Game {
         this.playerNames = playerNames;
         this.numOfPlayers = this.playerNames.length;
         this.namesOfCharacters = ["Bart Cassidy", "Black Jack", "Calamity Janet", "El Gringo", "Jesse Jones", "Jourdonnais", "Kit Carlson", "Lucky Duke", "Paul Regret", "Pedro Ramirez", "Rose Doolan", "Slab the Killer", "Suzy Lafayette", "Vulture Sam", "Willy the Kid"]
-        // this.namesOfCharacters = ["Kit Carlson", "Jesse Jones", "Pedro Ramirez", "Lucky Duke"]
+        // this.namesOfCharacters = ["Calamity Janet", "Jesse Jones", "Pedro Ramirez", "Lucky Duke"]
         this.knownRoles = {}
         this.deck = [...deck];  // create new copy of deck
         this.gameEnded = false;
@@ -240,20 +240,21 @@ export class Game {
 
         this.discard("Bang!", cardDigit, cardType, playerName);
 
-        this.setNotPlayable("Bang!", this.duelPlayers[this.duelTurnIndex]);
-        this.setIsLosingHealth(false, this.duelPlayers[this.duelTurnIndex]);
+        this.setIsLosingHealth(false, playerName);
         this.setAllNotPlayable(playerName);
 
         // shift to the next player in duel (duelPlayers.length should always = 2)
         this.duelTurnIndex = (this.duelTurnIndex + 1) % 2;
-        // set next players Ban!g cards playable
-        this.setPlayable("Bang!", this.duelPlayers[this.duelTurnIndex]);
-        if (this.players[this.duelPlayers[this.duelTurnIndex]].character.name === "Calamity Janet") {
-            this.setPlayable("Mancato!", this.duelPlayers[this.duelTurnIndex]);
-        }
-        this.setIsLosingHealth(true, this.duelPlayers[this.duelTurnIndex]);
+        const currentDuelPlayer = this.duelPlayers[this.duelTurnIndex];
 
-        return [`${playerName} used Bang! in duel`];
+        // set next players Bang! cards playable
+        this.setPlayable("Bang!", currentDuelPlayer);
+        if (this.players[currentDuelPlayer].character.name === "Calamity Janet") {
+            this.setPlayable("Mancato!", currentDuelPlayer);
+        }
+        this.setIsLosingHealth(true, currentDuelPlayer);
+
+        return [`${playerName} used Bang! in Duel with ${currentDuelPlayer}`];
     }
 
     useMancato(playerName: string, cardDigit: number, cardType: string) {
@@ -291,18 +292,18 @@ export class Game {
 
         this.discard("Mancato!", cardDigit, cardType, playerName);
 
-        this.setNotPlayable("Bang!", this.duelPlayers[this.duelTurnIndex]);
-        this.setNotPlayable("Mancato!", this.duelPlayers[this.duelTurnIndex]);
-        this.setIsLosingHealth(false, this.duelPlayers[this.duelTurnIndex]);
+        this.setIsLosingHealth(false, playerName);
         this.setAllNotPlayable(playerName);
 
         // shift to the next player in duel (duelPlayers.length should always = 2)
         this.duelTurnIndex = (this.duelTurnIndex + 1) % 2;
-        // set next players Ban!g cards playable
-        this.setPlayable("Bang!", this.duelPlayers[this.duelTurnIndex]);
-        this.setIsLosingHealth(true, this.duelPlayers[this.duelTurnIndex]);
+        const currentDuelPlayer = this.duelPlayers[this.duelTurnIndex];
 
-        return [`${playerName} used Mancato! as Bang! in duel`];
+        // set next players Bang! cards playable
+        this.setPlayable("Bang!", currentDuelPlayer);
+        this.setIsLosingHealth(true, currentDuelPlayer);
+
+        return [`${playerName} used Mancato! as Bang! in Duel with ${currentDuelPlayer}`];
     }
 
     useMancatoAsCJ(target: string, cardDigit: number, cardType: string, playerName = this.getNameOfCurrentTurnPlayer()) {

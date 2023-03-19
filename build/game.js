@@ -15,7 +15,7 @@ var Game = /** @class */ (function () {
         this.playerNames = playerNames;
         this.numOfPlayers = this.playerNames.length;
         this.namesOfCharacters = ["Bart Cassidy", "Black Jack", "Calamity Janet", "El Gringo", "Jesse Jones", "Jourdonnais", "Kit Carlson", "Lucky Duke", "Paul Regret", "Pedro Ramirez", "Rose Doolan", "Slab the Killer", "Suzy Lafayette", "Vulture Sam", "Willy the Kid"];
-        // this.namesOfCharacters = ["Kit Carlson", "Jesse Jones", "Pedro Ramirez", "Lucky Duke"]
+        // this.namesOfCharacters = ["Calamity Janet", "Jesse Jones", "Pedro Ramirez", "Lucky Duke"]
         this.knownRoles = {};
         this.deck = __spreadArray([], deck, true); // create new copy of deck
         this.gameEnded = false;
@@ -204,18 +204,18 @@ var Game = /** @class */ (function () {
         // special case of Bang! use, sets the next turn of the duel state
         if (playerName === void 0) { playerName = this.getNameOfCurrentTurnPlayer(); }
         this.discard("Bang!", cardDigit, cardType, playerName);
-        this.setNotPlayable("Bang!", this.duelPlayers[this.duelTurnIndex]);
-        this.setIsLosingHealth(false, this.duelPlayers[this.duelTurnIndex]);
+        this.setIsLosingHealth(false, playerName);
         this.setAllNotPlayable(playerName);
         // shift to the next player in duel (duelPlayers.length should always = 2)
         this.duelTurnIndex = (this.duelTurnIndex + 1) % 2;
-        // set next players Ban!g cards playable
-        this.setPlayable("Bang!", this.duelPlayers[this.duelTurnIndex]);
-        if (this.players[this.duelPlayers[this.duelTurnIndex]].character.name === "Calamity Janet") {
-            this.setPlayable("Mancato!", this.duelPlayers[this.duelTurnIndex]);
+        var currentDuelPlayer = this.duelPlayers[this.duelTurnIndex];
+        // set next players Bang! cards playable
+        this.setPlayable("Bang!", currentDuelPlayer);
+        if (this.players[currentDuelPlayer].character.name === "Calamity Janet") {
+            this.setPlayable("Mancato!", currentDuelPlayer);
         }
-        this.setIsLosingHealth(true, this.duelPlayers[this.duelTurnIndex]);
-        return ["".concat(playerName, " used Bang! in duel")];
+        this.setIsLosingHealth(true, currentDuelPlayer);
+        return ["".concat(playerName, " used Bang! in Duel with ").concat(currentDuelPlayer)];
     };
     Game.prototype.useMancato = function (playerName, cardDigit, cardType) {
         var message = ["".concat(playerName, " used Mancato!")];
@@ -245,16 +245,15 @@ var Game = /** @class */ (function () {
         // special case of Bang! use, sets the next turn of the duel state
         if (playerName === void 0) { playerName = this.getNameOfCurrentTurnPlayer(); }
         this.discard("Mancato!", cardDigit, cardType, playerName);
-        this.setNotPlayable("Bang!", this.duelPlayers[this.duelTurnIndex]);
-        this.setNotPlayable("Mancato!", this.duelPlayers[this.duelTurnIndex]);
-        this.setIsLosingHealth(false, this.duelPlayers[this.duelTurnIndex]);
+        this.setIsLosingHealth(false, playerName);
         this.setAllNotPlayable(playerName);
         // shift to the next player in duel (duelPlayers.length should always = 2)
         this.duelTurnIndex = (this.duelTurnIndex + 1) % 2;
-        // set next players Ban!g cards playable
-        this.setPlayable("Bang!", this.duelPlayers[this.duelTurnIndex]);
-        this.setIsLosingHealth(true, this.duelPlayers[this.duelTurnIndex]);
-        return ["".concat(playerName, " used Mancato! as Bang! in duel")];
+        var currentDuelPlayer = this.duelPlayers[this.duelTurnIndex];
+        // set next players Bang! cards playable
+        this.setPlayable("Bang!", currentDuelPlayer);
+        this.setIsLosingHealth(true, currentDuelPlayer);
+        return ["".concat(playerName, " used Mancato! as Bang! in Duel with ").concat(currentDuelPlayer)];
     };
     Game.prototype.useMancatoAsCJ = function (target, cardDigit, cardType, playerName) {
         if (playerName === void 0) { playerName = this.getNameOfCurrentTurnPlayer(); }
