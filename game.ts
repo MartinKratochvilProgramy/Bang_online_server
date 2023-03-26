@@ -24,6 +24,7 @@ export class Game {
     awaitDrawChoice: boolean;
     nextEmporioTurn: string | null;
     prevGameState: GameState[];
+    testing: boolean;
 
     constructor(playerNames: string[], deck: Card[]) {
         this.playerNames = playerNames;
@@ -49,6 +50,7 @@ export class Game {
         this.awaitDrawChoice = false;
         this.nextEmporioTurn = null;
         this.prevGameState = []
+        this.testing = process.env.TEST_BANG === "t_bang_dnpauey"
 
         // init players
         for (let i = 0; i < this.numOfPlayers; i++) {
@@ -1528,7 +1530,9 @@ export class Game {
 
     startGame() {
         // each player draws startingHandSize cards
-        this.shuffleDeck();
+        if (!this.testing) {
+            this.shuffleDeck();
+        }
         for (var player of Object.keys(this.players)) {
             this.draw(this.players[player].character.startingHandSize, player);
         }
@@ -1699,7 +1703,7 @@ export class Game {
         for (let i = 0; i < this.numOfPlayers; i++) {
             let playerChoice: string[] = []
             for (let i = 0; i < 2; i++) {
-                const randIndex = Math.floor(Math.random() * this.namesOfCharacters.length);
+                const randIndex = this.testing ? 0 : Math.floor(Math.random() * this.namesOfCharacters.length);
                 // add to player choice
                 playerChoice.push(this.namesOfCharacters[randIndex]);
                 // remove from namesOfCharacters

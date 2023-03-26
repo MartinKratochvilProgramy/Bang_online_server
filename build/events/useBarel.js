@@ -11,6 +11,7 @@ var useBarel = function (io, data) {
     try {
         io.to(roomName).emit("console", server_1.rooms[roomName].game.useBarel(username));
         (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, server_1.rooms[roomName].game.getNameOfCurrentTurnPlayer());
+        (0, updatePlayersHand_1.updatePlayersHand)(io, roomName, username);
         (0, updatePlayersTable_1.updatePlayersTable)(io, roomName, username);
         (0, updateTopStackCard_1.updateTopStackCard)(io, roomName);
         io.to(roomName).emit("update_players_losing_health", server_1.rooms[roomName].game.getPlayersLosingHealth());

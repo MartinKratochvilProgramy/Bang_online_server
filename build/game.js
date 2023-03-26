@@ -35,6 +35,7 @@ var Game = /** @class */ (function () {
         this.awaitDrawChoice = false;
         this.nextEmporioTurn = null;
         this.prevGameState = [];
+        this.testing = process.env.TEST_BANG === "t_bang_dnpauey";
         // init players
         for (var i = 0; i < this.numOfPlayers; i++) {
             this.players[playerNames[i]] = {
@@ -1374,7 +1375,9 @@ var Game = /** @class */ (function () {
     Game.prototype.startGame = function () {
         var _this = this;
         // each player draws startingHandSize cards
-        this.shuffleDeck();
+        if (!this.testing) {
+            this.shuffleDeck();
+        }
         for (var _i = 0, _a = Object.keys(this.players); _i < _a.length; _i++) {
             var player = _a[_i];
             this.draw(this.players[player].character.startingHandSize, player);
@@ -1530,7 +1533,7 @@ var Game = /** @class */ (function () {
         for (var i = 0; i < this.numOfPlayers; i++) {
             var playerChoice = [];
             for (var i_1 = 0; i_1 < 2; i_1++) {
-                var randIndex = Math.floor(Math.random() * this.namesOfCharacters.length);
+                var randIndex = this.testing ? 0 : Math.floor(Math.random() * this.namesOfCharacters.length);
                 // add to player choice
                 playerChoice.push(this.namesOfCharacters[randIndex]);
                 // remove from namesOfCharacters

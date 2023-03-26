@@ -10,6 +10,7 @@ export const useBarel = (io: any, data: any) => {
         io.to(roomName).emit("console", rooms[roomName].game!.useBarel(username));
 
         updatePlayersHand(io, roomName, rooms[roomName].game!.getNameOfCurrentTurnPlayer())
+        updatePlayersHand(io, roomName, username)
 
         updatePlayersTable(io, roomName, username);
 
