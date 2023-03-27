@@ -30,7 +30,7 @@ export const startGameEvent = (io: any, data: any) => {
             if (rooms[roomName].players.some(player => player.username === process.env.TEST_PRIGIONE)) {
                 console.log("test Prigione");
                 rooms[roomName].game = new Game(data.players, testPrigioneDeck);
-                rooms[roomName].game!.namesOfCharacters = ["Calamity Janet", "Vulture Sam", "Jourdonnais", "Rose Doolan"]
+                rooms[roomName].game!.namesOfCharacters = ["Calamity Janet", "Vulture Sam", "Jesse Jones", "Rose Doolan"]
             }
 
         } else {

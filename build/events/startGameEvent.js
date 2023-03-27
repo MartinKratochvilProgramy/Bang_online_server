@@ -32,7 +32,7 @@ var startGameEvent = function (io, data) {
             if (server_1.rooms[roomName].players.some(function (player) { return player.username === process.env.TEST_PRIGIONE; })) {
                 console.log("test Prigione");
                 server_1.rooms[roomName].game = new game_1.Game(data.players, testPrigioneDeck_1.testPrigioneDeck);
-                server_1.rooms[roomName].game.namesOfCharacters = ["Calamity Janet", "Vulture Sam", "Jourdonnais", "Rose Doolan"];
+                server_1.rooms[roomName].game.namesOfCharacters = ["Calamity Janet", "Vulture Sam", "Jesse Jones", "Rose Doolan"];
             }
         }
         else {

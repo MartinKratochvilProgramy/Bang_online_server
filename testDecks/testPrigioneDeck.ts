@@ -30,7 +30,7 @@ const P1_D1 = [
         name: "Dynamite",
         rimColor: "blue",
         digit: 4,
-        type: "spades",
+        type: "hearts",
         class: "dynamite",
         isPlayable: false,
 
