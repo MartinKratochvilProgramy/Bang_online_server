@@ -31,16 +31,16 @@ var P1_D1 = [
         name: "Dynamite",
         rimColor: "blue",
         digit: 3,
-        type: "hearts",
-        "class": "barel",
+        type: "spades",
+        "class": "dynamite",
         isPlayable: false
     },
     {
         name: "Dynamite",
         rimColor: "blue",
         digit: 4,
-        type: "hearts",
-        "class": "barel",
+        type: "spades",
+        "class": "dynamite",
         isPlayable: false
     },
 ];
@@ -58,7 +58,7 @@ var P2_D1 = [
         rimColor: "blue",
         digit: 6,
         type: "hearts",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     },
     {
@@ -66,7 +66,7 @@ var P2_D1 = [
         rimColor: "blue",
         digit: 7,
         type: "hearts",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     },
     {
@@ -74,7 +74,7 @@ var P2_D1 = [
         rimColor: "blue",
         digit: 8,
         type: "hearts",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     },
 ];
@@ -84,7 +84,7 @@ var P1_D2 = [
         rimColor: "blue",
         digit: 9,
         type: "hearts",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     },
     {
@@ -92,7 +92,7 @@ var P1_D2 = [
         rimColor: "blue",
         digit: 10,
         type: "hearts",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     },
 ];
@@ -102,7 +102,7 @@ var prison_D1 = [
         rimColor: "blue",
         digit: 10,
         type: "hearts",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     }
 ];
@@ -112,7 +112,7 @@ var prison_D2 = [
         rimColor: "blue",
         digit: 11,
         type: "hearts",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     }
 ];
@@ -120,9 +120,9 @@ var restOfTheDeck = [
     {
         name: "Dynamite",
         rimColor: "blue",
-        digit: 12,
+        digit: 6,
         type: "spades",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     },
     {
@@ -130,7 +130,7 @@ var restOfTheDeck = [
         rimColor: "blue",
         digit: 13,
         type: "spades",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     },
     {
@@ -138,7 +138,7 @@ var restOfTheDeck = [
         rimColor: "blue",
         digit: 14,
         type: "spades",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     },
     {
@@ -146,7 +146,7 @@ var restOfTheDeck = [
         rimColor: "blue",
         digit: 15,
         type: "spades",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     },
     {
@@ -154,7 +154,7 @@ var restOfTheDeck = [
         rimColor: "blue",
         digit: 16,
         type: "spades",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     },
     {
@@ -162,7 +162,7 @@ var restOfTheDeck = [
         rimColor: "blue",
         digit: 17,
         type: "spades",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     },
     {
@@ -170,7 +170,7 @@ var restOfTheDeck = [
         rimColor: "blue",
         digit: 18,
         type: "spades",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     },
     {
@@ -178,7 +178,7 @@ var restOfTheDeck = [
         rimColor: "blue",
         digit: 19,
         type: "spades",
-        "class": "barel",
+        "class": "dynamite",
         isPlayable: false
     },
 ];
