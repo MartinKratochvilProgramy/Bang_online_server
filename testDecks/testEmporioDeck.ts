@@ -1,20 +1,24 @@
 const P1_D1 = [
     {
-        name: "Gatling",
-        rimColor: "yellow",
+        name: "Barilo",
+        rimColor: "blue",
         digit: 1,
-        type: "diamonds",
-        isPlayable: false
+        type: "hearts",
+        class: "barel",
+        isPlayable: false,
+
     },
     {
-        name: "Bang!",
-        rimColor: "yellow",
+        name: "Vulcanic",
+        rimColor: "blue",
         digit: 2,
         type: "spades",
-        isPlayable: false
+        class: "gun",
+        isPlayable: false,
+
     },
     {
-        name: "Mancato!",
+        name: "Emporio",
         rimColor: "yellow",
         digit: 3,
         type: "diamonds",
@@ -31,14 +35,14 @@ const P1_D1 = [
 
 const P2_D1 = [
     {
-        name: "Indiani",
+        name: "Bang!",
         rimColor: "yellow",
         digit: 5,
         type: "diamonds",
         isPlayable: false
     },
     {
-        name: "Duel",
+        name: "Mancato!",
         rimColor: "yellow",
         digit: 6,
         type: "spades",
@@ -69,10 +73,10 @@ const P1_D2 = [
         isPlayable: false
     },
     {
-        name: "Beer",
+        name: "Bang!",
         rimColor: "yellow",
         digit: 10,
-        type: "hearts",
+        type: "clubs",
         isPlayable: false
     },
 ]
@@ -82,7 +86,7 @@ const P2_D2 = [
         name: "Mancato!",
         rimColor: "yellow",
         digit: 11,
-        type: "hearts",
+        type: "spades",
         isPlayable: false
     },
     {
@@ -95,5 +99,5 @@ const P2_D2 = [
 ]
 
 
-export const testIndianiDeck = [...P1_D1, ...P2_D1, ...P1_D2, ...P2_D2,
+export const testEmporioDeck = [...P1_D1, ...P2_D1, ...P1_D2, ...P2_D2,
 ...P1_D1, ...P2_D1, ...P1_D2, ...P2_D2]

@@ -5,7 +5,9 @@ import { updatePlayerHands } from "./updatePlayerHands";
 export const startGame = (io: any, roomName: any) => {
     if (rooms[roomName].game === null) return;
     try {
-        io.to(roomName).emit("console", rooms[roomName].game!.startGame());
+        const message = rooms[roomName].game!.startGame()
+        
+        io.to(roomName).emit("console", message);
 
         let characters = []
         for (var player of Object.keys(rooms[roomName].game!.players)) {

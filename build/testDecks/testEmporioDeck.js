@@ -1,20 +1,34 @@
-const P1_D1 = [
+"use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
+exports.__esModule = true;
+exports.testEmporioDeck = void 0;
+var P1_D1 = [
     {
-        name: "Gatling",
-        rimColor: "yellow",
+        name: "Barilo",
+        rimColor: "blue",
         digit: 1,
-        type: "diamonds",
+        type: "hearts",
+        "class": "barel",
         isPlayable: false
     },
     {
-        name: "Bang!",
-        rimColor: "yellow",
+        name: "Vulcanic",
+        rimColor: "blue",
         digit: 2,
         type: "spades",
+        "class": "gun",
         isPlayable: false
     },
     {
-        name: "Mancato!",
+        name: "Emporio",
         rimColor: "yellow",
         digit: 3,
         type: "diamonds",
@@ -27,18 +41,17 @@ const P1_D1 = [
         type: "spades",
         isPlayable: false
     },
-]
-
-const P2_D1 = [
+];
+var P2_D1 = [
     {
-        name: "Indiani",
+        name: "Bang!",
         rimColor: "yellow",
         digit: 5,
         type: "diamonds",
         isPlayable: false
     },
     {
-        name: "Duel",
+        name: "Mancato!",
         rimColor: "yellow",
         digit: 6,
         type: "spades",
@@ -58,9 +71,8 @@ const P2_D1 = [
         type: "spades",
         isPlayable: false
     },
-]
-
-const P1_D2 = [
+];
+var P1_D2 = [
     {
         name: "Mancato!",
         rimColor: "yellow",
@@ -69,20 +81,19 @@ const P1_D2 = [
         isPlayable: false
     },
     {
-        name: "Beer",
+        name: "Bang!",
         rimColor: "yellow",
         digit: 10,
-        type: "hearts",
+        type: "clubs",
         isPlayable: false
     },
-]
-
-const P2_D2 = [
+];
+var P2_D2 = [
     {
         name: "Mancato!",
         rimColor: "yellow",
         digit: 11,
-        type: "hearts",
+        type: "spades",
         isPlayable: false
     },
     {
@@ -92,8 +103,5 @@ const P2_D2 = [
         type: "clubs",
         isPlayable: false
     },
-]
-
-
-export const testIndianiDeck = [...P1_D1, ...P2_D1, ...P1_D2, ...P2_D2,
-...P1_D1, ...P2_D1, ...P1_D2, ...P2_D2]
+];
+exports.testEmporioDeck = __spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray(__spreadArray([], P1_D1, true), P2_D1, true), P1_D2, true), P2_D2, true), P1_D1, true), P2_D1, true), P1_D2, true), P2_D2, true);

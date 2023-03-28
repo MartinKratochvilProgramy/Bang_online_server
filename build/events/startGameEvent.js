@@ -9,6 +9,10 @@ var testBangDeck_1 = require("../testDecks/testBangDeck");
 var testIndianiDeck_1 = require("../testDecks/testIndianiDeck");
 var testPanicoDeck_1 = require("../testDecks/testPanicoDeck");
 var testPrigioneDeck_1 = require("../testDecks/testPrigioneDeck");
+var testEmporioDeck_1 = require("../testDecks/testEmporioDeck");
+var testStKDeck_1 = require("../testDecks/testStKDeck");
+var testBJElGDeck_1 = require("../testDecks/testBJElGDeck");
+var testDistancesDeck_1 = require("../testDecks/testDistancesDeck");
 var startGameEvent = function (io, data) {
     var roomName = data.currentRoom;
     try {
@@ -33,6 +37,31 @@ var startGameEvent = function (io, data) {
                 console.log("test Prigione");
                 server_1.rooms[roomName].game = new game_1.Game(data.players, testPrigioneDeck_1.testPrigioneDeck);
                 server_1.rooms[roomName].game.namesOfCharacters = ["Calamity Janet", "Vulture Sam", "Jesse Jones", "Rose Doolan"];
+            }
+            if (server_1.rooms[roomName].players.some(function (player) { return player.username === process.env.TEST_EMPORIO; })) {
+                console.log("test Emporio");
+                server_1.rooms[roomName].game = new game_1.Game(data.players, testEmporioDeck_1.testEmporioDeck);
+                server_1.rooms[roomName].game.namesOfCharacters = ["Kit Carlson", "Vulture Sam", "Lucky Duke", "Rose Doolan"];
+            }
+            if (server_1.rooms[roomName].players.some(function (player) { return player.username === process.env.TEST_BART_CASSIDY; })) {
+                console.log("test Emporio");
+                server_1.rooms[roomName].game = new game_1.Game(data.players, testStKDeck_1.testStKDeck);
+                server_1.rooms[roomName].game.namesOfCharacters = ["Slab the Killer", "Vulture Sam", "Bart Cassidy", "Rose Doolan"];
+            }
+            if (server_1.rooms[roomName].players.some(function (player) { return player.username === process.env.TEST_BJ_ElG; })) {
+                console.log("test Emporio");
+                server_1.rooms[roomName].game = new game_1.Game(data.players, testBJElGDeck_1.testBJElGDeck);
+                server_1.rooms[roomName].game.namesOfCharacters = ["Black Jack", "Vulture Sam", "El Gringo", "Rose Doolan"];
+            }
+            if (server_1.rooms[roomName].players.some(function (player) { return player.username === process.env.TEST_DISTANCES; })) {
+                console.log("test Emporio");
+                server_1.rooms[roomName].game = new game_1.Game(data.players, testDistancesDeck_1.testDistancesDeck);
+                server_1.rooms[roomName].game.namesOfCharacters = [
+                    "Rose Doolan", "Calamity Janet",
+                    "Paul Regret", "Rose Doolan",
+                    "Willy the Kid", "Rose Doolan",
+                    "Vulture Sam", "Rose Doolan",
+                ];
             }
         }
         else {

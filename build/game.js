@@ -1413,6 +1413,12 @@ var Game = /** @class */ (function () {
                 this.deck.shift();
             }
         }
+        else if (this.players[firstPlayerName].character.name === "Black Jack" && (this.deck[1].type === "hearts" || this.deck[1].type === "diamonds")) {
+            // Black Jack can draw 3 on hearts or diamonds
+            this.draw(3, firstPlayerName);
+            this.setAllPlayable(firstPlayerName);
+            return ["".concat(firstPlayerName, " is Black Jack and drew ").concat(this.deck[1].name, " ").concat(this.deck[1].type, " as a second card so he draws another card")];
+        }
         else {
             this.draw(2, firstPlayerName);
             this.setAllPlayable(firstPlayerName);
@@ -1565,7 +1571,7 @@ var Game = /** @class */ (function () {
         for (var i = 0; i < Object.keys(this.players).length; i++) {
             var player = this.playerNames[i];
             // get random role, splice from roles
-            var randIndex = Math.floor(Math.random() * roles.length);
+            var randIndex = this.testing ? 0 : Math.floor(Math.random() * roles.length);
             var role = roles.splice(randIndex, 1)[0];
             // add role to player
             this.players[player].character.role = role;

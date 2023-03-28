@@ -8,7 +8,8 @@ var startGame = function (io, roomName) {
     if (server_1.rooms[roomName].game === null)
         return;
     try {
-        io.to(roomName).emit("console", server_1.rooms[roomName].game.startGame());
+        var message = server_1.rooms[roomName].game.startGame();
+        io.to(roomName).emit("console", message);
         var characters = [];
         for (var _i = 0, _a = Object.keys(server_1.rooms[roomName].game.players); _i < _a.length; _i++) {
             var player = _a[_i];

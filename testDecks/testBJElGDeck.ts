@@ -1,6 +1,6 @@
 const P1_D1 = [
     {
-        name: "Gatling",
+        name: "Bang!",
         rimColor: "yellow",
         digit: 1,
         type: "diamonds",
@@ -10,42 +10,44 @@ const P1_D1 = [
         name: "Bang!",
         rimColor: "yellow",
         digit: 2,
-        type: "spades",
+        type: "diamonds",
         isPlayable: false
     },
     {
-        name: "Mancato!",
+        name: "Bang!",
         rimColor: "yellow",
         digit: 3,
-        type: "diamonds",
+        type: "hearts",
         isPlayable: false
     },
     {
         name: "Bang!",
         rimColor: "yellow",
         digit: 4,
-        type: "spades",
+        type: "hearts",
         isPlayable: false
     },
 ]
 
 const P2_D1 = [
     {
-        name: "Indiani",
-        rimColor: "yellow",
+        name: "Barilo",
+        rimColor: "blue",
         digit: 5,
-        type: "diamonds",
-        isPlayable: false
+        type: "hearts",
+        class: "barel",
+        isPlayable: false,
+
     },
     {
-        name: "Duel",
+        name: "Mancato!",
         rimColor: "yellow",
         digit: 6,
         type: "spades",
         isPlayable: false
     },
     {
-        name: "Bang!",
+        name: "Mancato!",
         rimColor: "yellow",
         digit: 7,
         type: "diamonds",
@@ -65,14 +67,14 @@ const P1_D2 = [
         name: "Mancato!",
         rimColor: "yellow",
         digit: 9,
-        type: "spades",
+        type: "diamonds",
         isPlayable: false
     },
     {
-        name: "Beer",
+        name: "Bang!",
         rimColor: "yellow",
         digit: 10,
-        type: "hearts",
+        type: "diamonds",
         isPlayable: false
     },
 ]
@@ -82,7 +84,7 @@ const P2_D2 = [
         name: "Mancato!",
         rimColor: "yellow",
         digit: 11,
-        type: "hearts",
+        type: "spades",
         isPlayable: false
     },
     {
@@ -95,5 +97,5 @@ const P2_D2 = [
 ]
 
 
-export const testIndianiDeck = [...P1_D1, ...P2_D1, ...P1_D2, ...P2_D2,
+export const testBJElGDeck = [...P1_D1, ...P2_D1, ...P1_D2, ...P2_D2,
 ...P1_D1, ...P2_D1, ...P1_D2, ...P2_D2]

@@ -6,6 +6,10 @@ import { testBangDeck } from "../testDecks/testBangDeck";
 import { testIndianiDeck } from "../testDecks/testIndianiDeck";
 import { testPanicoDeck } from "../testDecks/testPanicoDeck";
 import { testPrigioneDeck } from "../testDecks/testPrigioneDeck";
+import { testEmporioDeck } from "../testDecks/testEmporioDeck";
+import { testStKDeck } from "../testDecks/testStKDeck";
+import { testBJElGDeck } from "../testDecks/testBJElGDeck";
+import { testDistancesDeck } from "../testDecks/testDistancesDeck";
 
 export const startGameEvent = (io: any, data: any) => {
     const roomName = data.currentRoom;
@@ -31,6 +35,31 @@ export const startGameEvent = (io: any, data: any) => {
                 console.log("test Prigione");
                 rooms[roomName].game = new Game(data.players, testPrigioneDeck);
                 rooms[roomName].game!.namesOfCharacters = ["Calamity Janet", "Vulture Sam", "Jesse Jones", "Rose Doolan"]
+            }
+            if (rooms[roomName].players.some(player => player.username === process.env.TEST_EMPORIO)) {
+                console.log("test Emporio");
+                rooms[roomName].game = new Game(data.players, testEmporioDeck);
+                rooms[roomName].game!.namesOfCharacters = ["Kit Carlson", "Vulture Sam", "Lucky Duke", "Rose Doolan"]
+            }
+            if (rooms[roomName].players.some(player => player.username === process.env.TEST_BART_CASSIDY)) {
+                console.log("test Emporio");
+                rooms[roomName].game = new Game(data.players, testStKDeck);
+                rooms[roomName].game!.namesOfCharacters = ["Slab the Killer", "Vulture Sam", "Bart Cassidy", "Rose Doolan"]
+            }
+            if (rooms[roomName].players.some(player => player.username === process.env.TEST_BJ_ElG)) {
+                console.log("test Emporio");
+                rooms[roomName].game = new Game(data.players, testBJElGDeck);
+                rooms[roomName].game!.namesOfCharacters = ["Black Jack", "Vulture Sam", "El Gringo", "Rose Doolan"]
+            }
+            if (rooms[roomName].players.some(player => player.username === process.env.TEST_DISTANCES)) {
+                console.log("test Emporio");
+                rooms[roomName].game = new Game(data.players, testDistancesDeck);
+                rooms[roomName].game!.namesOfCharacters = [
+                    "Rose Doolan", "Calamity Janet", 
+                    "Paul Regret", "Rose Doolan",
+                    "Willy the Kid", "Rose Doolan",
+                    "Vulture Sam", "Rose Doolan",
+                    ]
             }
 
         } else {

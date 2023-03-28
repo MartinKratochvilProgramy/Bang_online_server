@@ -79,10 +79,10 @@ var P1_D2 = [
         isPlayable: false
     },
     {
-        name: "Bang!",
+        name: "Beer",
         rimColor: "yellow",
         digit: 10,
-        type: "clubs",
+        type: "hearts",
         isPlayable: false
     },
 ];
