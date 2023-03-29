@@ -70,18 +70,20 @@ export const testDistancesDeck = [
         isPlayable: false
     },
     {
-        name: "Bang!",
-        rimColor: "yellow",
-        digit: 7,
-        type: "clubs",
-        isPlayable: false
+        name: "Apaloosa",
+        rimColor: "blue",
+        digit: 1,
+        type: "spades",
+        class: "horse",
+        isPlayable: false,
     },
     {
-        name: "Bang!",
-        rimColor: "yellow",
-        digit: 11,
-        type: "diamonds",
-        isPlayable: false
+        name: "Mustang",
+        rimColor: "blue",
+        digit: 1,
+        type: "spades",
+        class: "horse",
+        isPlayable: false,
     },
     {
         name: "Bang!",
@@ -161,11 +163,12 @@ export const testDistancesDeck = [
         isPlayable: false
     },
     {
-        name: "Bang!",
-        rimColor: "yellow",
-        digit: 13,
-        type: "diamonds",
-        isPlayable: false
+        name: "Winchester",
+        rimColor: "blue",
+        digit: 8,
+        type: "spades",
+        class: "gun",
+        isPlayable: false,
     },
     {
         name: "Bang!",
@@ -510,7 +513,6 @@ export const testDistancesDeck = [
         type: "spades",
         class: "gun",
         isPlayable: false,
-
     },
     {
         name: "Mustang",

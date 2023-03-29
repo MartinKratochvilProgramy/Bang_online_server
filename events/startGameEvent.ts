@@ -41,18 +41,23 @@ export const startGameEvent = (io: any, data: any) => {
                 rooms[roomName].game = new Game(data.players, testEmporioDeck);
                 rooms[roomName].game!.namesOfCharacters = ["Kit Carlson", "Vulture Sam", "Lucky Duke", "Rose Doolan"]
             }
+            if (rooms[roomName].players.some(player => player.username === process.env.TEST_STK)) {
+                console.log("test StK");
+                rooms[roomName].game = new Game(data.players, testStKDeck);
+                rooms[roomName].game!.namesOfCharacters = ["Slab the Killer", "Vulture Sam", "Jourdonnais", "Rose Doolan"]
+            }
             if (rooms[roomName].players.some(player => player.username === process.env.TEST_BART_CASSIDY)) {
-                console.log("test Emporio");
+                console.log("test Bart Cassidy");
                 rooms[roomName].game = new Game(data.players, testStKDeck);
                 rooms[roomName].game!.namesOfCharacters = ["Slab the Killer", "Vulture Sam", "Bart Cassidy", "Rose Doolan"]
             }
             if (rooms[roomName].players.some(player => player.username === process.env.TEST_BJ_ElG)) {
-                console.log("test Emporio");
+                console.log("test BJ ElG");
                 rooms[roomName].game = new Game(data.players, testBJElGDeck);
                 rooms[roomName].game!.namesOfCharacters = ["Black Jack", "Vulture Sam", "El Gringo", "Rose Doolan"]
             }
             if (rooms[roomName].players.some(player => player.username === process.env.TEST_DISTANCES)) {
-                console.log("test Emporio");
+                console.log("test Distance");
                 rooms[roomName].game = new Game(data.players, testDistancesDeck);
                 rooms[roomName].game!.namesOfCharacters = [
                     "Rose Doolan", "Calamity Janet", 

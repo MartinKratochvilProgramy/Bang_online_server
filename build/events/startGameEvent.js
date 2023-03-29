@@ -43,18 +43,23 @@ var startGameEvent = function (io, data) {
                 server_1.rooms[roomName].game = new game_1.Game(data.players, testEmporioDeck_1.testEmporioDeck);
                 server_1.rooms[roomName].game.namesOfCharacters = ["Kit Carlson", "Vulture Sam", "Lucky Duke", "Rose Doolan"];
             }
+            if (server_1.rooms[roomName].players.some(function (player) { return player.username === process.env.TEST_STK; })) {
+                console.log("test StK");
+                server_1.rooms[roomName].game = new game_1.Game(data.players, testStKDeck_1.testStKDeck);
+                server_1.rooms[roomName].game.namesOfCharacters = ["Slab the Killer", "Vulture Sam", "Jourdonnais", "Rose Doolan"];
+            }
             if (server_1.rooms[roomName].players.some(function (player) { return player.username === process.env.TEST_BART_CASSIDY; })) {
-                console.log("test Emporio");
+                console.log("test Bart Cassidy");
                 server_1.rooms[roomName].game = new game_1.Game(data.players, testStKDeck_1.testStKDeck);
                 server_1.rooms[roomName].game.namesOfCharacters = ["Slab the Killer", "Vulture Sam", "Bart Cassidy", "Rose Doolan"];
             }
             if (server_1.rooms[roomName].players.some(function (player) { return player.username === process.env.TEST_BJ_ElG; })) {
-                console.log("test Emporio");
+                console.log("test BJ ElG");
                 server_1.rooms[roomName].game = new game_1.Game(data.players, testBJElGDeck_1.testBJElGDeck);
                 server_1.rooms[roomName].game.namesOfCharacters = ["Black Jack", "Vulture Sam", "El Gringo", "Rose Doolan"];
             }
             if (server_1.rooms[roomName].players.some(function (player) { return player.username === process.env.TEST_DISTANCES; })) {
-                console.log("test Emporio");
+                console.log("test Distance");
                 server_1.rooms[roomName].game = new game_1.Game(data.players, testDistancesDeck_1.testDistancesDeck);
                 server_1.rooms[roomName].game.namesOfCharacters = [
                     "Rose Doolan", "Calamity Janet",
