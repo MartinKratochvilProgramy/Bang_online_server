@@ -53,8 +53,8 @@ const app = express();
 const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
-const ws = require('ws');
 const parser = require("socket.io-msgpack-parser");
+const ws = require('ws');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 4000;
