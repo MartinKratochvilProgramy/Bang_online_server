@@ -1,7 +1,6 @@
 import { Card, GameState } from "./types/types";
 
 export class Game {
-
     playerNames: string[];
     numOfPlayers: number;
     namesOfCharacters: string[];
@@ -1541,7 +1540,9 @@ export class Game {
         if (this.numOfPlayers >= 4) {
             firstPlayerName = Object.keys(this.players).find(player => this.players[player].character.role === "Sheriff");
         } else {
-            firstPlayerName = Object.keys(this.players).find(player => this.players[player].id === 0);
+            // random player index in range numOfPlayers
+            this.playerRoundId = Math.floor(Math.random() * this.numOfPlayers)
+            firstPlayerName = this.playerNames[this.playerRoundId]
         }
         if (!firstPlayerName) {
             return;
