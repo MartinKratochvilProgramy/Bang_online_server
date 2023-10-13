@@ -165,7 +165,7 @@ io.on("connection", (socket: any) => {
   socket.on("request_players_in_range", (data: any) => { requestPlayersInRange(socket, data) });
 });
 
-app.get('/', (req: any, res: any) => {
+app.get('/status', (req: any, res: any) => {
   res.send('Server is running.')
 })
 
