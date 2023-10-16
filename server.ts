@@ -55,9 +55,14 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const parser = require("socket.io-msgpack-parser");
 const ws = require('ws');
+const path = require('path')
 require('dotenv').config();
 
-const PORT = process.env.PORT || 4000;
+const _dirname = path.dirname("")
+const buildPath = path.join(_dirname  , "../Bang_online_client/build");
+app.use(express.static(buildPath))
+
+const PORT = process.env.PORT || 3000;
 
 const io = new Server(server,
   {
@@ -167,6 +172,19 @@ io.on("connection", (socket: any) => {
 
 app.get('/status', (req: any, res: any) => {
   res.send('Server is running.')
+})
+
+app.get("/*", function(req: any, res: any){
+
+  res.sendFile(
+      path.join(__dirname, "../Bang_online_client/build/index.html"),
+      function (err: any) {
+        if (err) {
+          res.status(500).send(err);
+        }
+      }
+    );
+
 })
 
 server.listen(PORT, () => {

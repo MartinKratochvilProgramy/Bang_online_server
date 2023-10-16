@@ -10,8 +10,12 @@ var Server = require("socket.io").Server;
 var server = http.createServer(app);
 var parser = require("socket.io-msgpack-parser");
 var ws = require('ws');
+var path = require('path');
 require('dotenv').config();
-var PORT = process.env.PORT || 4000;
+var _dirname = path.dirname("");
+var buildPath = path.join(_dirname, "../Bang_online_client/build");
+app.use(express.static(buildPath));
+var PORT = process.env.PORT || 3000;
 var io = new Server(server, {
     cors: {
         origin: "*",
@@ -68,6 +72,16 @@ io.on("connection", function (socket) {
     socket.on("discard", function (data) { (0, events_1.discard)(io, data); });
     socket.on("end_turn", function (roomName) { (0, events_1.endTurnEvent)(io, roomName); });
     socket.on("request_players_in_range", function (data) { (0, events_1.requestPlayersInRange)(socket, data); });
+});
+app.get('/status', function (req, res) {
+    res.send('Server is running.');
+});
+app.get("/*", function (req, res) {
+    res.sendFile(path.join(__dirname, "../Bang_online_client/build/index.html"), function (err) {
+        if (err) {
+            res.status(500).send(err);
+        }
+    });
 });
 server.listen(PORT, function () {
     console.log("listening @ ", PORT);
