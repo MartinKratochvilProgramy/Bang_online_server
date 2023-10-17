@@ -15,7 +15,7 @@ require('dotenv').config();
 var _dirname = path.dirname("");
 var buildPath = path.join(_dirname, "../Bang_online_client/build");
 app.use(express.static(buildPath));
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 5001;
 var io = new Server(server, {
     cors: {
         origin: "*",

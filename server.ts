@@ -62,7 +62,7 @@ const _dirname = path.dirname("")
 const buildPath = path.join(_dirname  , "../Bang_online_client/build");
 app.use(express.static(buildPath))
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 
 const io = new Server(server,
   {
