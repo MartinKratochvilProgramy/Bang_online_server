@@ -12,9 +12,9 @@ var parser = require("socket.io-msgpack-parser");
 var ws = require('ws');
 var path = require('path');
 require('dotenv').config();
-var _dirname = path.dirname("");
-var buildPath = path.join(_dirname, "../Bang_online_client/build");
-app.use(express.static(buildPath));
+// const _dirname = path.dirname("")
+// const buildPath = path.join(_dirname  , "../Bang_online_client/build");
+// app.use(express.static(buildPath))
 var PORT = process.env.PORT || 5001;
 var io = new Server(server, {
     cors: {
@@ -76,13 +76,16 @@ io.on("connection", function (socket) {
 app.get('/status', function (req, res) {
     res.send('Server is running.');
 });
-app.get("/*", function (req, res) {
-    res.sendFile(path.join(__dirname, "../Bang_online_client/build/index.html"), function (err) {
-        if (err) {
-            res.status(500).send(err);
-        }
-    });
-});
+// app.get("/*", function(req: any, res: any){
+//   res.sendFile(
+//       path.join(__dirname, "../Bang_online_client/build/index.html"),
+//       function (err: any) {
+//         if (err) {
+//           res.status(500).send(err);
+//         }
+//       }
+//     );
+// })
 server.listen(PORT, function () {
     console.log("listening @ ", PORT);
 });

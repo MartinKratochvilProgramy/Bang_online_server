@@ -58,9 +58,9 @@ const ws = require('ws');
 const path = require('path')
 require('dotenv').config();
 
-const _dirname = path.dirname("")
-const buildPath = path.join(_dirname  , "../Bang_online_client/build");
-app.use(express.static(buildPath))
+// const _dirname = path.dirname("")
+// const buildPath = path.join(_dirname  , "../Bang_online_client/build");
+// app.use(express.static(buildPath))
 
 const PORT = process.env.PORT || 5001;
 
@@ -174,18 +174,18 @@ app.get('/status', (req: any, res: any) => {
   res.send('Server is running.')
 })
 
-app.get("/*", function(req: any, res: any){
+// app.get("/*", function(req: any, res: any){
 
-  res.sendFile(
-      path.join(__dirname, "../Bang_online_client/build/index.html"),
-      function (err: any) {
-        if (err) {
-          res.status(500).send(err);
-        }
-      }
-    );
+//   res.sendFile(
+//       path.join(__dirname, "../Bang_online_client/build/index.html"),
+//       function (err: any) {
+//         if (err) {
+//           res.status(500).send(err);
+//         }
+//       }
+//     );
 
-})
+// })
 
 server.listen(PORT, () => {
   console.log("listening @ ", PORT);
