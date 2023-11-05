@@ -77,6 +77,19 @@ io.on("connection", function (socket) {
 app.get('/status', function (req, res) {
     res.send('Server is running.');
 });
+<<<<<<< HEAD
+=======
+// app.get("/*", function(req: any, res: any){
+//   res.sendFile(
+//       path.join(__dirname, "../Bang_online_client/build/index.html"),
+//       function (err: any) {
+//         if (err) {
+//           res.status(500).send(err);
+//         }
+//       }
+//     );
+// })
+>>>>>>> f856df917e3d398da06a789675f91193c7ab4df5
 server.listen(PORT, function () {
     console.log("listening @ ", PORT);
 });

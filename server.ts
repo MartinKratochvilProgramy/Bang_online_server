@@ -175,6 +175,19 @@ app.get('/status', (req: any, res: any) => {
   res.send('Server is running.')
 })
 
+// app.get("/*", function(req: any, res: any){
+
+//   res.sendFile(
+//       path.join(__dirname, "../Bang_online_client/build/index.html"),
+//       function (err: any) {
+//         if (err) {
+//           res.status(500).send(err);
+//         }
+//       }
+//     );
+
+// })
+
 server.listen(PORT, () => {
   console.log("listening @ ", PORT);
 });
