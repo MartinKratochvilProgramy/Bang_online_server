@@ -55,9 +55,15 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const parser = require("socket.io-msgpack-parser");
 const ws = require('ws');
+const path = require('path');
 require('dotenv').config();
 
-const PORT = process.env.PORT || 4000;
+app.use(express.static(path.join(__dirname, 'dist')));
+app.get('/', (req: any, res: any) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+})
+
+const PORT = process.env.PORT || 3000;
 
 const io = new Server(server,
   {

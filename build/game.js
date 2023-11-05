@@ -1387,7 +1387,9 @@ var Game = /** @class */ (function () {
             firstPlayerName = Object.keys(this.players).find(function (player) { return _this.players[player].character.role === "Sheriff"; });
         }
         else {
-            firstPlayerName = Object.keys(this.players).find(function (player) { return _this.players[player].id === 0; });
+            // random player index in range numOfPlayers
+            this.playerRoundId = Math.floor(Math.random() * this.numOfPlayers);
+            firstPlayerName = this.playerNames[this.playerRoundId];
         }
         if (!firstPlayerName) {
             return;
